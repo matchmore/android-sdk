@@ -26,8 +26,8 @@ interface DeviceApi {
     @Headers("Content-Type:application/json")
     @POST("devices")
     fun createDevice(
-            @Body device: MobileDevice
-    ): Call<MobileDevice>
+            @Body device: Device
+    ): Call<Device>
 
     /**
      * Create a new location for a device

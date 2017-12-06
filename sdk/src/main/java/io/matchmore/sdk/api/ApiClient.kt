@@ -2,7 +2,9 @@ package io.matchmore.sdk.api
 
 import com.google.gson.GsonBuilder
 import io.matchmore.sdk.api.adapters.DateTimeTypeAdapter
+import io.matchmore.sdk.api.adapters.DeviceTypeAdapter
 import io.matchmore.sdk.api.adapters.LocalDateTypeAdapter
+import io.matchmore.sdk.api.models.Device
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.joda.time.DateTime
@@ -21,18 +23,22 @@ class ApiClient(var apiKey: String) {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
                 .registerTypeAdapter(DateTime::class.java, DateTimeTypeAdapter())
                 .registerTypeAdapter(LocalDate::class.java, LocalDateTypeAdapter())
+                .registerTypeAdapter(Device::class.java, DeviceTypeAdapter())
                 .create()
-        retrofit = Retrofit.Builder()
+
+        val okHttpClientBuilder = OkHttpClient.Builder()
+                .addInterceptor {
+                    it.proceed(it.request().newBuilder().addHeader("api-key", apiKey).build())
+                }
+        val retrofitBuilder = Retrofit.Builder()
                 .baseUrl("$prefix$baseUrl$apiVersion/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .callbackExecutor(Executors.newSingleThreadExecutor())
-                .client(OkHttpClient.Builder()
-                        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                        .addInterceptor {
-                            it.proceed(it.request().newBuilder().addHeader("api-key", apiKey).build())
-                        }.build()
-                ).build()
+        if (DEBUG) {
+            okHttpClientBuilder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            retrofitBuilder.callbackExecutor(Executors.newSingleThreadExecutor())
+        }
+        retrofit = retrofitBuilder.client(okHttpClientBuilder.build()).build()
     }
 
     val deviceApi by lazy { retrofit.create(DeviceApi::class.java) }
@@ -45,5 +51,6 @@ class ApiClient(var apiKey: String) {
         private const val prefix = "https://"
         private const val baseUrl = "api.matchmore.io"
         private const val apiVersion = "/v5"
+        var DEBUG = true
     }
 }
