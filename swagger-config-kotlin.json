@@ -1,0 +1,7 @@
+{
+  "packageName": "io.matchmore.sdk",
+  "modelPackage": "io.matchmore.sdk.models",
+  "apiPackage": "io.matchmore.sdk",
+  "artifactId": "alps",
+  "hideGenerationTimestamp": true
+}
