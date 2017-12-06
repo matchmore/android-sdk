@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+
+ext {
+    retrofit_version = "2.3.0"
+    swagger_annotations_version = "1.5.15"
+    junit_version = "4.12"
+    jodatime_version = "2.9.9"
+}
+
+dependencies {
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    compile "io.swagger:swagger-annotations:$swagger_annotations_version"
+    compile "joda-time:joda-time:$jodatime_version"
+}
+
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+}
