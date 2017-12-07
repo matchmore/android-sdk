@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.Executors
 
-class ApiClient(var apiKey: String) {
+class ApiClient(private val apiKey: String, callbackInUIThread: Boolean, debugLog: Boolean) {
 
     private val retrofit: Retrofit
 
@@ -34,9 +34,11 @@ class ApiClient(var apiKey: String) {
                 .baseUrl("$prefix$baseUrl$apiVersion/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-        if (DEBUG) {
-            okHttpClientBuilder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        if (!callbackInUIThread) {
             retrofitBuilder.callbackExecutor(Executors.newSingleThreadExecutor())
+        }
+        if (debugLog) {
+            okHttpClientBuilder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         }
         retrofit = retrofitBuilder.client(okHttpClientBuilder.build()).build()
     }
@@ -51,6 +53,5 @@ class ApiClient(var apiKey: String) {
         private const val prefix = "https://"
         private const val baseUrl = "api.matchmore.io"
         private const val apiVersion = "/v5"
-        var DEBUG = true
     }
 }

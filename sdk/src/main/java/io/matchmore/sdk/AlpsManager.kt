@@ -6,9 +6,9 @@ import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.managers.DeviceManager
 
-class AlpsManager(apiKey: String, worldId: String) : MatchMore {
+class AlpsManager(apiKey: String, worldId: String, callbackInUIThread: Boolean, debugLog: Boolean) : MatchMoreSdk {
 
-    private val apiClient = ApiClient(apiKey)
+    private val apiClient = ApiClient(apiKey, callbackInUIThread, debugLog)
     private val deviceManager = DeviceManager(apiClient)
 
     override fun startUsingMainDevice(device: MobileDevice?, success: SuccessCallback<MobileDevice>?, error: ErrorCallback?)

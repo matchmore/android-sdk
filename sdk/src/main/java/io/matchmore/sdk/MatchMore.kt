@@ -4,26 +4,34 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.MobileDevice
 
-interface MatchMore {
+object MatchMore {
 
-    fun startUsingMainDevice(device: MobileDevice? = null, success: SuccessCallback<MobileDevice>?, error: ErrorCallback?)
+    private var apiKey: String? = null
+    private lateinit var worldId: String
+    private var callbackInUIThread = true
+    private var debugLog = false
 
-    companion object {
-
-        private var apiKey: String? = null
-        private var worldId: String? = null
-
-        val instance: MatchMore by lazy {
-            if (!isConfigured()) throw IllegalStateException("Please config first.")
-            AlpsManager( apiKey!!, worldId!!)
-        }
-
-        fun config(apiKey: String, worldId: String) {
-            if (isConfigured()) throw IllegalStateException("You can not overwrite the configuration.")
-            this.apiKey = apiKey
-            this.worldId = worldId
-        }
-
-        fun isConfigured() = this.apiKey != null
+    @JvmStatic
+    val instance: MatchMoreSdk by lazy {
+        if (!isConfigured()) throw IllegalStateException("Please config first.")
+        AlpsManager(apiKey!!, worldId, callbackInUIThread, debugLog)
     }
+
+    @JvmStatic
+    @JvmOverloads
+    fun config(apiKey: String, worldId: String, callbackInUIThread: Boolean = true, debugLog: Boolean = false) {
+        if (isConfigured()) throw IllegalStateException("You can not overwrite the configuration.")
+        this.apiKey = apiKey
+        this.worldId = worldId
+        this.callbackInUIThread = callbackInUIThread
+        this.debugLog = debugLog
+    }
+
+    @JvmStatic
+    fun isConfigured() = this.apiKey != null
+}
+
+interface MatchMoreSdk {
+    fun startUsingMainDevice(success: SuccessCallback<MobileDevice>?, error: ErrorCallback?) = startUsingMainDevice(null, success, error)
+    fun startUsingMainDevice(device: MobileDevice? = null, success: SuccessCallback<MobileDevice>?, error: ErrorCallback?)
 }
