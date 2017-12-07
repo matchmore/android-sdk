@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
@@ -23,7 +24,12 @@ class DevicesTestJava {
     void setUp() {
         ShadowLog.stream = System.out;
         if (!MatchMore.isConfigured()) {
-            MatchMore.config(SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID, false, true);
+            MatchMore.config(new MatchMoreConfig(
+                    RuntimeEnvironment.application,
+                    SdkConfigTest.API_KEY,
+                    SdkConfigTest.WORLD_ID,
+                    false,
+                    true));
         }
     }
 

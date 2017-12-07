@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLog
 
@@ -18,12 +19,16 @@ class DevicesTest {
     fun setUp() {
         ShadowLog.stream = System.out
         if (!MatchMore.isConfigured())
-            MatchMore.config(SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID, false, true)
+            MatchMore.config(MatchMoreConfig(
+                    RuntimeEnvironment.application,
+                    SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
+                    false,
+                    true))
     }
 
     @Test
     fun createMainDevice() {
-        MatchMore.instance.startUsingMainDevice({ waiter.resume() }, waiter::fail)
+        MatchMore.instance.startUsingMainDevice({ _ -> waiter.resume() }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 }

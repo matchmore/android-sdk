@@ -1,34 +1,29 @@
 package io.matchmore.sdk
 
+import android.annotation.SuppressLint
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.MobileDevice
 
+@SuppressLint("StaticFieldLeak")
 object MatchMore {
 
-    private var apiKey: String? = null
-    private lateinit var worldId: String
-    private var callbackInUIThread = true
-    private var debugLog = false
+    private var matchMoreConfig: MatchMoreConfig? = null
 
     @JvmStatic
     val instance: MatchMoreSdk by lazy {
         if (!isConfigured()) throw IllegalStateException("Please config first.")
-        AlpsManager(apiKey!!, worldId, callbackInUIThread, debugLog)
+        AlpsManager(matchMoreConfig!!)
     }
 
     @JvmStatic
-    @JvmOverloads
-    fun config(apiKey: String, worldId: String, callbackInUIThread: Boolean = true, debugLog: Boolean = false) {
+    fun config(matchMoreConfig: MatchMoreConfig) {
         if (isConfigured()) throw IllegalStateException("You can not overwrite the configuration.")
-        this.apiKey = apiKey
-        this.worldId = worldId
-        this.callbackInUIThread = callbackInUIThread
-        this.debugLog = debugLog
+        this.matchMoreConfig = matchMoreConfig
     }
 
     @JvmStatic
-    fun isConfigured() = this.apiKey != null
+    fun isConfigured() = this.matchMoreConfig != null
 }
 
 interface MatchMoreSdk {
