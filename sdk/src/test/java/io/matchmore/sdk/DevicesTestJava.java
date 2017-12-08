@@ -16,12 +16,12 @@ import kotlin.Unit;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-class DevicesTestJava {
+public class DevicesTestJava {
 
     private Waiter waiter = new Waiter();
 
     @Before
-    void setUp() {
+    public void setUp() {
         ShadowLog.stream = System.out;
         if (!MatchMore.isConfigured()) {
             MatchMore.config(new MatchMoreConfig(
@@ -34,7 +34,7 @@ class DevicesTestJava {
     }
 
     @Test
-    void createMainDevice() throws TimeoutException {
+    public void createMainDevice() throws TimeoutException {
         MatchMore.getInstance().startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
