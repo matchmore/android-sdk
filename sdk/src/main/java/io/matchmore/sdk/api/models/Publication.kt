@@ -22,57 +22,60 @@ import java.util.*
  * A publication can be seen as a JavaMessagingService (JMS) publication extended with the notion of a geographical zone. The zone is defined as circle with a center at the given location and a range around that location.
  */
 @ApiModel(description = "A publication can be seen as a JavaMessagingService (JMS) publication extended with the notion of a geographical zone. The zone is defined as circle with a center at the given location and a range around that location. ")
-data class Publication(
-    /**
-     * The id (UUID) of the publication.
-     */
-    @SerializedName("id")
-    @get:ApiModelProperty(required = true, value = "The id (UUID) of the publication.")
-    val id: String? = null,
+data class Publication @JvmOverloads constructor(
 
-    /**
-     * The timestamp of the publication creation in seconds since Jan 01 1970 (UTC).
-     */
-    @SerializedName("createdAt")
-    @get:ApiModelProperty(required = true, value = "The timestamp of the publication creation in seconds since Jan 01 1970 (UTC). ")
-    val createdAt: Long? = null,
+        /**
+         * The topic of the publication. This will act as a first match filter. For a subscription to be able to match a publication they must have the exact same topic.
+         */
+        @SerializedName("topic")
+        @get:ApiModelProperty(required = true, value = "The topic of the publication. This will act as a first match filter. For a subscription to be able to match a publication they must have the exact same topic. ")
+        var topic: String? = null,
 
-    /**
-     * The id (UUID) of the world that contains device to attach a publication to.
-     */
-    @SerializedName("worldId")
-    @get:ApiModelProperty(required = true, value = "The id (UUID) of the world that contains device to attach a publication to.")
-    var worldId: String? = null,
+        /**
+         * The range of the publication in meters. This is the range around the device holding the publication in which matches with subscriptions can be triggered.
+         */
+        @SerializedName("range")
+        @get:ApiModelProperty(required = true, value = "The range of the publication in meters. This is the range around the device holding the publication in which matches with subscriptions can be triggered. ")
+        var range: Double? = null,
 
-    /**
-     * The id (UUID) of the device to attach a publication to.
-     */
-    @SerializedName("deviceId")
-    @get:ApiModelProperty(required = true, value = "The id (UUID) of the device to attach a publication to.")
-    var deviceId: String? = null,
+        /**
+         * The duration of the publication in seconds. If set to &#39;-1&#39; the publication will live forever and if set to &#39;0&#39; it will be instant at the time of publication.
+         */
+        @SerializedName("duration")
+        @get:ApiModelProperty(required = true, value = "The duration of the publication in seconds. If set to '-1' the publication will live forever and if set to '0' it will be instant at the time of publication. ")
+        var duration: Double? = null,
 
-    /**
-     * The topic of the publication. This will act as a first match filter. For a subscription to be able to match a publication they must have the exact same topic.
-     */
-    @SerializedName("topic")
-    @get:ApiModelProperty(required = true, value = "The topic of the publication. This will act as a first match filter. For a subscription to be able to match a publication they must have the exact same topic. ")
-    var topic: String? = null,
+        @SerializedName("properties")
+        var properties: MutableMap<String, String> = HashMap(),
 
-    /**
-     * The range of the publication in meters. This is the range around the device holding the publication in which matches with subscriptions can be triggered.
-     */
-    @SerializedName("range")
-    @get:ApiModelProperty(required = true, value = "The range of the publication in meters. This is the range around the device holding the publication in which matches with subscriptions can be triggered. ")
-    var range: Double? = null,
+        /**
+         * The id (UUID) of the device to attach a publication to.
+         */
+        @SerializedName("deviceId")
+        @get:ApiModelProperty(required = true, value = "The id (UUID) of the device to attach a publication to.")
+        var deviceId: String? = null,
 
-    /**
-     * The duration of the publication in seconds. If set to &#39;-1&#39; the publication will live forever and if set to &#39;0&#39; it will be instant at the time of publication.
-     */
-    @SerializedName("duration")
-    @get:ApiModelProperty(required = true, value = "The duration of the publication in seconds. If set to '-1' the publication will live forever and if set to '0' it will be instant at the time of publication. ")
-    var duration: Double? = null,
+        /**
+         * The id (UUID) of the world that contains device to attach a publication to.
+         */
+        @SerializedName("worldId")
+        @get:ApiModelProperty(required = true, value = "The id (UUID) of the world that contains device to attach a publication to.")
+        var worldId: String? = null,
 
-    @SerializedName("properties")
-    var properties: MutableMap<String, String> = HashMap()
-)
+        /**
+         * The timestamp of the publication creation in seconds since Jan 01 1970 (UTC).
+         */
+        @SerializedName("createdAt")
+        @get:ApiModelProperty(required = true, value = "The timestamp of the publication creation in seconds since Jan 01 1970 (UTC). ")
+        val createdAt: Long? = null,
+
+        /**
+         * The id (UUID) of the publication.
+         */
+        @SerializedName("id")
+        @get:ApiModelProperty(required = true, value = "The id (UUID) of the publication.")
+        override val id: String? = null
+
+
+) : HasId
 

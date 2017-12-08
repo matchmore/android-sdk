@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.MobileDevice
+import io.matchmore.sdk.api.models.Publication
+import io.matchmore.sdk.api.models.Subscription
 
 @SuppressLint("StaticFieldLeak")
 object MatchMore {
@@ -27,6 +29,18 @@ object MatchMore {
 }
 
 interface MatchMoreSdk {
-    fun startUsingMainDevice(success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null) = startUsingMainDevice(null, success, error)
+    fun startUsingMainDevice(success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null)
+            = startUsingMainDevice(null, success, error)
+
     fun startUsingMainDevice(device: MobileDevice? = null, success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null)
+
+    fun createPublication(publication: Publication, success: SuccessCallback<Publication>?, error: ErrorCallback?)
+            = createPublication(publication, null, success, error)
+
+    fun createPublication(publication: Publication, deviceWithId: String? = null, success: SuccessCallback<Publication>?, error: ErrorCallback?)
+
+    fun createSubscription(subscription: Subscription, success: SuccessCallback<Subscription>?, error: ErrorCallback?)
+            = createSubscription(subscription, null, success, error)
+
+    fun createSubscription(subscription: Subscription, deviceWithId: String? = null, success: SuccessCallback<Subscription>?, error: ErrorCallback?)
 }

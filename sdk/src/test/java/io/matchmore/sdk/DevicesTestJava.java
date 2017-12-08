@@ -12,6 +12,8 @@ import org.robolectric.shadows.ShadowLog;
 
 import java.util.concurrent.TimeoutException;
 
+import io.matchmore.sdk.api.models.Publication;
+import io.matchmore.sdk.api.models.Subscription;
 import kotlin.Unit;
 
 @RunWith(RobolectricTestRunner.class)
@@ -34,14 +36,37 @@ public class DevicesTestJava {
     }
 
     @Test
-    public void createMainDevice() throws TimeoutException {
-        MatchMore.getInstance().startUsingMainDevice(device -> {
+    public void creations() throws TimeoutException {
+        MatchMoreSdk matchMore = MatchMore.getInstance();
+        matchMore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
             waiter.fail(e);
             return Unit.INSTANCE;
         });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        Publication publication = new Publication("Test Topic", 20d, 100000d);
+        matchMore.createPublication(publication,
+                device -> {
+                    waiter.resume();
+                    return Unit.INSTANCE;
+                }, e -> {
+                    waiter.fail(e);
+                    return Unit.INSTANCE;
+                });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
+        matchMore.createSubscription(subscription,
+                device -> {
+                    waiter.resume();
+                    return Unit.INSTANCE;
+                }, e -> {
+                    waiter.fail(e);
+                    return Unit.INSTANCE;
+                });
         waiter.await(SdkConfigTest.TIMEOUT);
     }
 }
