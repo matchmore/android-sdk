@@ -3,8 +3,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 26
-
-
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
         minSdkVersion 22
@@ -29,7 +28,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.5.1"
     testImplementation "net.jodah:concurrentunit:0.4.3"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
     mavenCentral()
