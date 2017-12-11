@@ -1,5 +1,7 @@
 package io.matchmore.sdk
 
+import io.matchmore.sdk.api.models.Publication
+import io.matchmore.sdk.api.models.Subscription
 import net.jodah.concurrentunit.Waiter
 import org.junit.Before
 import org.junit.Test
@@ -27,8 +29,16 @@ class DevicesTest {
     }
 
     @Test
-    fun createMainDevice() {
+    fun creations() {
         MatchMore.instance.startUsingMainDevice({ _ -> waiter.resume() }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        val publication = Publication("Test Topic", 20.0, 100000.0)
+        MatchMore.instance.createPublication(publication, { _ -> waiter.resume() }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        val subscription = Subscription("Test Topic", 20.0, 100000.0, "")
+        MatchMore.instance.createSubscription(subscription, { _ -> waiter.resume() }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 }

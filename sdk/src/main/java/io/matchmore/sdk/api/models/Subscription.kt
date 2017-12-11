@@ -21,48 +21,13 @@ import io.swagger.annotations.ApiModelProperty
  * A subscription can be seen as a JMS subscription extended with the notion of geographical zone. The zone again being defined as circle with a center at the given location and a range around that location.
  */
 @ApiModel(description = "A subscription can be seen as a JMS subscription extended with the notion of geographical zone. The zone again being defined as circle with a center at the given location and a range around that location. ")
-class Subscription(
-        /**
-         * The id (UUID) of the subscription.
-         */
-        @SerializedName("id")
-        @get:ApiModelProperty(required = true, value = "The id (UUID) of the subscription.")
-        val id: String? = null,
-
-        /**
-         * The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC).
-         */
-        @SerializedName("createdAt")
-        @get:ApiModelProperty(required = true, value = "The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC). ")
-        val createdAt: Long? = null,
-
-        /**
-         * The id (UUID) of the world that contains device to attach a subscription to.
-         */
-        @SerializedName("worldId")
-        @get:ApiModelProperty(required = true, value = "The id (UUID) of the world that contains device to attach a subscription to.")
-        var worldId: String? = null,
-
-        /**
-         * The id (UUID) of the device to attach a subscription to.
-         */
-        @SerializedName("deviceId")
-        @get:ApiModelProperty(required = true, value = "The id (UUID) of the device to attach a subscription to.")
-        var deviceId: String? = null,
-
+data class Subscription @JvmOverloads constructor(
         /**
          * The topic of the subscription. This will act as a first match filter. For a subscription to be able to match a publication they must have the exact same topic.
          */
         @SerializedName("topic")
         @get:ApiModelProperty(required = true, value = "The topic of the subscription. This will act as a first match filter. For a subscription to be able to match a publication they must have the exact same topic. ")
         var topic: String? = null,
-
-        /**
-         * This is an expression to filter the publications. For instance &#39;job&#x3D;&#39;developer&#39;&#39; will allow matching only with publications containing a &#39;job&#39; key with a value of &#39;developer&#39;.
-         */
-        @SerializedName("selector")
-        @get:ApiModelProperty(required = true, value = "This is an expression to filter the publications. For instance 'job='developer'' will allow matching only with publications containing a 'job' key with a value of 'developer'. ")
-        var selector: String? = null,
 
         /**
          * The range of the subscription in meters. This is the range around the device holding the subscription in which matches with publications can be triggered.
@@ -78,7 +43,42 @@ class Subscription(
         @get:ApiModelProperty(required = true, value = "The duration of the subscription in seconds. If set to '-1' the subscription will live forever and if set to '0' it will be instant at the time of subscription. ")
         var duration: Double? = null,
 
+        /**
+         * This is an expression to filter the publications. For instance &#39;job&#x3D;&#39;developer&#39;&#39; will allow matching only with publications containing a &#39;job&#39; key with a value of &#39;developer&#39;.
+         */
+        @SerializedName("selector")
+        @get:ApiModelProperty(required = true, value = "This is an expression to filter the publications. For instance 'job='developer'' will allow matching only with publications containing a 'job' key with a value of 'developer'. ")
+        var selector: String? = null,
+
+        /**
+         * The id (UUID) of the device to attach a subscription to.
+         */
+        @SerializedName("deviceId")
+        @get:ApiModelProperty(required = true, value = "The id (UUID) of the device to attach a subscription to.")
+        var deviceId: String? = null,
+
+        /**
+         * The id (UUID) of the world that contains device to attach a subscription to.
+         */
+        @SerializedName("worldId")
+        @get:ApiModelProperty(required = true, value = "The id (UUID) of the world that contains device to attach a subscription to.")
+        var worldId: String? = null,
+
+        /**
+         * The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC).
+         */
+        @SerializedName("createdAt")
+        @get:ApiModelProperty(required = true, value = "The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC). ")
+        val createdAt: Long? = null,
+
         @SerializedName("pushers")
-        var pushers: MutableList<String>? = null
-)
+        var pushers: MutableList<String>? = null,
+
+        /**
+         * The id (UUID) of the subscription.
+         */
+        @SerializedName("id")
+        @get:ApiModelProperty(required = true, value = "The id (UUID) of the subscription.")
+        override val id: String? = null
+) : HasId
 

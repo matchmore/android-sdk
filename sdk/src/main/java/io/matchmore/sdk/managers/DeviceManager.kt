@@ -1,17 +1,16 @@
 package io.matchmore.sdk.managers
 
 import android.os.Build
-import io.matchmore.sdk.api.ApiClient
+import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.MobileDevice
-import io.matchmore.sdk.store.DeviceStore
 
-class DeviceManager(private val apiClient: ApiClient, private val deviceStore: DeviceStore) {
+class DeviceManager(private val manager: AlpsManager) {
 
     fun startUsingMainDevice(device: MobileDevice?, success: SuccessCallback<MobileDevice>?, error: ErrorCallback?) {
-        deviceStore.main?.let {
+        manager.deviceStore.main?.let {
             if (device == null) {
 //                TODO manager.matchMonitor.startMonitoringFor(device: mainDevice)
                 success?.invoke(it)
@@ -24,10 +23,10 @@ class DeviceManager(private val apiClient: ApiClient, private val deviceStore: D
                 deviceToken = device?.deviceToken ?: "",
                 location = device?.location //TODO ?: lastLocation
         )
-        apiClient.deviceApi.createDevice(mobileDevice).async({
+        manager.apiClient.deviceApi.createDevice(mobileDevice).async({
             val mDevice = it as MobileDevice
-            deviceStore.create(mDevice)
-            if (deviceStore.main == null) deviceStore.main = mDevice
+            manager.deviceStore.create(mDevice)
+            if (manager.deviceStore.main == null) manager.deviceStore.main = mDevice
             success?.invoke(mDevice)
         }, error)
     }

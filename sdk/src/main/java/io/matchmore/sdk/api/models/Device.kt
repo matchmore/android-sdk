@@ -27,7 +27,7 @@ open class Device(
          */
         @SerializedName("id")
         @get:ApiModelProperty(required = true, value = "The id (UUID) of the device.")
-        val id: String? = null,
+        override val id: String? = null,
 
         /**
          * The timestamp of the device&#39;s creation in seconds since Jan 01 1970 (UTC).
@@ -63,5 +63,5 @@ open class Device(
         @SerializedName("deviceType")
         @get:ApiModelProperty(required = true, value = "")
         var deviceType: DeviceType? = null
-)
+): HasId
 

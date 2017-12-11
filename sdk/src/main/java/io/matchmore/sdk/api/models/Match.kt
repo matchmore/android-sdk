@@ -27,7 +27,7 @@ data class Match(
          */
         @SerializedName("id")
         @get:ApiModelProperty(required = true, value = "The id (UUID) of the match.")
-        var id: String? = null,
+        override var id: String? = null,
 
         /**
          * The timestamp of the match in seconds since Jan 01 1970 (UTC).
@@ -49,5 +49,5 @@ data class Match(
         @SerializedName("subscription")
         @get:ApiModelProperty(required = true, value = "")
         var subscription: Subscription? = null
-)
+): HasId
 
