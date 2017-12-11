@@ -48,7 +48,7 @@ data class Subscription @JvmOverloads constructor(
          */
         @SerializedName("selector")
         @get:ApiModelProperty(required = true, value = "This is an expression to filter the publications. For instance 'job='developer'' will allow matching only with publications containing a 'job' key with a value of 'developer'. ")
-        var selector: String? = null,
+        var selector: String = "",
 
         /**
          * The id (UUID) of the device to attach a subscription to.

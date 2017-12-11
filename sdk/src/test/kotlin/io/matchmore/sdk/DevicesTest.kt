@@ -1,45 +1,33 @@
 package io.matchmore.sdk
 
-import io.matchmore.sdk.api.models.Publication
-import io.matchmore.sdk.api.models.Subscription
-import net.jodah.concurrentunit.Waiter
-import org.junit.Before
+import io.matchmore.sdk.api.models.MobileDevice
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
-import org.robolectric.shadows.ShadowLog
 
-@RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class)
-class DevicesTest {
-
-    private val waiter = Waiter()
-
-    @Before
-    fun setUp() {
-        ShadowLog.stream = System.out
-        if (!MatchMore.isConfigured())
-            MatchMore.config(MatchMoreConfig(
-                    RuntimeEnvironment.application,
-                    SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
-                    false,
-                    true))
-    }
+class DevicesTest : BaseTest() {
 
     @Test
-    fun creations() {
+    fun test() {
+        initAndStartUsingMainDevice()
+
         val matchMoreSdk = MatchMore.instance
-        matchMoreSdk.startUsingMainDevice({ _ -> waiter.resume() }, waiter::fail)
+        val device = MobileDevice("Test Device", platform = "Android")
+
+        matchMoreSdk.devices.create(device, { _ ->
+            waiter.assertEquals(2, matchMoreSdk.devices.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        val publication = Publication("Test Topic", 20.0, 100000.0)
-        matchMoreSdk.createPublication(publication, { _ -> waiter.resume() }, waiter::fail)
+        matchMoreSdk.devices.delete(matchMoreSdk.devices.findAll()[0], {
+            waiter.assertEquals(1, matchMoreSdk.devices.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        val subscription = Subscription("Test Topic", 20.0, 100000.0, "")
-        matchMoreSdk.createSubscription(subscription, { _ -> waiter.resume() }, waiter::fail)
+        matchMoreSdk.devices.deleteAll({
+            waiter.assertEquals(0, matchMoreSdk.devices.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 }

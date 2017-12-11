@@ -3,9 +3,11 @@ package io.matchmore.sdk
 import android.annotation.SuppressLint
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
+import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.store.CRD
 
 @SuppressLint("StaticFieldLeak")
 object MatchMore {
@@ -29,6 +31,14 @@ object MatchMore {
 }
 
 interface MatchMoreSdk {
+    val main: MobileDevice?
+
+    val publications: CRD<Publication>
+
+    val subscriptions: CRD<Subscription>
+
+    val devices: CRD<Device>
+
     fun startUsingMainDevice(success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null)
             = startUsingMainDevice(null, success, error)
 
