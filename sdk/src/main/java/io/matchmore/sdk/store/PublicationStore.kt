@@ -18,7 +18,7 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
     override fun create(item: Publication, success: SuccessCallback<Publication>?, error: ErrorCallback?) {
         manager.apiClient.publicationApi.createPublication(item.deviceId!!, item)
                 .async({
-                    create(it)
+                    createData(it)
                     success?.invoke(it)
                 }, error)
     }
@@ -26,7 +26,7 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
     override fun delete(item: Publication, complete: CompleteCallback?, error: ErrorCallback?) {
         manager.apiClient.publicationApi.deletePublication(item.deviceId!!, item.id!!)
                 .async({
-                    delete(item)
+                    deleteData(item)
                     complete?.invoke()
                 }, error)
     }

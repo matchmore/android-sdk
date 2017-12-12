@@ -10,7 +10,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLog
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, sdk = [26])
+@Config(constants = BuildConfig::class)
 abstract class BaseTest {
 
     // unfortunately we can't move that metho to @BeforeClass because robolectric RuntimeEnvironment.application is still null there

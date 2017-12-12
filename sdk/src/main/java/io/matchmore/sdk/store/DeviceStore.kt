@@ -46,14 +46,14 @@ class DeviceStore(private val manager: AlpsManager)
 
     override fun create(item: Device, success: SuccessCallback<Device>?, error: ErrorCallback?) {
         manager.apiClient.deviceApi.createDevice(item).async({ device ->
-            create(device)
+            createData(device)
             success?.invoke(device)
         }, error)
     }
 
     override fun delete(item: Device, complete: CompleteCallback?, error: ErrorCallback?) {
         manager.apiClient.deviceApi.deleteDevice(item.id!!).async({
-            delete(item)
+            deleteData(item)
             if (item == main) main = null
             complete?.invoke()
         }, error)

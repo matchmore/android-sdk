@@ -18,7 +18,7 @@ class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
     override fun create(item: Subscription, success: SuccessCallback<Subscription>?, error: ErrorCallback?) {
         manager.apiClient.subscriptionApi.createSubscription(item.deviceId!!, item)
                 .async({
-                    create(it)
+                    createData(it)
                     success?.invoke(it)
                 }, error)
     }
@@ -26,7 +26,7 @@ class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
     override fun delete(item: Subscription, complete: CompleteCallback?, error: ErrorCallback?) {
         manager.apiClient.subscriptionApi.deleteSubscription(item.deviceId!!, item.id!!)
                 .async({
-                    delete(item)
+                    deleteData(item)
                     complete?.invoke()
                 }, error)
     }

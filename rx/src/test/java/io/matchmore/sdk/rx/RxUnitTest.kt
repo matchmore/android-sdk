@@ -1,6 +1,5 @@
 package io.matchmore.sdk.rx
 
-import io.matchmore.sdk.BuildConfig
 import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.MatchMoreConfig
 import io.matchmore.sdk.api.models.Publication
@@ -43,6 +42,15 @@ class RxUnitTest {
 
         val subscription = Subscription("Test Topic", 20.0, 100000.0, "")
         matchMore.rxCreateSubscription(subscription).subscribe({ _ -> waiter.resume() }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        matchMore.publications.rxDeleteAll().subscribe(waiter::resume, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        matchMore.subscriptions.rxDeleteAll().subscribe(waiter::resume, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        matchMore.devices.rxDeleteAll().subscribe(waiter::resume, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 }

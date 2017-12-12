@@ -21,15 +21,15 @@ open class Store<T : HasId>(private val persistenceManager: PersistenceManager, 
 
     fun findAll() = items
 
-    protected fun create(item: T) {
+    protected fun createData(item: T) {
         items += item
     }
 
-    protected fun delete(item: T) {
+    protected fun deleteData(item: T) {
         items -= item
     }
 
-    protected fun deleteAll() {
+    protected fun deleteAllData() {
         items = listOf()
     }
 }
