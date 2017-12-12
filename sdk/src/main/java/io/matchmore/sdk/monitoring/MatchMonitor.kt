@@ -10,21 +10,20 @@ interface MatchMonitorDelegate {
     fun didReceiveMatches(matches: Set<Match>, forDevice: Device)
 }
 
-class MatchMonitor(private val manager: AlpsManager) {
+class MatchMonitor(private val manager: AlpsManager, val delegate: MatchMonitorDelegate) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
 
     var timer: Timer? = null
 
     fun startPollingMatchesA() {
-        val delay: Long = 0 // delay for 0 sec.
-        val period: Long = 10000 // repeat every 10 sec.
+        val period: Long = 5000 // repeat every 10 sec.
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 getMatches()
             }
-        }, delay, period)
+        }, 0, period)
     }
 
     fun stopPollingMatches() {
@@ -42,9 +41,9 @@ class MatchMonitor(private val manager: AlpsManager) {
         device.id?.let {
             manager.apiClient.matchesApi.getMatches(it).async({
                 val union = deliveredMatches.union(it.toSet())
-                if (deliveredMatches.equals(union) == false) {
+                if (!(deliveredMatches == union)) {
                     deliveredMatches = union.toMutableSet()
-                    // notify delegates / observers
+                    delegate?.didReceiveMatches(union, device)
                 }
             }, null)
         }
