@@ -27,7 +27,7 @@ class MatchMonitor(private val manager: AlpsManager) {
         }, delay, period)
     }
 
-    fun stopPollingMatches(): Void {
+    fun stopPollingMatches() {
         timer?.cancel()
         timer = null
     }
@@ -39,12 +39,14 @@ class MatchMonitor(private val manager: AlpsManager) {
     }
 
     private fun getMatchesForDevice(device: Device) {
-        manager.apiClient.matchesApi.getMatches(device.id).async({
-            val union = deliveredMatches.union(it.toSet())
-            if union != deliveredMatches {
-                deliveredMatches = union
-                // notify delegates
-            }
-        })
+        device.id?.let {
+            manager.apiClient.matchesApi.getMatches(it).async({
+                val union = deliveredMatches.union(it.toSet())
+                if (deliveredMatches.equals(union) == false) {
+                    deliveredMatches = union.toMutableSet()
+                    // notify delegates / observers
+                }
+            }, null)
+        }
     }
 }
