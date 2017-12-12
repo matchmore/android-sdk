@@ -10,11 +10,11 @@ interface MatchMonitorDelegate {
     fun didReceiveMatches(matches: Set<Match>, forDevice: Device)
 }
 
-class MatchMonitor(private val manager: AlpsManager, val delegate: MatchMonitorDelegate) {
+class MatchMonitor(private val manager: AlpsManager, private val delegate: MatchMonitorDelegate) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
 
-    var timer: Timer? = null
+    private var timer: Timer? = null
 
     fun startPollingMatchesA() {
         val period: Long = 5000 // repeat every 10 sec.
