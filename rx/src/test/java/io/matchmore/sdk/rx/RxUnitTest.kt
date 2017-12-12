@@ -1,5 +1,8 @@
-package io.matchmore.sdk
+package io.matchmore.sdk.rx
 
+import io.matchmore.sdk.BuildConfig
+import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.MatchMoreConfig
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import net.jodah.concurrentunit.Waiter
@@ -13,7 +16,7 @@ import org.robolectric.shadows.ShadowLog
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
-class DevicesTest {
+class RxUnitTest {
 
     private val waiter = Waiter()
 
@@ -30,16 +33,16 @@ class DevicesTest {
 
     @Test
     fun creations() {
-        val matchMoreSdk = MatchMore.instance
-        matchMoreSdk.startUsingMainDevice({ _ -> waiter.resume() }, waiter::fail)
+        val matchMore = MatchMore.instance
+        matchMore.rxStartUsingMainDevice().subscribe({ _ -> waiter.resume() }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
         val publication = Publication("Test Topic", 20.0, 100000.0)
-        matchMoreSdk.createPublication(publication, { _ -> waiter.resume() }, waiter::fail)
+        matchMore.rxCreatePublication(publication).subscribe({ _ -> waiter.resume() }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
         val subscription = Subscription("Test Topic", 20.0, 100000.0, "")
-        matchMoreSdk.createSubscription(subscription, { _ -> waiter.resume() }, waiter::fail)
+        matchMore.rxCreateSubscription(subscription).subscribe({ _ -> waiter.resume() }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 }
