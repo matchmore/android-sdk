@@ -26,14 +26,19 @@ class MatchMonitor(private val manager: AlpsManager) {
 
     private var timer: Timer? = null
 
-    fun startPollingMatchesA() {
+    fun startPollingMatches() {
         if (timer != null) { return }
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 getMatches()
             }
-        }, 0, 5000) // repeat every 5 sec.
+        }, delay, repeat)
+    }
+
+    companion object {
+        private const val delay: Long = 0
+        private const val repeat: Long = 5000
     }
 
     fun stopPollingMatches() {
