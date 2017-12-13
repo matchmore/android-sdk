@@ -10,6 +10,10 @@ import io.matchmore.sdk.api.models.Publication
 class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
         Store<Publication>(manager.persistenceManager, PUBLICATIONS_FILE) {
 
+    init {
+        this.items = manager.persistenceManager.readData<List<Publication>>(PUBLICATIONS_FILE) ?: arrayListOf()
+    }
+
     fun createPublication(publication: Publication, deviceWithId: String? = null, success: SuccessCallback<Publication>?, error: ErrorCallback?) {
         publication.deviceId = deviceWithId ?: manager.main?.id
         create(publication, success, error)
