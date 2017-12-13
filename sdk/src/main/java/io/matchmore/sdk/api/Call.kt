@@ -19,3 +19,19 @@ fun <T> Call<T>.async(success: SuccessCallback<T>?, error: ErrorCallback?) {
         }
     })
 }
+
+fun Call<Void>.async(complete: CompleteCallback?, error: ErrorCallback?) {
+    enqueue(object: Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            if (response.isSuccessful) {
+                complete?.invoke()
+            } else {
+                error?.invoke(Exception(response.errorBody()!!.string()))
+            }
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+            error?.invoke(t)
+        }
+    })
+}

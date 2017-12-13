@@ -68,5 +68,32 @@ public class DevicesTestJava {
                     return Unit.INSTANCE;
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
+
+        matchMore.getSubscriptions().deleteAll(() -> {
+            waiter.resume();
+            return Unit.INSTANCE;
+        }, e -> {
+            waiter.fail(e);
+            return Unit.INSTANCE;
+        });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        matchMore.getPublications().deleteAll(() -> {
+            waiter.resume();
+            return Unit.INSTANCE;
+        }, e -> {
+            waiter.fail(e);
+            return Unit.INSTANCE;
+        });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        matchMore.getDevices().deleteAll(() -> {
+            waiter.resume();
+            return Unit.INSTANCE;
+        }, e -> {
+            waiter.fail(e);
+            return Unit.INSTANCE;
+        });
+        waiter.await(SdkConfigTest.TIMEOUT);
     }
 }

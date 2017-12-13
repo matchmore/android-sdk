@@ -21,7 +21,28 @@ import io.swagger.annotations.ApiModelProperty
  * A device might be either virtual like a pin device or physical like a mobile phone or iBeacon device.
  */
 @ApiModel(description = "A device might be either virtual like a pin device or physical like a mobile phone or iBeacon device. ")
-open class Device(
+abstract class Device(
+        /**
+         * The name of the device.
+         */
+        @SerializedName("name")
+        @get:ApiModelProperty(value = "The name of the device.")
+        var name: String = "",
+
+        /**
+         * Get deviceType
+         */
+        @SerializedName("deviceType")
+        @get:ApiModelProperty(required = true, value = "")
+        var deviceType: DeviceType? = null,
+
+        /**
+         * Optional device groups, one device can belong to multiple groups, grops are string that can be max 25 characters long and contains letters numbers or underscores
+         */
+        @SerializedName("group")
+        @ApiModelProperty(example = "[\"first_group\",\"SecondGroup\",\"thirdGroup\"]", value = "Optional device groups, one device can belong to multiple groups, grops are string that can be max 25 characters long and contains letters numbers or underscores")
+        var group: MutableList<String>? = null,
+
         /**
          * The id (UUID) of the device.
          */
@@ -41,27 +62,6 @@ open class Device(
          */
         @SerializedName("updatedAt")
         @get:ApiModelProperty(value = "The timestamp of the device's creation in seconds since Jan 01 1970 (UTC). ")
-        val updatedAt: Long? = null,
-
-        /**
-         * Optional device groups, one device can belong to multiple groups, grops are string that can be max 25 characters long and contains letters numbers or underscores
-         */
-        @SerializedName("group")
-        @ApiModelProperty(example = "[\"first_group\",\"SecondGroup\",\"thirdGroup\"]", value = "Optional device groups, one device can belong to multiple groups, grops are string that can be max 25 characters long and contains letters numbers or underscores")
-        var group: MutableList<String>? = null,
-
-        /**
-         * The name of the device.
-         */
-        @SerializedName("name")
-        @get:ApiModelProperty(value = "The name of the device.")
-        var name: String = "",
-
-        /**
-         * Get deviceType
-         */
-        @SerializedName("deviceType")
-        @get:ApiModelProperty(required = true, value = "")
-        var deviceType: DeviceType? = null
+        val updatedAt: Long? = null
 ): HasId
 

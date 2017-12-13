@@ -1,4 +1,4 @@
-package io.matchmore.sdk.store
+package io.matchmore.sdk.utils
 
 import android.content.Context
 import com.google.gson.Gson

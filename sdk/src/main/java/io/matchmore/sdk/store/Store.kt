@@ -2,8 +2,9 @@ package io.matchmore.sdk.store
 
 import com.google.gson.reflect.TypeToken
 import io.matchmore.sdk.api.models.HasId
+import io.matchmore.sdk.utils.PersistenceManager
 
-open class Store<T: HasId>(private val persistenceManager: PersistenceManager, private val file: String) : CRD<T> {
+open class Store<T : HasId>(private val persistenceManager: PersistenceManager, private val file: String) {
 
     private val type = object : TypeToken<List<T>>() {}.type
     private var items = listOf<T>()
@@ -16,19 +17,19 @@ open class Store<T: HasId>(private val persistenceManager: PersistenceManager, p
         this.items = persistenceManager.readData(file, type) ?: listOf()
     }
 
-    override fun create(item: T) {
+    fun find(byId: String) = findAll().firstOrNull { it.id == byId }
+
+    fun findAll() = items
+
+    protected fun createData(item: T) {
         items += item
     }
 
-    override fun find(byId: String) = findAll().firstOrNull { it.id == byId }
-
-    override fun findAll() = items
-
-    override fun delete(item: T) {
+    protected fun deleteData(item: T) {
         items -= item
     }
 
-    override fun deleteAll() {
+    protected fun deleteAllData() {
         items = listOf()
     }
 }
