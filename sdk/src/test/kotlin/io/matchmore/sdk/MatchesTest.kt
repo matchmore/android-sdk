@@ -9,10 +9,9 @@ import org.junit.Test
 
 class MatchesTest : BaseTest() {
 
-
-    class TestMatchListener(private val finished: ()->Unit): MatchListener {
+    class TestMatchListener(private val finished: (numberOfMatches: Int)->Unit): MatchListener {
         override fun onReceiveMatches(matches: Set<Match>, forDevice: Device) {
-            finished()
+            finished(matches.size)
         }
     }
 
@@ -23,7 +22,7 @@ class MatchesTest : BaseTest() {
         val matchMoreSdk = MatchMore.instance
 
         // create publication
-        val publication = Publication("Test Topic", 20.0, 100000.0)
+        val publication = Publication("Test Topic", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to "true")
         matchMoreSdk.createPublication(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
@@ -32,7 +31,7 @@ class MatchesTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // create subscription
-        val subscription = Subscription("Test Topic", 20.0, 100000.0)
+        val subscription = Subscription("Test Topic", 2000.0, 100000.0)
         subscription.selector = "test = 'true'"
         matchMoreSdk.createSubscription(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
@@ -41,10 +40,13 @@ class MatchesTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // get a match
-        val testMatchListener = TestMatchListener {
-            waiter.assertEquals(1, matchMoreSdk.matchMonitor.deliveredMatches.size)
+        val testMatchListener = TestMatchListener { numberOfMatches ->
+            waiter.assertEquals(1, numberOfMatches)
+            waiter.resume()
         }
+        matchMoreSdk.matchMonitor.monitoredDevices.add(matchMoreSdk.main!!)
         matchMoreSdk.matchMonitor.addOnMatchListener(testMatchListener)
+        matchMoreSdk.matchMonitor.startPollingMatches()
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 }

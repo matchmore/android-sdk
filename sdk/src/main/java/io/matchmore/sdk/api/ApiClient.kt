@@ -38,8 +38,10 @@ class ApiClient(gson: Gson, private val matchMoreConfig: MatchMoreConfig) {
     val subscriptionApi by lazy { retrofit.create(SubscriptionApi::class.java) }
 
     companion object {
-        private const val prefix = "https://"
-        private const val baseUrl = "api.matchmore.io"
+//        private const val prefix = "https://"
+//        private const val baseUrl = "api.matchmore.io"
+        private const val prefix = "http://"
+        private const val baseUrl = "35.201.116.232"
         private const val apiVersion = "/v5"
     }
 }
