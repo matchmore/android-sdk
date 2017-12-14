@@ -13,6 +13,7 @@ import io.matchmore.sdk.store.DeviceStore
 import io.matchmore.sdk.store.PublicationStore
 import io.matchmore.sdk.store.SubscriptionStore
 import io.matchmore.sdk.utils.PersistenceManager
+import io.matchmore.sdk.monitoring.MatchMonitor
 
 class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     private val gson = ParserBuilder.gsonBuilder.create()
