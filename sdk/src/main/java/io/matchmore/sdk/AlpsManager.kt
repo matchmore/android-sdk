@@ -7,6 +7,7 @@ import io.matchmore.sdk.api.adapters.ParserBuilder
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.DeviceStore
 import io.matchmore.sdk.store.PublicationStore
 import io.matchmore.sdk.store.SubscriptionStore
@@ -18,6 +19,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     private val deviceStore by lazy { DeviceStore(this) }
     private val publicationStore by lazy { PublicationStore(this) }
     private val subscriptionStore by lazy { SubscriptionStore(this) }
+
     val apiClient = ApiClient(gson, matchMoreConfig)
 
     override val main: MobileDevice?
@@ -37,4 +39,6 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     override val subscriptions = subscriptionStore
 
     override val devices = deviceStore
+
+    override val matchMonitor = MatchMonitor(this)
 }

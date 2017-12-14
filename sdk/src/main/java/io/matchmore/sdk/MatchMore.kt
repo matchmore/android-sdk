@@ -7,6 +7,7 @@ import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.CRD
 
 @SuppressLint("StaticFieldLeak")
@@ -38,6 +39,8 @@ interface MatchMoreSdk {
     val subscriptions: CRD<Subscription>
 
     val devices: CRD<Device>
+
+    val matchMonitor: MatchMonitor
 
     fun startUsingMainDevice(success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null)
             = startUsingMainDevice(null, success, error)
