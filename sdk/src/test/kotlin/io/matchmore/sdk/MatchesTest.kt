@@ -10,7 +10,7 @@ import org.junit.Test
 class MatchesTest : BaseTest() {
 
 
-    class TestMatchListener(private val finished: ()->()): MatchListener {
+    class TestMatchListener(private val finished: ()->Unit): MatchListener {
         override fun onReceiveMatches(matches: Set<Match>, forDevice: Device) {
             finished()
         }
