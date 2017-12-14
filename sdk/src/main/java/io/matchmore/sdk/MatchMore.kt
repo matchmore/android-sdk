@@ -1,6 +1,8 @@
 package io.matchmore.sdk
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.support.annotation.RequiresPermission
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.Device
@@ -41,6 +43,11 @@ interface MatchMoreSdk {
     val devices: CRD<Device>
 
     val matchMonitor: MatchMonitor
+
+    @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    fun startUpdatingLocation()
+
+    fun stopUpdatingLocation()
 
     fun startUsingMainDevice(success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null)
             = startUsingMainDevice(null, success, error)

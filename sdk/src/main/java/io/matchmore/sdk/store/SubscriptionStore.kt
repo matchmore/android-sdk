@@ -10,6 +10,10 @@ import io.matchmore.sdk.api.models.Subscription
 class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
         Store<Subscription>(manager.persistenceManager, SUBSCRIPTIONS_FILE) {
 
+    init {
+        this.items = manager.persistenceManager.readData<List<Subscription>>(SUBSCRIPTIONS_FILE) ?: arrayListOf()
+    }
+
     fun createSubscription(subscription: Subscription, deviceWithId: String? = null, success: SuccessCallback<Subscription>?, error: ErrorCallback?) {
         subscription.deviceId = deviceWithId ?: manager.main?.id
         create(subscription, success, error)
