@@ -19,7 +19,8 @@ class DeviceStore(private val manager: AlpsManager)
         }
 
     init {
-        this.main = manager.persistenceManager.readData(MAIN_DEVICE_FILE, MobileDevice::class.java)
+        this.main = manager.persistenceManager.readData<MobileDevice>(MAIN_DEVICE_FILE)
+        this.items = manager.persistenceManager.readData<List<Device>>(MOBILE_DEVICES_FILE) ?: arrayListOf()
     }
 
     fun startUsingMainDevice(device: MobileDevice?, success: SuccessCallback<MobileDevice>?, error: ErrorCallback?) {
