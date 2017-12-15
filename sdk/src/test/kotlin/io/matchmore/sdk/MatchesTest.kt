@@ -13,7 +13,7 @@ class MatchesTest : BaseTest() {
     }
 
     @Test
-    fun test() {
+    fun getMatches() {
         initAndStartUsingMainDevice()
 
         val matchMoreSdk = MatchMore.instance
