@@ -53,5 +53,19 @@ class MatchesTest : BaseTest() {
         matchMoreSdk.matchMonitor.addOnMatchListener(testMatchListener)
         matchMoreSdk.matchMonitor.startPollingMatches()
         waiter.await(SdkConfigTest.TIMEOUT)
+
+        // delete sub
+        matchMoreSdk.subscriptions.deleteAll({
+            waiter.assertEquals(0, matchMoreSdk.subscriptions.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        // delete pub
+        matchMoreSdk.publications.deleteAll({
+            waiter.assertEquals(0, matchMoreSdk.subscriptions.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
     }
 }
