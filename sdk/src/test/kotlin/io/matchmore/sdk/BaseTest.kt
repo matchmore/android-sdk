@@ -1,5 +1,6 @@
 package io.matchmore.sdk
 
+import io.matchmore.config.SdkConfigTest
 import net.jodah.concurrentunit.Waiter
 import org.junit.AfterClass
 import org.junit.BeforeClass
