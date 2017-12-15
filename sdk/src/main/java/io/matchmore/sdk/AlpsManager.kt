@@ -1,6 +1,5 @@
 package io.matchmore.sdk
 
-import android.annotation.SuppressLint
 import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
@@ -9,11 +8,11 @@ import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import io.matchmore.sdk.managers.MatchMoreLocationManager
+import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.DeviceStore
 import io.matchmore.sdk.store.PublicationStore
 import io.matchmore.sdk.store.SubscriptionStore
 import io.matchmore.sdk.utils.PersistenceManager
-import io.matchmore.sdk.monitoring.MatchMonitor
 
 class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     private val gson = ParserBuilder.gsonBuilder.create()
@@ -46,8 +45,15 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     override val locationManager = MatchMoreLocationManager(matchMoreConfig.context, this)
 
-    @SuppressLint("MissingPermission")
     override fun startUpdatingLocation() = locationManager.startUpdatingLocation()
 
     override fun stopUpdatingLocation() = locationManager.stopUpdatingLocation()
+
+    fun registerDeviceToken(token: String) {
+
+    }
+
+    fun processPushNotification(data: Map<String, String>) {
+        data["matchId"]?.let { matchMonitor.onReceiveMatchUpdate(it) }
+    }
 }

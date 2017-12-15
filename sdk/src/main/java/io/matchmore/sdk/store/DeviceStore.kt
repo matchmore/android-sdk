@@ -1,6 +1,7 @@
 package io.matchmore.sdk.store
 
 import android.os.Build
+import com.google.firebase.iid.FirebaseInstanceId
 import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.api.CompleteCallback
 import io.matchmore.sdk.api.ErrorCallback
@@ -26,7 +27,7 @@ class DeviceStore(private val manager: AlpsManager)
     fun startUsingMainDevice(device: MobileDevice?, success: SuccessCallback<MobileDevice>?, error: ErrorCallback?) {
         main?.let {
             if (device == null) {
-//                TODO manager.matchMonitor.startMonitoringFor(device: mainDevice)
+                manager.matchMonitor.startMonitoringFor(it)
                 success?.invoke(it)
                 return
             }
@@ -34,12 +35,13 @@ class DeviceStore(private val manager: AlpsManager)
         val mobileDevice = MobileDevice(
                 name = device?.name ?: Build.MODEL,
                 platform = device?.platform ?: "Android",
-                deviceToken = device?.deviceToken ?: "",
-                location = device?.location //TODO ?: lastLocation
+                deviceToken = device?.deviceToken ?: FirebaseInstanceId.getInstance().token ?: "",
+                location = device?.location ?: manager.locationManager.lastLocation
         )
         create(mobileDevice, {
             if (it is MobileDevice) {
                 if (main == null) main = it
+                manager.matchMonitor.startMonitoringFor(it)
                 success?.invoke(it)
             }
         }, error)

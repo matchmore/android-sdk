@@ -16,6 +16,8 @@ class MatchMonitor(private val manager: AlpsManager) {
 
     private var listeners = mutableSetOf<MatchListener>()
 
+    private var timer: Timer? = null
+
     fun addOnMatchListener(listener: MatchListener) {
         listeners.add(listener)
     }
@@ -24,7 +26,13 @@ class MatchMonitor(private val manager: AlpsManager) {
         listeners.remove(listener)
     }
 
-    private var timer: Timer? = null
+    fun startMonitoringFor(device: Device) {
+        monitoredDevices.add(device)
+    }
+
+    fun stopMonitoringFor(device: Device) {
+        monitoredDevices.remove(device)
+    }
 
     fun startPollingMatches() {
         if (timer != null) { return }
@@ -36,14 +44,13 @@ class MatchMonitor(private val manager: AlpsManager) {
         }, delay, repeat)
     }
 
-    companion object {
-        private const val delay: Long = 0
-        private const val repeat: Long = 5000
-    }
-
     fun stopPollingMatches() {
         timer?.cancel()
         timer = null
+    }
+
+    fun onReceiveMatchUpdate(deviceId: String) {
+        monitoredDevices.filter { it.id == deviceId }.forEach { getMatchesForDevice(it) }
     }
 
     private fun getMatches() = monitoredDevices.forEach { getMatchesForDevice(it) }
@@ -60,5 +67,10 @@ class MatchMonitor(private val manager: AlpsManager) {
                 }
             }, null)
         }
+    }
+
+    companion object {
+        private const val delay: Long = 0
+        private const val repeat: Long = 5000
     }
 }
