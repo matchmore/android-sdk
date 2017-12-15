@@ -17,7 +17,6 @@ import io.matchmore.sdk.monitoring.MatchMonitor
 
 class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     private val gson = ParserBuilder.gsonBuilder.create()
-    private val locationManager = MatchMoreLocationManager(matchMoreConfig.context, this)
     private val deviceStore by lazy { DeviceStore(this) }
     private val publicationStore by lazy { PublicationStore(this) }
     private val subscriptionStore by lazy { SubscriptionStore(this) }
@@ -44,6 +43,8 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     override val devices = deviceStore
 
     override val matchMonitor = MatchMonitor(this)
+
+    override val locationManager = MatchMoreLocationManager(matchMoreConfig.context, this)
 
     @SuppressLint("MissingPermission")
     override fun startUpdatingLocation() = locationManager.startUpdatingLocation()

@@ -1,9 +1,6 @@
 package io.matchmore.sdk
 
-import io.matchmore.sdk.api.models.Device
-import io.matchmore.sdk.api.models.Match
-import io.matchmore.sdk.api.models.Publication
-import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.monitoring.*
 import org.junit.Test
 
@@ -37,6 +34,14 @@ class MatchesTest : BaseTest() {
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+
+        // update location
+        val location = Location(latitude = 54.414662, longitude = 18.625498)
+        matchMoreSdk.locationManager.sendLocation(location) {
+            waiter.assertEquals(location, matchMoreSdk.locationManager.lastLocation)
+            waiter.resume()
+        }
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // get a match

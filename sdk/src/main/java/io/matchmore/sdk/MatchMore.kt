@@ -9,6 +9,7 @@ import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.managers.MatchMoreLocationManager
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.CRD
 
@@ -43,6 +44,8 @@ interface MatchMoreSdk {
     val devices: CRD<Device>
 
     val matchMonitor: MatchMonitor
+
+    val locationManager: MatchMoreLocationManager
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startUpdatingLocation()
