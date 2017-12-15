@@ -1,8 +1,7 @@
 package io.matchmore.sdk
 
-
 object SdkConfigTest {
-    const val API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJhbHBzIiwic3ViIjoiOTYzMjE5N2YtMDdjOC00Yzg0LWE4NzUtZGVjOGJmNDM3Mjg1IiwiYXVkIjpbIlB1YmxpYyJdLCJuYmYiOjE1MTE4NjMzNDUsImlhdCI6MTUxMTg2MzM0NSwianRpIjoiNCJ9.IXEclo2C_4IWh2V1F6B95O-Xo9LSQ_rcVhr9_Fg428z4gLhPLnMeXdnVy6f_RJObPC3in5J2ca7y19H2BNMWyg"
-    const val WORLD_ID = "9632197f-07c8-4c84-a875-dec8bf437285"
-    const val TIMEOUT = 10000L //10s
+    const val API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJhbHBzIiwic3ViIjoiZWRhMzQwYTAtNmUwOC00MWJhLWE3ZTEtMzU0YjExNTRkZGE4IiwiYXVkIjpbIlB1YmxpYyJdLCJuYmYiOjE1MTMxNjg1NzksImlhdCI6MTUxMzE2ODU3OSwianRpIjoiMSJ9.RLtv2x80KBaxtt4ADdo78MO-V3cMWvcadje7wi5QDiWS3vkKEeiBabzHRPgVrjvwDqHK6KbJ0cATayAZnWT78w"
+    const val WORLD_ID = "eda340a0-6e08-41ba-a7e1-354b1154dda8"
+    const val TIMEOUT = 20000L // 20s
 }

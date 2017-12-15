@@ -6,7 +6,7 @@ import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.Match
 import java.util.*
 
-interface MatchMonitorListener {
+interface MatchListener {
     fun onReceiveMatches(matches: Set<Match>, forDevice: Device)
 }
 
@@ -14,13 +14,13 @@ class MatchMonitor(private val manager: AlpsManager) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
 
-    private var listeners = mutableSetOf<MatchMonitorListener>()
+    private var listeners = mutableSetOf<MatchListener>()
 
-    fun addOnMatchListener(listener: MatchMonitorListener) {
+    fun addOnMatchListener(listener: MatchListener) {
         listeners.add(listener)
     }
 
-    fun removeOnMatchListener(listener: MatchMonitorListener) {
+    fun removeOnMatchListener(listener: MatchListener) {
         listeners.remove(listener)
     }
 
