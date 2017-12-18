@@ -1,7 +1,8 @@
 package io.matchmore.sdk
 
+import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.api.models.*
-import io.matchmore.sdk.monitoring.*
+import io.matchmore.sdk.monitoring.MatchListener
 import org.junit.Test
 
 class MatchesTest : BaseTest() {

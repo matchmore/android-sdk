@@ -12,6 +12,7 @@ import org.robolectric.shadows.ShadowLog;
 
 import java.util.concurrent.TimeoutException;
 
+import io.matchmore.config.SdkConfigTest;
 import io.matchmore.sdk.api.models.Publication;
 import io.matchmore.sdk.api.models.Subscription;
 import kotlin.Unit;

@@ -1,1 +1,1 @@
-include ':example', ':sdk', ':rx'
+include ':example', ':sdk', ':rx', ':config'

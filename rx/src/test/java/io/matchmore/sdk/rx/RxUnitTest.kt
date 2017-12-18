@@ -1,5 +1,6 @@
 package io.matchmore.sdk.rx
 
+import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.MatchMoreConfig
 import io.matchmore.sdk.api.models.Publication
