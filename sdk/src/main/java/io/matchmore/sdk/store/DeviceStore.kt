@@ -35,7 +35,7 @@ class DeviceStore(private val manager: AlpsManager)
         val mobileDevice = MobileDevice(
                 name = device?.name ?: Build.MODEL,
                 platform = device?.platform ?: "Android",
-                deviceToken = device?.deviceToken ?: FirebaseInstanceId.getInstance().token ?: "",
+                deviceToken = device?.deviceToken ?: manager.getDeviceToken(),
                 location = device?.location ?: manager.locationManager.lastLocation
         )
         create(mobileDevice, {

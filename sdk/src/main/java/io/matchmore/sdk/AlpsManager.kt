@@ -1,5 +1,6 @@
 package io.matchmore.sdk
 
+import com.google.firebase.iid.FirebaseInstanceId
 import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
@@ -56,4 +57,11 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     fun processPushNotification(data: Map<String, String>) {
         data["matchId"]?.let { matchMonitor.onReceiveMatchUpdate(it) }
     }
+
+    fun getDeviceToken() =
+            try {
+                FirebaseInstanceId.getInstance().token ?: ""
+            } catch (ex: IllegalStateException) {
+                ""
+            }
 }
