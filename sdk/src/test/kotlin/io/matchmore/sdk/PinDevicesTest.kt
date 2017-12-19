@@ -9,13 +9,13 @@ class PinDevicesTest : BaseTest() {
 
     @Test
     fun testPinDeviceCreation() {
-        initAndStartUsingMainDevice()
+        init()
 
         val matchMoreSdk = MatchMore.instance
         var pinDevice = PinDevice("Test Pin", location = Location(latitude = 2.0, longitude = 2.0))
 
-        matchMoreSdk.devices.create(pinDevice, { _ ->
-            pinDevice = matchMoreSdk.devices.findAll().filterIsInstance<PinDevice>().first()
+        matchMoreSdk.createPinDevice(pinDevice, {
+            pinDevice = it
             waiter.assertEquals(1, matchMoreSdk.devices.findAll().filterIsInstance<PinDevice>().size)
             waiter.resume()
         }, waiter::fail)
@@ -23,12 +23,6 @@ class PinDevicesTest : BaseTest() {
 
         matchMoreSdk.devices.delete(pinDevice, {
             waiter.assertEquals(0, matchMoreSdk.devices.findAll().filterIsInstance<PinDevice>().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
-
-        matchMoreSdk.devices.deleteAll({
-            waiter.assertEquals(0, matchMoreSdk.devices.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
