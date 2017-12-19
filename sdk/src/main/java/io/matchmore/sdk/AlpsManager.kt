@@ -9,14 +9,17 @@ import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.api.models.PinDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.managers.MatchMoreBeaconManager
 import io.matchmore.sdk.managers.MatchMoreLocationManager
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.DeviceStore
+import io.matchmore.sdk.store.IBeaconTriplesStore
 import io.matchmore.sdk.store.PublicationStore
 import io.matchmore.sdk.store.SubscriptionStore
 import io.matchmore.sdk.utils.PersistenceManager
 
 class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
+
     private val gson = ParserBuilder.gsonBuilder.create()
     private val deviceStore by lazy {
         val deviceStore = DeviceStore(this)
@@ -26,6 +29,8 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     }
     private val publicationStore by lazy { PublicationStore(this) }
     private val subscriptionStore by lazy { SubscriptionStore(this) }
+    private val beaconManager by lazy { MatchMoreBeaconManager(matchMoreConfig.context, apiClient, deviceStore) }
+    private val iBeaconTriplesStore by lazy { IBeaconTriplesStore(this) }
 
     val apiClient = ApiClient(gson, matchMoreConfig)
     val persistenceManager = PersistenceManager(matchMoreConfig.context, gson)
@@ -42,7 +47,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     override fun createSubscription(subscription: Subscription, deviceWithId: String?, success: SuccessCallback<Subscription>?, error: ErrorCallback?)
             = subscriptionStore.createSubscription(subscription, deviceWithId, success, error)
 
-    override  fun createPinDevice(pinDevice: PinDevice, success: SuccessCallback<PinDevice>?, error: ErrorCallback?) = deviceStore.create(pinDevice, {
+    override fun createPinDevice(pinDevice: PinDevice, success: SuccessCallback<PinDevice>?, error: ErrorCallback?) = deviceStore.create(pinDevice, {
         success?.invoke(it as PinDevice)
     }, error)
 
@@ -59,6 +64,14 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     override fun startUpdatingLocation() = locationManager.startUpdatingLocation()
 
     override fun stopUpdatingLocation() = locationManager.stopUpdatingLocation()
+
+    override fun startRanging() {
+        iBeaconTriplesStore.updateBeaconTriplets {
+            beaconManager.startRanging()
+        }
+    }
+
+    override fun stopRanging() = beaconManager.stopRanging()
 
     fun registerDeviceToken(token: String) {
 

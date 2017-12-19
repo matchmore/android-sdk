@@ -52,5 +52,7 @@ open class IBeaconTriple(
         @SerializedName("minor")
         @get:ApiModelProperty(value = "Minor values are intended to identify and distinguish an individual. ")
         var minor: Int? = null
-)
+) : HasId {
+    override val id = deviceId
+}
 

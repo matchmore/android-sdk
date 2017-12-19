@@ -49,6 +49,11 @@ interface MatchMoreSdk {
 
     fun stopUpdatingLocation()
 
+    @RequiresPermission(allOf = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.BLUETOOTH))
+    fun startRanging()
+
+    fun stopRanging()
+
     fun startUsingMainDevice(success: SuccessCallback<MobileDevice>? = null, error: ErrorCallback? = null)
             = startUsingMainDevice(null, success, error)
 

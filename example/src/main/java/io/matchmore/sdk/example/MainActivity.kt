@@ -42,6 +42,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        MatchMore.instance.apply {
+            stopRanging()
+            stopUpdatingLocation()
+        }
+    }
+
     private fun MatchMoreSdk.createPollingSubscription() {
         val subscription = Subscription("Test Topic", 1.0, 0.0)
         subscription.selector = "test = 'true'"
@@ -54,7 +62,10 @@ class MainActivity : AppCompatActivity() {
         val permissionListener = object : PermissionListener {
             @SuppressLint("MissingPermission")
             override fun onPermissionGranted() {
-                MatchMore.instance.startUpdatingLocation()
+                MatchMore.instance.apply {
+                    startUpdatingLocation()
+                    startRanging()
+                }
             }
 
             override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {
