@@ -35,6 +35,10 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
                 }, error)
     }
 
+    var onDeviceDelete: DeviceDeleteListener = { id ->
+        items = items.filter { it.deviceId != id }
+    }
+
     companion object {
         private const val PUBLICATIONS_FILE = "kPublicationsFile.Alps"
     }
