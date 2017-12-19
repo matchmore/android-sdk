@@ -6,23 +6,21 @@ import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.Match
 import java.util.*
 
-interface MatchListener {
-    fun onReceiveMatches(matches: Set<Match>, forDevice: Device)
-}
+typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
 class MatchMonitor(private val manager: AlpsManager) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
 
-    private var listeners = mutableSetOf<MatchListener>()
+    private var listeners = mutableSetOf<MatchMonitorListener>()
 
     private var timer: Timer? = null
 
-    fun addOnMatchListener(listener: MatchListener) {
+    fun addOnMatchListener(listener: MatchMonitorListener) {
         listeners.add(listener)
     }
 
-    fun removeOnMatchListener(listener: MatchListener) {
+    fun removeOnMatchListener(listener: MatchMonitorListener) {
         listeners.remove(listener)
     }
 
@@ -35,7 +33,9 @@ class MatchMonitor(private val manager: AlpsManager) {
     }
 
     fun startPollingMatches() {
-        if (timer != null) { return }
+        if (timer != null) {
+            return
+        }
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
@@ -62,7 +62,7 @@ class MatchMonitor(private val manager: AlpsManager) {
                 if (newMatches.isNotEmpty()) {
                     deliveredMatches.addAll(newMatches)
                     listeners.forEach {
-                        it.onReceiveMatches(newMatches.toSet(), device)
+                        it.invoke(newMatches.toSet(), device)
                     }
                 }
             }, null)
