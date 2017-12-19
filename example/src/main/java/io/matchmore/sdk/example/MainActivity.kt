@@ -9,6 +9,9 @@ import android.widget.Toast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.MatchMoreSdk
+import io.matchmore.sdk.api.models.Publication
+import io.matchmore.sdk.api.models.Subscription
 
 
 class MainActivity : AppCompatActivity() {
@@ -16,12 +19,35 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        MatchMore.instance.startUsingMainDevice(
-                { device ->
-                    Log.i("MatchMore", "start ${device.name}")
-                    checkLocationPermission()
-                },
-                { it.printStackTrace() })
+        MatchMore.instance.apply {
+            startUsingMainDevice(
+                    { device ->
+                        Log.i(TAG, "start using device ${device.name}")
+
+                        val publication = Publication("Test Topic", 1.0, 0.0)
+                        publication.properties = hashMapOf("test" to "true")
+                        createPublication(publication, { result ->
+                            Log.i(TAG, "Publication created ${result.topic}")
+                        }, Throwable::printStackTrace)
+
+                        matchMonitor.addOnMatchListener { matches, _ ->
+                            Log.i(TAG, "Matches found: ${matches.size}")
+                        }
+                        matchMonitor.startPollingMatches()
+
+                        createPollingSubscription()
+
+                        checkLocationPermission()
+                    }, Throwable::printStackTrace)
+        }
+    }
+
+    private fun MatchMoreSdk.createPollingSubscription() {
+        val subscription = Subscription("Test Topic", 1.0, 0.0)
+        subscription.selector = "test = 'true'"
+        createSubscription(subscription, { result ->
+            Log.i(TAG, "Subscription created ${result.topic}")
+        }, Throwable::printStackTrace)
     }
 
     private fun checkLocationPermission() {
@@ -39,6 +65,10 @@ class MainActivity : AppCompatActivity() {
                 .setPermissionListener(permissionListener)
                 .setDeniedMessage(R.string.if_you_reject)
                 .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
-                .check();
+                .check()
+    }
+
+    companion object {
+        private const val TAG = "MatchMore"
     }
 }

@@ -1,17 +1,12 @@
 package io.matchmore.sdk
 
 import io.matchmore.config.SdkConfigTest
-import io.matchmore.sdk.api.models.*
-import io.matchmore.sdk.monitoring.MatchListener
+import io.matchmore.sdk.api.models.Location
+import io.matchmore.sdk.api.models.Publication
+import io.matchmore.sdk.api.models.Subscription
 import org.junit.Test
 
 class MatchesTest : BaseTest() {
-
-    class TestMatchListener(private val finished: (numberOfMatches: Int)->Unit): MatchListener {
-        override fun onReceiveMatches(matches: Set<Match>, forDevice: Device) {
-            finished(matches.size)
-        }
-    }
 
     @Test
     fun getMatches() {
@@ -46,12 +41,10 @@ class MatchesTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // get a match
-        val testMatchListener = TestMatchListener { numberOfMatches ->
-            waiter.assertTrue(numberOfMatches >= 0)
+        matchMoreSdk.matchMonitor.addOnMatchListener { matches, _ ->
+            waiter.assertTrue(matches.size >= 0)
             waiter.resume()
         }
-        matchMoreSdk.matchMonitor.monitoredDevices.add(matchMoreSdk.main!!)
-        matchMoreSdk.matchMonitor.addOnMatchListener(testMatchListener)
         matchMoreSdk.matchMonitor.startPollingMatches()
         waiter.await(SdkConfigTest.TIMEOUT)
 
