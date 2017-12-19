@@ -35,6 +35,10 @@ class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
                 }, error)
     }
 
+    var onDeviceDelete: DeviceDeleteListener = { id ->
+        items = items.filter { it.deviceId != id }
+    }
+
     companion object {
         private const val SUBSCRIPTIONS_FILE = "kSubscriptionsFile.Alps"
     }

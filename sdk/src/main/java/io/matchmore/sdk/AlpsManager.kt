@@ -6,6 +6,7 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.adapters.ParserBuilder
 import io.matchmore.sdk.api.models.MobileDevice
+import io.matchmore.sdk.api.models.PinDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import io.matchmore.sdk.managers.MatchMoreLocationManager
@@ -17,7 +18,12 @@ import io.matchmore.sdk.utils.PersistenceManager
 
 class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     private val gson = ParserBuilder.gsonBuilder.create()
-    private val deviceStore by lazy { DeviceStore(this) }
+    private val deviceStore by lazy {
+        val deviceStore = DeviceStore(this)
+        deviceStore.addOnDeviceDeleteListener(publicationStore.onDeviceDelete)
+        deviceStore.addOnDeviceDeleteListener(subscriptionStore.onDeviceDelete)
+        deviceStore
+    }
     private val publicationStore by lazy { PublicationStore(this) }
     private val subscriptionStore by lazy { SubscriptionStore(this) }
 
@@ -35,6 +41,10 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     override fun createSubscription(subscription: Subscription, deviceWithId: String?, success: SuccessCallback<Subscription>?, error: ErrorCallback?)
             = subscriptionStore.createSubscription(subscription, deviceWithId, success, error)
+
+    override  fun createPinDevice(pinDevice: PinDevice, success: SuccessCallback<PinDevice>?, error: ErrorCallback?) = deviceStore.create(pinDevice, {
+        success?.invoke(it as PinDevice)
+    }, error)
 
     override val publications = publicationStore
 

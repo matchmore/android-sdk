@@ -10,8 +10,21 @@ import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.MobileDevice
 
+typealias DeviceDeleteListener = (String) -> Unit
+
 class DeviceStore(private val manager: AlpsManager)
     : Store<Device>(manager.persistenceManager, MOBILE_DEVICES_FILE), CRD<Device> {
+
+    private var listeners = mutableSetOf<DeviceDeleteListener>()
+
+    fun addOnDeviceDeleteListener(listener: DeviceDeleteListener) {
+        listeners.add(listener)
+    }
+
+    fun removeOnDeviceDeleteListener(listener: DeviceDeleteListener) {
+        listeners.remove(listener)
+    }
+
 
     var main: MobileDevice? = null
         set(value) {
@@ -58,6 +71,9 @@ class DeviceStore(private val manager: AlpsManager)
         manager.apiClient.deviceApi.deleteDevice(item.id!!).async({
             deleteData(item)
             if (item == main) main = null
+            listeners.forEach {
+                it.invoke(item.id!!)
+            }
             complete?.invoke()
         }, error)
     }

@@ -5,10 +5,7 @@ import android.annotation.SuppressLint
 import android.support.annotation.RequiresPermission
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
-import io.matchmore.sdk.api.models.Device
-import io.matchmore.sdk.api.models.MobileDevice
-import io.matchmore.sdk.api.models.Publication
-import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.managers.MatchMoreLocationManager
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.CRD
@@ -66,4 +63,6 @@ interface MatchMoreSdk {
             = createSubscription(subscription, null, success, error)
 
     fun createSubscription(subscription: Subscription, deviceWithId: String? = null, success: SuccessCallback<Subscription>?, error: ErrorCallback?)
+
+    fun createPinDevice(pinDevice: PinDevice, success: SuccessCallback<PinDevice>?, error: ErrorCallback?)
 }

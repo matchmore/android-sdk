@@ -14,8 +14,17 @@ import org.robolectric.shadows.ShadowLog
 @Config(constants = BuildConfig::class)
 abstract class BaseTest {
 
-    // unfortunately we can't move that metho to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
+    // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
     fun initAndStartUsingMainDevice() {
+        init()
+        MatchMore.instance.startUsingMainDevice({ _ ->
+            waiter.assertEquals(1, MatchMore.instance.devices.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+    }
+
+    fun init() {
         if (!MatchMore.isConfigured()) {
             MatchMore.config(MatchMoreConfig(
                     RuntimeEnvironment.application,
@@ -23,11 +32,6 @@ abstract class BaseTest {
                     false,
                     true))
         }
-        MatchMore.instance.startUsingMainDevice({ _ ->
-            waiter.assertEquals(1, MatchMore.instance.devices.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
     }
 
     companion object {
