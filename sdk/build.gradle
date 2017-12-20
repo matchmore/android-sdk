@@ -45,6 +45,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "io.swagger:swagger-annotations:$swagger_annotations_version"
+    implementation 'org.altbeacon:android-beacon-library:2.12.4'
     testImplementation project(':config')
     testImplementation 'junit:junit:4.12'
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

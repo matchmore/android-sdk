@@ -4,7 +4,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-fun <T> Call<T>.async(success: SuccessCallback<T>?, error: ErrorCallback?) {
+fun <T> Call<T>.async(success: SuccessCallback<T>? = null, error: ErrorCallback? = null) {
     enqueue(object: Callback<T> {
         override fun onResponse(call: Call<T>, response: Response<T>) {
             if (response.isSuccessful) {
@@ -20,7 +20,7 @@ fun <T> Call<T>.async(success: SuccessCallback<T>?, error: ErrorCallback?) {
     })
 }
 
-fun Call<Void>.async(complete: CompleteCallback?, error: ErrorCallback?) {
+fun Call<Void>.async(complete: CompleteCallback? = null, error: ErrorCallback? = null) {
     enqueue(object: Callback<Void> {
         override fun onResponse(call: Call<Void>, response: Response<Void>) {
             if (response.isSuccessful) {
