@@ -6,10 +6,10 @@ import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import org.junit.Test
 
-class MatchesTest : BaseTest() {
+class SocketTest : BaseTest() {
 
     @Test
-    fun getMatches() {
+    fun getMatchesUsingSocket() {
         initAndStartUsingMainDevice()
 
         val matchMoreSdk = MatchMore.instance
@@ -32,20 +32,16 @@ class MatchesTest : BaseTest() {
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
+        matchMoreSdk.matchMonitor.openSocketForMatches()
         // update location
         val location = Location(latitude = 54.414662, longitude = 18.625498)
-        matchMoreSdk.locationManager.sendLocation(location) {
-            waiter.assertEquals(location, matchMoreSdk.locationManager.lastLocation)
-            waiter.resume()
-        }
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.locationManager.sendLocation(location)
 
         // get a match
-        matchMoreSdk.matchMonitor.addOnMatchListener { matches, _ ->
-            waiter.assertTrue(matches.size >= 0)
-            waiter.resume()
-        }
-        matchMoreSdk.matchMonitor.startPollingMatches()
-        waiter.await(SdkConfigTest.TIMEOUT)
+//        matchMoreSdk.matchMonitor.addOnMatchListener { matches, _ ->
+//            waiter.assertTrue(matches.size >= 0)
+//            waiter.resume()
+//        }
+//        waiter.await(SdkConfigTest.TIMEOUT)
     }
 }

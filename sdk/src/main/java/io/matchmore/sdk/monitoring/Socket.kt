@@ -10,8 +10,8 @@ typealias OnClosed = (Int, String?) -> Unit
 
 class MatchSocketListener : WebSocketListener() {
 
-    val onMessage: OnMessage? = null
-    val onClosed: OnClosed? = null
+    var onMessage: OnMessage? = null
+    var onClosed: OnClosed? = null
 
     override fun onMessage(webSocket: WebSocket?, text: String?) {
         onMessage?.invoke(text)
