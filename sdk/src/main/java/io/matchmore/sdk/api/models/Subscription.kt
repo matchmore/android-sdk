@@ -14,6 +14,7 @@
 package io.matchmore.sdk.api.models
 
 import com.google.gson.annotations.SerializedName
+import io.matchmore.sdk.utils.Expirable
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 
@@ -41,7 +42,7 @@ data class Subscription @JvmOverloads constructor(
          */
         @SerializedName("duration")
         @get:ApiModelProperty(required = true, value = "The duration of the subscription in seconds. If set to '-1' the subscription will live forever and if set to '0' it will be instant at the time of subscription. ")
-        var duration: Double? = null,
+        override var duration: Double? = null,
 
         /**
          * This is an expression to filter the publications. For instance &#39;job&#x3D;&#39;developer&#39;&#39; will allow matching only with publications containing a &#39;job&#39; key with a value of &#39;developer&#39;.
@@ -69,7 +70,7 @@ data class Subscription @JvmOverloads constructor(
          */
         @SerializedName("createdAt")
         @get:ApiModelProperty(required = true, value = "The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC). ")
-        val createdAt: Long? = null,
+        override val createdAt: Long? = null,
 
         @SerializedName("pushers")
         var pushers: MutableList<String>? = null,
@@ -80,5 +81,5 @@ data class Subscription @JvmOverloads constructor(
         @SerializedName("id")
         @get:ApiModelProperty(required = true, value = "The id (UUID) of the subscription.")
         override val id: String? = null
-) : HasId
+) : HasId, Expirable
 
