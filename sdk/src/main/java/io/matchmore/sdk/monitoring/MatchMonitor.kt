@@ -1,20 +1,29 @@
 package io.matchmore.sdk.monitoring
 
 import io.matchmore.sdk.AlpsManager
+import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.MatchMoreConfig
+import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.Match
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
 import java.util.*
 
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
-class MatchMonitor(private val manager: AlpsManager) {
+class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
+    val listener = MatchSocketListener()
 
     private var listeners = mutableSetOf<MatchMonitorListener>()
 
     private var timer: Timer? = null
+
+    private var socket: WebSocket? = null
 
     fun addOnMatchListener(listener: MatchMonitorListener) {
         listeners.add(listener)
@@ -22,6 +31,32 @@ class MatchMonitor(private val manager: AlpsManager) {
 
     fun removeOnMatchListener(listener: MatchMonitorListener) {
         listeners.remove(listener)
+    }
+
+    fun openSocketForMatches() {
+        if (socket != null) {
+            return
+        }
+        val deviceId = MatchMore.instance.devices.findAll().first().id
+        val request = Request.Builder().url("ws://$ApiClient.baseUrl/pusher/v5/ws/$deviceId").header("api_key", config.worldId).build()
+        val client = OkHttpClient()
+        listener.onMessage = { text ->
+            if (text != "") {
+                getMatches()
+            }
+        }
+        listener.onClosed = { _, _ -> openSocket(client, request) }
+        openSocket(client, request)
+    }
+
+    private fun openSocket(client: OkHttpClient, request: Request) {
+        socket = client.newWebSocket(request, listener)
+        client.dispatcher().executorService().shutdown()
+    }
+
+    fun closeSocketForMatches() {
+        socket?.close(1001, "closed by SDK")
+        socket = null
     }
 
     fun startMonitoringFor(device: Device) {

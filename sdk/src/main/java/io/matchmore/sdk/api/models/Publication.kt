@@ -14,6 +14,7 @@
 package io.matchmore.sdk.api.models
 
 import com.google.gson.annotations.SerializedName
+import io.matchmore.sdk.utils.Expirable
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import java.util.*
@@ -43,7 +44,7 @@ data class Publication @JvmOverloads constructor(
          */
         @SerializedName("duration")
         @get:ApiModelProperty(required = true, value = "The duration of the publication in seconds. If set to '-1' the publication will live forever and if set to '0' it will be instant at the time of publication. ")
-        var duration: Double? = null,
+        override var duration: Double? = null,
 
         @SerializedName("properties")
         var properties: MutableMap<String, String> = HashMap(),
@@ -67,7 +68,7 @@ data class Publication @JvmOverloads constructor(
          */
         @SerializedName("createdAt")
         @get:ApiModelProperty(required = true, value = "The timestamp of the publication creation in seconds since Jan 01 1970 (UTC). ")
-        val createdAt: Long? = null,
+        override val createdAt: Long? = null,
 
         /**
          * The id (UUID) of the publication.
@@ -77,5 +78,5 @@ data class Publication @JvmOverloads constructor(
         override val id: String? = null
 
 
-) : HasId
+) : HasId, Expirable
 

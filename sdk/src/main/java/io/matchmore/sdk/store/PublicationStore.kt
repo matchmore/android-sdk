@@ -6,12 +6,20 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Publication
+import io.matchmore.sdk.utils.withoutExpired
 
 class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
         Store<Publication>(manager.persistenceManager, PUBLICATIONS_FILE) {
 
+    override var items: List<Publication> = listOf<Publication>()
+        get() = field.withoutExpired()
+        set(value) {
+            Thread({ manager.persistenceManager.writeData(value, PUBLICATIONS_FILE) }).start()
+            field = value
+        }
+
     init {
-        this.items = manager.persistenceManager.readData<List<Publication>>(PUBLICATIONS_FILE) ?: arrayListOf()
+        items = manager.persistenceManager.readData<List<Publication>>(PUBLICATIONS_FILE)?.withoutExpired() ?: listOf()
     }
 
     fun createPublication(publication: Publication, deviceWithId: String? = null, success: SuccessCallback<Publication>?, error: ErrorCallback?) {

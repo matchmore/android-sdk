@@ -7,7 +7,7 @@ open class Store<T : HasId>(
         private val persistenceManager: PersistenceManager,
         private val file: String) {
 
-    protected var items = listOf<T>()
+    open var items = listOf<T>()
         set(value) {
             Thread({ persistenceManager.writeData(value, file) }).start()
             field = value

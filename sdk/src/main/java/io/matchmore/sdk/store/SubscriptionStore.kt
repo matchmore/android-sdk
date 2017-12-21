@@ -6,12 +6,20 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.utils.withoutExpired
 
 class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
         Store<Subscription>(manager.persistenceManager, SUBSCRIPTIONS_FILE) {
 
+    override var items: List<Subscription> = listOf<Subscription>()
+        get() = field.withoutExpired()
+        set(value) {
+            Thread({ manager.persistenceManager.writeData(value, SUBSCRIPTIONS_FILE) }).start()
+            field = value
+        }
+
     init {
-        this.items = manager.persistenceManager.readData<List<Subscription>>(SUBSCRIPTIONS_FILE) ?: arrayListOf()
+        items = manager.persistenceManager.readData<List<Subscription>>(SUBSCRIPTIONS_FILE)?.withoutExpired() ?: listOf()
     }
 
     fun createSubscription(subscription: Subscription, deviceWithId: String? = null, success: SuccessCallback<Subscription>?, error: ErrorCallback?) {

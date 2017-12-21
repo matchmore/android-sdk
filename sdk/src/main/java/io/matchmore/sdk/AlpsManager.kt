@@ -57,7 +57,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     override val devices = deviceStore
 
-    override val matchMonitor = MatchMonitor(this)
+    override val matchMonitor = MatchMonitor(this, matchMoreConfig)
 
     override val locationManager = MatchMoreLocationManager(matchMoreConfig.context, this)
 
