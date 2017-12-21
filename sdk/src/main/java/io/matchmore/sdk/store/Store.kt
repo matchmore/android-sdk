@@ -4,8 +4,8 @@ import io.matchmore.sdk.api.models.HasId
 import io.matchmore.sdk.utils.PersistenceManager
 
 open class Store<T : HasId>(
-        val persistenceManager: PersistenceManager,
-        val file: String) {
+        private val persistenceManager: PersistenceManager,
+        private val file: String) {
 
     open var items = listOf<T>()
         set(value) {

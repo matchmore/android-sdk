@@ -11,17 +11,15 @@ import io.matchmore.sdk.utils.withoutExpired
 class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
         Store<Subscription>(manager.persistenceManager, SUBSCRIPTIONS_FILE) {
 
-    private var _items = listOf<Subscription>()
-    override var items: List<Subscription>
-        get() {
-            return _items.withoutExpired()
-        }
+    override var items: List<Subscription> = listOf<Subscription>()
+        get() = field.withoutExpired()
         set(value) {
-            Thread({ persistenceManager.writeData(value, file) }).start()
-            _items = value
+            Thread({ manager.persistenceManager.writeData(value, SUBSCRIPTIONS_FILE) }).start()
+            field = value
         }
+
     init {
-        items = manager.persistenceManager.readData<List<Subscription>>(SUBSCRIPTIONS_FILE)?.withoutExpired() ?: arrayListOf()
+        items = manager.persistenceManager.readData<List<Subscription>>(SUBSCRIPTIONS_FILE)?.withoutExpired() ?: listOf()
     }
 
     fun createSubscription(subscription: Subscription, deviceWithId: String? = null, success: SuccessCallback<Subscription>?, error: ErrorCallback?) {

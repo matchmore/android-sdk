@@ -1,7 +1,5 @@
 package io.matchmore.sdk.utils
 
-import java.util.*
-
 interface Expirable {
     val duration: Double?
     val createdAt: Long?
@@ -10,8 +8,7 @@ interface Expirable {
             val duration = this.duration
             val createdAt = this.createdAt
             if (duration == null || createdAt == null) return true
-            val nowTimeInterval = Date().time
-            return (duration * 1000).toLong() < (nowTimeInterval - createdAt)
+            return (duration * 1000).toLong() < System.currentTimeMillis() - createdAt
         }
 }
 

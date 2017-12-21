@@ -20,7 +20,7 @@ class ExpirableTest : BaseTest() {
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        val expiringPublication = Publication("Test Topic", 2000.0, 1.0)
+        val expiringPublication = Publication("Expiring Topic", 2000.0, 1.0)
         matchMoreSdk.createPublication(expiringPublication, { _ ->
             waiter.assertEquals(2, matchMoreSdk.publications.findAll().size)
             waiter.resume()
@@ -35,7 +35,7 @@ class ExpirableTest : BaseTest() {
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        val expiringSubscription = Subscription("Test Topic", 2000.0, 1.0)
+        val expiringSubscription = Subscription("Expiring Topic", 2000.0, 1.0)
         matchMoreSdk.createSubscription(expiringSubscription, { _ ->
             waiter.assertEquals(2, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()

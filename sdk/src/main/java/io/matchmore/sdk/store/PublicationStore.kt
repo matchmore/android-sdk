@@ -11,18 +11,15 @@ import io.matchmore.sdk.utils.withoutExpired
 class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
         Store<Publication>(manager.persistenceManager, PUBLICATIONS_FILE) {
 
-    private var _items = listOf<Publication>()
-    override var items: List<Publication>
-        get() {
-            return _items.withoutExpired()
-        }
+    override var items: List<Publication> = listOf<Publication>()
+        get() = field.withoutExpired()
         set(value) {
-            Thread({ persistenceManager.writeData(value, file) }).start()
-            _items = value
+            Thread({ manager.persistenceManager.writeData(value, PUBLICATIONS_FILE) }).start()
+            field = value
         }
 
     init {
-        items = manager.persistenceManager.readData<List<Publication>>(PUBLICATIONS_FILE)?.withoutExpired() ?: arrayListOf()
+        items = manager.persistenceManager.readData<List<Publication>>(PUBLICATIONS_FILE)?.withoutExpired() ?: listOf()
     }
 
     fun createPublication(publication: Publication, deviceWithId: String? = null, success: SuccessCallback<Publication>?, error: ErrorCallback?) {
