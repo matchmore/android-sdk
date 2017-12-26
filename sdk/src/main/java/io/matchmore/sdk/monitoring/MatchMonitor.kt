@@ -17,6 +17,7 @@ typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
+        private set
     val listener = MatchSocketListener()
 
     private var listeners = mutableSetOf<MatchMonitorListener>()

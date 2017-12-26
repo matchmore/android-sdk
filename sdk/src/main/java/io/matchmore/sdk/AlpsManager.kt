@@ -5,10 +5,7 @@ import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.adapters.ParserBuilder
-import io.matchmore.sdk.api.models.MobileDevice
-import io.matchmore.sdk.api.models.PinDevice
-import io.matchmore.sdk.api.models.Publication
-import io.matchmore.sdk.api.models.Subscription
+import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.managers.MatchMoreBeaconManager
 import io.matchmore.sdk.managers.MatchMoreLocationManager
 import io.matchmore.sdk.monitoring.MatchMonitor
@@ -34,6 +31,9 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     val apiClient = ApiClient(gson, matchMoreConfig)
     val persistenceManager = PersistenceManager(matchMoreConfig.context, gson)
+
+    override val matches: Set<Match>
+        get() =  matchMonitor.deliveredMatches.toSet()
 
     override val main: MobileDevice?
         get() = deviceStore.main
