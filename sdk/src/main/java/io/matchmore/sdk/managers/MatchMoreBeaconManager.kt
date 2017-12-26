@@ -25,10 +25,12 @@ class MatchMoreBeaconManager(
 
     fun startRanging() {
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        if (!bluetoothAdapter.isEnabled) {
-            bluetoothAdapter.enable()
+        if (bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled) {
+                bluetoothAdapter.enable()
+            }
+            beaconManager.bind(this)
         }
-        beaconManager.bind(this)
     }
 
     fun stopRanging() {
