@@ -15,9 +15,10 @@ import java.util.*
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
 class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
-    var monitoredDevices = mutableSetOf<Device>()
-    var deliveredMatches = mutableSetOf<Match>()
+    val monitoredDevices = mutableSetOf<Device>()
+    val deliveredMatches = mutableSetOf<Match>()
     val socketListener = MatchSocketListener()
+
 
     private var listeners = mutableSetOf<MatchMonitorListener>()
 
