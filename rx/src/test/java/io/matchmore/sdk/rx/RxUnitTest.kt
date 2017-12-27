@@ -25,10 +25,10 @@ class RxUnitTest {
         ShadowLog.stream = System.out
         if (!MatchMore.isConfigured())
             MatchMore.config(MatchMoreConfig(
-                    RuntimeEnvironment.application,
-                    SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
-                    false,
-                    true))
+                    context = RuntimeEnvironment.application,
+                    apiKey = SdkConfigTest.API_KEY, worldId = SdkConfigTest.WORLD_ID,
+                    callbackInUIThread = false,
+                    debugLog = true))
     }
 
     @Test
