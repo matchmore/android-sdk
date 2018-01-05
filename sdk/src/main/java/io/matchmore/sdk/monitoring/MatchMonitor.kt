@@ -10,6 +10,7 @@ import io.matchmore.sdk.api.models.Match
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
+import java.net.URL
 import java.util.*
 
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
@@ -17,7 +18,7 @@ typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
     var monitoredDevices = mutableSetOf<Device>()
     var deliveredMatches = mutableSetOf<Match>()
-    val listener = MatchSocketListener()
+    val socketListener = MatchSocketListener()
 
     private var listeners = mutableSetOf<MatchMonitorListener>()
 
@@ -38,19 +39,25 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
             return
         }
         val deviceId = MatchMore.instance.devices.findAll().first().id
-        val request = Request.Builder().url("ws://$ApiClient.baseUrl/pusher/v5/ws/$deviceId").header("api_key", config.worldId).build()
+        val wsUrl = "ws://${ApiClient.baseUrl}/pusher/v5/ws/$deviceId"
+        val request = Request.Builder().url(wsUrl).header("Sec-WebSocket-Protocol", "api-key,${config.worldId}").build()
         val client = OkHttpClient()
-        listener.onMessage = { text ->
-            if (text != "") {
+        socketListener.onMessage = { text ->
+            if (text != "" && text != "ping") {
                 getMatches()
             }
         }
-        listener.onClosed = { _, _ -> openSocket(client, request) }
+        socketListener.onClosed = { _, _ ->
+            if (socket != null) {
+                openSocket(client, request)
+            }
+        }
         openSocket(client, request)
+        socket?.send("ping")
     }
 
     private fun openSocket(client: OkHttpClient, request: Request) {
-        socket = client.newWebSocket(request, listener)
+        socket = client.newWebSocket(request, socketListener)
         client.dispatcher().executorService().shutdown()
     }
 
