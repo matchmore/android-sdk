@@ -29,8 +29,8 @@ abstract class BaseTest {
             MatchMore.config(MatchMoreConfig(
                     RuntimeEnvironment.application,
                     SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
-                    false,
-                    true))
+                    callbackInUIThread = false,
+                    debugLog = true))
         }
     }
 
