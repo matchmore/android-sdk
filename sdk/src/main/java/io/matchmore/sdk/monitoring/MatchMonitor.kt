@@ -1,5 +1,6 @@
 package io.matchmore.sdk.monitoring
 
+import android.util.Log
 import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.MatchMoreConfig
@@ -43,17 +44,18 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
         val request = Request.Builder().url(wsUrl).header("Sec-WebSocket-Protocol", "api-key,${config.worldId}").build()
         val client = OkHttpClient()
         socketListener.onMessage = { text ->
-            if (text != "" && text != "ping") {
+            Log.d("socket", "text!")
+            if (text != "" && text != "ping" && text != "pong") {
                 getMatches()
             }
         }
         socketListener.onClosed = { _, _ ->
+            Log.d("socket", "disconnect!")
             if (socket != null) {
                 openSocket(client, request)
             }
         }
         openSocket(client, request)
-        socket?.send("ping")
     }
 
     private fun openSocket(client: OkHttpClient, request: Request) {
