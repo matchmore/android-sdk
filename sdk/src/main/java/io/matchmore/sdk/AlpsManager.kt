@@ -33,7 +33,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     val persistenceManager = PersistenceManager(matchMoreConfig.context, gson)
 
     override val matches: Set<Match>
-        get() =  matchMonitor.deliveredMatches.toSet()
+        get() = matchMonitor.deliveredMatches.toSet()
 
     override val main: MobileDevice?
         get() = deviceStore.main
@@ -55,6 +55,8 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     override val subscriptions = subscriptionStore
 
+    override val knownBeacons = iBeaconTriplesStore
+
     override val devices = deviceStore
 
     override val matchMonitor = MatchMonitor(this, matchMoreConfig)
@@ -73,9 +75,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     override fun stopRanging() = beaconManager.stopRanging()
 
-    fun registerDeviceToken(token: String) {
-
-    }
+    fun registerDeviceToken(token: String) = deviceStore.registerDeviceToken(token)
 
     fun processPushNotification(data: Map<String, String>) {
         data["matchId"]?.let { matchMonitor.onReceiveMatchUpdate(it) }

@@ -29,6 +29,20 @@ interface DeviceApi {
             @Body device: Device
     ): Call<Device>
 
+
+    /**
+     * Create a device
+     *
+     * @param deviceId The id (UUID) of the device. (required)
+     * @param device The device to be updated. (required)
+     * @return Call&lt;Device&gt;
+     */
+    @Headers("Content-Type:application/json")
+    @PATCH("devices/{deviceId}")
+    fun updateDevice(
+            @Path("deviceId") deviceId: String,@Body device: Device
+    ): Call<Device>
+
     /**
      * Create a new location for a device
      *

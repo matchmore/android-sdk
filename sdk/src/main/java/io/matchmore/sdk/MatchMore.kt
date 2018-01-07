@@ -8,6 +8,7 @@ import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.managers.MatchMoreLocationManager
 import io.matchmore.sdk.monitoring.MatchMonitor
+import io.matchmore.sdk.store.AsyncReadable
 import io.matchmore.sdk.store.CRD
 
 @SuppressLint("StaticFieldLeak")
@@ -39,6 +40,8 @@ interface MatchMoreSdk {
     val subscriptions: CRD<Subscription>
 
     val devices: CRD<Device>
+
+    val knownBeacons: AsyncReadable<IBeaconTriple>
 
     val matchMonitor: MatchMonitor
 
