@@ -5,8 +5,8 @@ import io.matchmore.sdk.api.CompleteCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.IBeaconTriple
 
-class IBeaconTriplesStore(private val manager: AlpsManager)
-    : Store<IBeaconTriple>(manager.persistenceManager, IBEACON_TRIPLES_FILE) {
+class IBeaconTriplesStore(private val manager: AlpsManager) : AsyncReadable<IBeaconTriple>,
+    Store<IBeaconTriple>(manager.persistenceManager, IBEACON_TRIPLES_FILE) {
 
     fun updateBeaconTriplets(complete: CompleteCallback) {
         manager.apiClient.deviceApi.getIBeaconTriples().async({ beacons ->

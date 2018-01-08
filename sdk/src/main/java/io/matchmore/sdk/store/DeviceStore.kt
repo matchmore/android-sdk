@@ -1,7 +1,6 @@
 package io.matchmore.sdk.store
 
 import android.os.Build
-import com.google.firebase.iid.FirebaseInstanceId
 import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.api.CompleteCallback
 import io.matchmore.sdk.api.ErrorCallback
@@ -76,6 +75,15 @@ class DeviceStore(private val manager: AlpsManager)
             }
             complete?.invoke()
         }, error)
+    }
+
+    fun registerDeviceToken(token: String) {
+        main?.let {
+            it.deviceToken = token
+            manager.apiClient.deviceApi.updateDevice(it.id!!, it).async({ device ->
+                main = device as MobileDevice
+            })
+        }
     }
 
     companion object {
