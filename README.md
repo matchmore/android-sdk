@@ -8,6 +8,10 @@ SDK is written using Kotlin 1.2.
 
 `AlpsSDK` requires Android 4.4+
 
+## Installation
+
+`TODO`
+
 ## Technical overview
 
 The `MatchMore` is a static wrapper that provides you all the functions you need to use our SDK.
@@ -24,7 +28,45 @@ Everytime you call an asynchronous function and it succeeds, our SDK stores it. 
 
 ## Usage
 
-`USAGE EXAMPLE`
+Setup application API key and world, get it for free from [http://matchmore.io/](http://matchmore.io/).
+
+```kotlin
+override fun onCreate() {
+        super.onCreate()
+        MatchMore.config(MatchMoreConfig(this, SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID, debugLog = true))
+    }
+}
+```
+
+Create first device, publication and subscription. Please note that we're not caring about errors right now.
+
+```kotlin
+MatchMore.instance.apply {
+    startUsingMainDevice({ device ->
+        Log.i(TAG, "start using device ${device.name}")
+
+        // Create publication
+        val publication = Publication("Test Topic", 1.0, 0.0)
+        publication.properties = hashMapOf("test" to "true")
+        createPublication(publication, { result ->
+            Log.i(TAG, "Publication created ${result.topic}")
+        }, Throwable::printStackTrace)
+
+        // Create subscription
+        val subscription = Subscription("Test Topic", 1.0, 0.0)
+        subscription.selector = "test = 'true'"
+        createSubscription(subscription, { result ->
+            Log.i(TAG, "Subscription created ${result.topic}")
+        }, Throwable::printStackTrace)
+
+        // Start getting matches
+        matchMonitor.addOnMatchListener { matches, _ ->
+            Log.i(TAG, "Matches found: ${matches.size}")
+        }
+        matchMonitor.startPollingMatches()
+    }, Throwable::printStackTrace)
+}
+```
 
 ## Example
 
@@ -36,7 +78,7 @@ See the [http://matchmore.io/documentation/api](http://matchmore.io/documentatio
 
 ## Authors
 
-- @kubatatami, 
+- @kubatatami, kubatatami@gmail.com
 - @maciejburda, maciej.burda@matchmore.com
 
 
