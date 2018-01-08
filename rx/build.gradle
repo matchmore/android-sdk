@@ -5,12 +5,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.matchmore'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion "27.0.2"
 
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -21,14 +21,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    testOptions.unitTests.all {
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat "full"
+        }
+    }
 }
 
 dependencies {
     implementation project(':sdk')
     testImplementation project(':config')
     api "io.reactivex.rxjava2:rxjava:2.1.7"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.5.1"
     testImplementation "net.jodah:concurrentunit:0.4.3"

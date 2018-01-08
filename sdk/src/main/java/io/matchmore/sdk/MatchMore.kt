@@ -44,6 +44,8 @@ interface MatchMoreSdk {
 
     val locationManager: MatchMoreLocationManager
 
+    val matches: Set<Match>
+
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startUpdatingLocation()
 

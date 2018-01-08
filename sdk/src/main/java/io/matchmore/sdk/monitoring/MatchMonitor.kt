@@ -15,9 +15,10 @@ import java.util.*
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
 class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
-    var monitoredDevices = mutableSetOf<Device>()
-    var deliveredMatches = mutableSetOf<Match>()
+    val monitoredDevices = mutableSetOf<Device>()
+    val deliveredMatches = mutableSetOf<Match>()
     val socketListener = MatchSocketListener()
+
 
     private var listeners = mutableSetOf<MatchMonitorListener>()
 
@@ -38,8 +39,9 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
             return
         }
         val deviceId = MatchMore.instance.devices.findAll().first().id
-        val wsUrl = "ws://${ApiClient.baseUrl}/pusher/v5/ws/$deviceId"
-        val request = Request.Builder().url(wsUrl).header("Sec-WebSocket-Protocol", "api-key,${config.worldId}").build()
+        val url = config.serverUrl ?: ApiClient.DEFAULT_URL
+        val request = Request.Builder().url("ws://$url/pusher/${ApiClient.API_VERSION}/ws/$deviceId")
+                .header("Sec-WebSocket-Protocol", "api-key,${config.worldId}").build()
         val client = OkHttpClient()
         socketListener.onMessage = { text ->
             if (text != "" && text != "ping" && text != "pong") {
