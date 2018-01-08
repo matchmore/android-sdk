@@ -5,7 +5,7 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.utils.CallbacksGroup
 
-interface CRUD<T> : AsyncCreateable<T>, AsyncReadable<T>, AsyncUpdateable<T>, AsyncDeleteable<T>, AsyncClearable
+interface CRUD<T> : CRD<T>, AsyncUpdateable<T>
 
 interface CRD<T> : AsyncCreateable<T>, AsyncReadable<T>, AsyncDeleteable<T>, AsyncClearable {
     override fun deleteAll(complete: CompleteCallback?, error: ErrorCallback?) {
