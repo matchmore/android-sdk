@@ -10,21 +10,21 @@ SDK is written using Kotlin 1.2.
 
 ## Installation
 
-`TODO`
+Get via Maven:
+```
+<dependency>
+    TODO
+</dependency>
+```
+
+or via Gradle:
+```
+implementation TODO
+```
 
 ## Technical overview
 
 The `MatchMore` is a static wrapper that provides you all the functions you need to use our SDK.
-
-Features of MatchMore iOS SDK is divided into two parts: Asynchronous calls and dynamic calls.
-
-### Asynchronous calls
-
-All the asynchronous functions calls our cloud service and return a completion for you.
-
-### Dynamic calls
-
-Everytime you call an asynchronous function and it succeeds, our SDK stores it. To gain speed, we allow you to get access(read only) to these stored values.
 
 ## Usage
 
