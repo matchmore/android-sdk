@@ -78,7 +78,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     fun registerDeviceToken(token: String) = deviceStore.registerDeviceToken(token)
 
     fun processPushNotification(data: Map<String, String>) {
-        data["matchId"]?.let { matchMonitor.onReceiveMatchUpdate(it) }
+        data["matchId"]?.let { matchMonitor.onReceiveMatchUpdate() }
     }
 
     fun getDeviceToken() =

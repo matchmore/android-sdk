@@ -47,7 +47,7 @@ class DeviceStore(private val manager: AlpsManager)
         val mobileDevice = MobileDevice(
                 name = device?.name ?: Build.MODEL,
                 platform = device?.platform ?: "Android",
-                deviceToken = device?.deviceToken ?: manager.getDeviceToken(),
+                deviceToken = device?.deviceToken ?: "fcm://${manager.getDeviceToken()}",
                 location = device?.location ?: manager.locationManager.lastLocation
         )
         create(mobileDevice, {
@@ -79,7 +79,7 @@ class DeviceStore(private val manager: AlpsManager)
 
     fun registerDeviceToken(token: String) {
         main?.let {
-            it.deviceToken = token
+            it.deviceToken = "fcm://$token"
             manager.apiClient.deviceApi.updateDevice(it.id!!, it).async({ device ->
                 main = device as MobileDevice
             })
