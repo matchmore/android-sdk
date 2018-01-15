@@ -17,6 +17,7 @@ abstract class BaseTest {
     // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
     fun initAndStartUsingMainDevice() {
         init()
+        removeDevices()
         MatchMore.instance.startUsingMainDevice({ _ ->
             waiter.assertEquals(1, MatchMore.instance.devices.findAll().size)
             waiter.resume()
