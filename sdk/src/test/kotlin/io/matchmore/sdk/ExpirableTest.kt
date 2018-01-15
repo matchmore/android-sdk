@@ -42,8 +42,8 @@ class ExpirableTest : BaseTest() {
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        // wait 1 second
-        Thread.sleep(1_000)
+        // wait 2 second
+        Thread.sleep(2_000)
 
         // get publications
         waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.api.CompleteCallback
+import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.utils.mmLocation
@@ -58,14 +59,14 @@ class MatchMoreLocationManager(private val context: Context, private val manager
         started = false
     }
 
-    internal fun sendLocation(location: io.matchmore.sdk.api.models.Location, completion: CompleteCallback? = null) {
+    internal fun sendLocation(location: io.matchmore.sdk.api.models.Location,
+                              completion: CompleteCallback? = null,
+                              error: ErrorCallback? = null) {
         manager.devices.findAll().filterIsInstance(MobileDevice::class.java).forEach {
             manager.apiClient.locationApi.createLocation(it.id!!, location).async({ _ -> // API method is broken, it does not return location
                 lastLocation = location
                 completion?.invoke()
-            }, {
-                completion?.invoke()
-            })
+            }, error)
         }
     }
 

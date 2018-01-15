@@ -24,7 +24,6 @@ class DeviceStore(private val manager: AlpsManager)
         listeners.remove(listener)
     }
 
-
     var main: MobileDevice? = null
         set(value) {
             manager.persistenceManager.writeData(value, MAIN_DEVICE_FILE)
@@ -80,9 +79,7 @@ class DeviceStore(private val manager: AlpsManager)
     fun registerDeviceToken(token: String) {
         main?.let {
             it.deviceToken = "fcm://$token"
-            manager.apiClient.deviceApi.updateDevice(it.id!!, it).async({ device ->
-                main = device as MobileDevice
-            })
+            manager.apiClient.deviceApi.updateDevice(it.id!!, it).async({ _ -> })
         }
     }
 
