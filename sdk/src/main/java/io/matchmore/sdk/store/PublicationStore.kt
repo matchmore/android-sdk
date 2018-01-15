@@ -23,11 +23,12 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
     }
 
     fun createPublication(publication: Publication, deviceWithId: String? = null, success: SuccessCallback<Publication>?, error: ErrorCallback?) {
-        publication.deviceId = deviceWithId ?: manager.main?.id
+        publication.deviceId = deviceWithId ?: publication.deviceId
         create(publication, success, error)
     }
 
     override fun create(item: Publication, success: SuccessCallback<Publication>?, error: ErrorCallback?) {
+        item.deviceId = item.deviceId ?: manager.main?.id
         manager.apiClient.publicationApi.createPublication(item.deviceId!!, item)
                 .async({
                     createData(it)
