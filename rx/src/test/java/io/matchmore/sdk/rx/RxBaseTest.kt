@@ -1,10 +1,13 @@
-package io.matchmore.sdk
+package io.matchmore.sdk.rx
 
 import android.Manifest
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import io.matchmore.config.SdkConfigTest
+import io.matchmore.sdk.BuildConfig
+import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.MatchMoreConfig
 import net.jodah.concurrentunit.Waiter
 import org.junit.BeforeClass
 import org.junit.runner.RunWith
@@ -12,17 +15,16 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
-import org.robolectric.shadows.ShadowLocationManager
 import org.robolectric.shadows.ShadowLog
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, shadows =  [ShadowLocationManager::class])
-abstract class BaseTest {
+@Config(constants = BuildConfig::class)
+abstract class RxBaseTest {
 
     // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
     fun initAndStartUsingMainDevice() {
         init()
-        MatchMore.instance.startUsingMainDevice({ _ ->
+        MatchMore.instance.rxStartUsingMainDevice().subscribe({ _ ->
             waiter.assertEquals(1, MatchMore.instance.devices.findAll().size)
             waiter.resume()
         }, waiter::fail)
@@ -43,7 +45,7 @@ abstract class BaseTest {
     }
 
     private fun removePublications() {
-        MatchMore.instance.publications.deleteAll({
+        MatchMore.instance.publications.rxDeleteAll().subscribe({
             waiter.assertEquals(0, MatchMore.instance.publications.findAll().size)
             waiter.resume()
         }, waiter::fail)
@@ -51,7 +53,7 @@ abstract class BaseTest {
     }
 
     private fun removeSubscriptions() {
-        MatchMore.instance.subscriptions.deleteAll({
+        MatchMore.instance.subscriptions.rxDeleteAll().subscribe({
             waiter.assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)
@@ -59,7 +61,7 @@ abstract class BaseTest {
     }
 
     private fun removeDevices() {
-        MatchMore.instance.devices.deleteAll({
+        MatchMore.instance.devices.rxDeleteAll().subscribe({
             waiter.assertEquals(0, MatchMore.instance.devices.findAll().size)
             waiter.resume()
         }, waiter::fail)

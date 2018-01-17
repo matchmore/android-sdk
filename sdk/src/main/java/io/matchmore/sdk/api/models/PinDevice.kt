@@ -30,5 +30,5 @@ class PinDevice(
          */
         @SerializedName("location")
         @get:ApiModelProperty(required = true, value = "")
-        var location: Location? = null
+        var location: MatchMoreLocation? = null
 ) : Device(name = name, deviceType = DeviceType.PIN_DEVICE)

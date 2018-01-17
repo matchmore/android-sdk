@@ -13,13 +13,14 @@ import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.api.CompleteCallback
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.async
+import io.matchmore.sdk.api.models.MatchMoreLocation
 import io.matchmore.sdk.api.models.MobileDevice
 import io.matchmore.sdk.utils.mmLocation
 
 
 class MatchMoreLocationManager(private val context: Context, private val manager: AlpsManager) {
 
-    var lastLocation: io.matchmore.sdk.api.models.Location? = null
+    var lastLocation: io.matchmore.sdk.api.models.MatchMoreLocation? = null
 
     private var started = false
 
@@ -35,7 +36,9 @@ class MatchMoreLocationManager(private val context: Context, private val manager
         }
     }
 
-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val locationManager by lazy {
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
 
     private fun findProvider() = locationManager.getBestProvider(Criteria().apply {
         accuracy = Criteria.ACCURACY_FINE
@@ -59,12 +62,12 @@ class MatchMoreLocationManager(private val context: Context, private val manager
         started = false
     }
 
-    internal fun sendLocation(location: io.matchmore.sdk.api.models.Location,
-                              completion: CompleteCallback? = null,
-                              error: ErrorCallback? = null) {
+    private fun sendLocation(location: MatchMoreLocation,
+                             completion: CompleteCallback? = null,
+                             error: ErrorCallback? = null) {
+        lastLocation = location
         manager.devices.findAll().filterIsInstance(MobileDevice::class.java).forEach {
             manager.apiClient.locationApi.createLocation(it.id!!, location).async({ _ -> // API method is broken, it does not return location
-                lastLocation = location
                 completion?.invoke()
             }, error)
         }
