@@ -91,8 +91,8 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
         timer = null
     }
 
-    fun onReceiveMatchUpdate(deviceId: String) {
-        monitoredDevices.filter { it.id == deviceId }.forEach { getMatchesForDevice(it) }
+    fun onReceiveMatchUpdate() {
+        monitoredDevices.forEach { getMatchesForDevice(it) }
     }
 
     private fun getMatches() = monitoredDevices.forEach { getMatchesForDevice(it) }

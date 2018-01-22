@@ -5,7 +5,11 @@ import io.matchmore.sdk.api.models.Location
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import org.junit.Test
+import org.robolectric.annotation.Config
 
+// Workaround for a bug that after openSocketForMatches all other tests throw SocketTimeoutException
+// SDK 23 makes that test run in other environment
+@Config(constants = BuildConfig::class, sdk = [23])
 class SocketTest : BaseTest() {
 
     @Test

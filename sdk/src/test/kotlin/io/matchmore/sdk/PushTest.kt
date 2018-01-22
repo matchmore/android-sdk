@@ -11,6 +11,6 @@ class PushTest : BaseTest() {
         val matchMoreSdk = MatchMore.instance as AlpsManager
         val token = "testToken"
         matchMoreSdk.registerDeviceToken(token)
-        assertEquals(token, matchMoreSdk.main!!.deviceToken)
+        assertEquals("fcm://$token", matchMoreSdk.main!!.deviceToken)
     }
 }

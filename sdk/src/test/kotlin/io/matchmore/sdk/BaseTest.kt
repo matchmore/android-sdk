@@ -2,7 +2,6 @@ package io.matchmore.sdk
 
 import io.matchmore.config.SdkConfigTest
 import net.jodah.concurrentunit.Waiter
-import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -32,6 +31,33 @@ abstract class BaseTest {
                     callbackInUIThread = false,
                     debugLog = true))
         }
+        removeSubscriptions()
+        removePublications()
+        removeDevices()
+    }
+
+    fun removePublications() {
+        MatchMore.instance.publications.deleteAll({
+            waiter.assertEquals(0, MatchMore.instance.publications.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+    }
+
+    fun removeSubscriptions() {
+        MatchMore.instance.subscriptions.deleteAll({
+            waiter.assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
+    }
+
+    fun removeDevices() {
+        MatchMore.instance.devices.deleteAll({
+            waiter.assertEquals(0, MatchMore.instance.devices.findAll().size)
+            waiter.resume()
+        }, waiter::fail)
+        waiter.await(SdkConfigTest.TIMEOUT)
     }
 
     companion object {
@@ -41,16 +67,6 @@ abstract class BaseTest {
         @JvmStatic
         fun setUp() {
             ShadowLog.stream = System.out
-        }
-
-        @AfterClass
-        @JvmStatic
-        fun removeDevices() {
-            MatchMore.instance.devices.deleteAll({
-                waiter.assertEquals(0, MatchMore.instance.devices.findAll().size)
-                waiter.resume()
-            }, waiter::fail)
-            waiter.await(SdkConfigTest.TIMEOUT)
         }
     }
 }

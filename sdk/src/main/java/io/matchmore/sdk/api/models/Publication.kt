@@ -47,7 +47,7 @@ data class Publication @JvmOverloads constructor(
         override var duration: Double? = null,
 
         @SerializedName("properties")
-        var properties: MutableMap<String, String> = HashMap(),
+        var properties: MutableMap<String, Any> = HashMap(),
 
         /**
          * The id (UUID) of the device to attach a publication to.
