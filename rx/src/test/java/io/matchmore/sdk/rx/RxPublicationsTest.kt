@@ -1,8 +1,8 @@
 package io.matchmore.sdk.rx
 
-import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.api.models.Publication
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 class RxPublicationsTest : RxBaseTest() {
@@ -13,28 +13,16 @@ class RxPublicationsTest : RxBaseTest() {
 
         val matchMoreSdk = MatchMore.instance
         val publication = Publication("Test Topic", 20.0, 100000.0)
-        matchMoreSdk.rxCreatePublication(publication).subscribe({ _ ->
-            waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.rxCreatePublication(publication).testAndWait()
+        assertEquals(1, matchMoreSdk.publications.findAll().size)
 
-        matchMoreSdk.rxCreatePublication(publication).subscribe({ _ ->
-            waiter.assertEquals(2, matchMoreSdk.publications.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.rxCreatePublication(publication).testAndWait()
+        assertEquals(2, matchMoreSdk.publications.findAll().size)
 
-        matchMoreSdk.publications.rxDelete(matchMoreSdk.publications.findAll()[0]).subscribe({
-            waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.publications.rxDelete(matchMoreSdk.publications.findAll()[0]).testAndWait()
+        assertEquals(1, matchMoreSdk.publications.findAll().size)
 
-        matchMoreSdk.publications.rxDeleteAll().subscribe({
-            waiter.assertEquals(0, matchMoreSdk.publications.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.publications.rxDeleteAll().testAndWait()
+        assertEquals(0, matchMoreSdk.publications.findAll().size)
     }
 }

@@ -5,8 +5,10 @@ import io.matchmore.sdk.BuildConfig
 import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.robolectric.annotation.Config
+import java.util.concurrent.TimeUnit
 
 // Workaround for a bug that after openSocketForMatches all other tests throw SocketTimeoutException
 // SDK 23 makes that test run in other environment
@@ -23,33 +25,27 @@ class RxSocketTest : RxBaseTest() {
         matchMoreSdk.matchMonitor.openSocketForMatches()
 
         // start listening for matches
-        val disposable = matchMoreSdk.matchMonitor.rxMatch().subscribe({ (matches, _) ->
-            waiter.assertTrue(matches.size >= 0)
-            matchMoreSdk.matchMonitor.closeSocketForMatches()
-            waiter.resume()
-        })
+        val matchTest = matchMoreSdk.matchMonitor.rxMatch().test()
 
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to "true")
-        matchMoreSdk.rxCreatePublication(publication).subscribe({ _ ->
-            waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
-        }, waiter::fail)
+        matchMoreSdk.rxCreatePublication(publication).testAndWait()
+        assertEquals(1, matchMoreSdk.publications.findAll().size)
 
         // create subscription
         val subscription = Subscription("Test Topic", 2000.0, 100000.0)
         subscription.selector = "test = 'true'"
         subscription.pushers = mutableListOf("ws")
-        matchMoreSdk.rxCreateSubscription(subscription).subscribe({ _ ->
-            waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
-        }, waiter::fail)
+        matchMoreSdk.rxCreateSubscription(subscription).testAndWait()
+        assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
 
         // update location
         mockLocation()
         matchMoreSdk.startUpdatingLocation()
 
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchTest.awaitDone(SdkConfigTest.TIMEOUT, TimeUnit.MILLISECONDS)
+                .assertValueAt(0)  { (matches, _) -> matches.isNotEmpty() }
         matchMoreSdk.stopUpdatingLocation()
-        disposable.dispose()
     }
 }

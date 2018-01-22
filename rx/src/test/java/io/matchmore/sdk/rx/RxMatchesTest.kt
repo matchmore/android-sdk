@@ -5,8 +5,10 @@ import io.matchmore.sdk.BuildConfig
 import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.robolectric.annotation.Config
+import java.util.concurrent.TimeUnit
 
 @Config(constants = BuildConfig::class, sdk = [24])
 class RxMatchesTest : RxBaseTest() {
@@ -20,39 +22,27 @@ class RxMatchesTest : RxBaseTest() {
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to "true")
-        matchMoreSdk.rxCreatePublication(publication).subscribe({ _ ->
-            waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.rxCreatePublication(publication).testAndWait()
+        assertEquals(1, matchMoreSdk.publications.findAll().size)
 
         // create subscription
         val subscription = Subscription("Test Topic", 2000.0, 100000.0)
         subscription.selector = "test = 'true'"
-        matchMoreSdk.rxCreateSubscription(subscription).subscribe({ _ ->
-            waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.rxCreateSubscription(subscription).testAndWait()
+        assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
 
-        // get a match
-        val disposable = matchMoreSdk.matchMonitor.rxMatch().subscribe { (matches, _) ->
-            waiter.assertTrue(matches.size >= 0)
-            waiter.resume()
-        }
+        val matchTest = matchMoreSdk.matchMonitor.rxMatch().test()
 
         // update location
         mockLocation()
         matchMoreSdk.startUpdatingLocation()
         // start polling matches
         matchMoreSdk.matchMonitor.startPollingMatches()
-        waiter.await(SdkConfigTest.TIMEOUT)
+        matchTest.awaitDone(SdkConfigTest.TIMEOUT, TimeUnit.MILLISECONDS)
+                .assertValueAt(0) { (matches, _) -> matches.isNotEmpty() }
 
         // clear resources
-        disposable.dispose()
         matchMoreSdk.matchMonitor.stopPollingMatches()
         matchMoreSdk.stopUpdatingLocation()
-        // wait to be sure that last get matches call is done
-        Thread.sleep(SdkConfigTest.TIMEOUT)
     }
 }
