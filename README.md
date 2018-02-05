@@ -10,16 +10,61 @@ SDK is written using Kotlin 1.2.
 
 ## Installation
 
-Get via Maven:
+Gradle
+
+Add it in your root build.gradle at the end of repositories:
+
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+}
+
+SDK
+
+```groovy
+implementation 'com.github.matchmore.alps-android-sdk:sdk:<latest version>'
+```
+
+Rx Wrapper
+
+```groovy
+implementation 'com.github.matchmore.alps-android-sdk:rx:<latest version>'
+```
+
+
+
+Maven
+
+```
+<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+</repositories>
+```
+
+SDK
+
 ```
 <dependency>
-    TODO
+    <groupId>com.github.matchmore.alps-android-sdk</groupId>
+    <artifactId>sdk</artifactId>
+    <version>latest version</version>
 </dependency>
 ```
 
-or via Gradle:
+Rx Wrapper
+
 ```
-implementation TODO
+<dependency>
+    <groupId>com.github.matchmore.alps-android-sdk</groupId>
+    <artifactId>rx</artifactId>
+    <version>latest version</version>
+</dependency>
 ```
 
 ## Technical overview
