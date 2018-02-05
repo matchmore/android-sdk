@@ -1,17 +1,19 @@
-package io.matchmore.sdk
+package io.matchmore.sdk.rx
 
 import io.matchmore.config.SdkConfigTest
-import io.matchmore.sdk.api.models.Device
-import io.matchmore.sdk.api.models.Match
+import io.matchmore.sdk.BuildConfig
+import io.matchmore.sdk.MatchMore
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.robolectric.annotation.Config
+import java.util.concurrent.TimeUnit
 
 // Workaround for a bug that after openSocketForMatches all other tests throw SocketTimeoutException
 // SDK 23 makes that test run in other environment
 @Config(constants = BuildConfig::class, sdk = [23])
-class SocketTest : BaseTest() {
+class RxSocketTest : RxBaseTest() {
 
     @Test
     fun getMatchesUsingSocket() {
@@ -23,34 +25,27 @@ class SocketTest : BaseTest() {
         matchMoreSdk.matchMonitor.openSocketForMatches()
 
         // start listening for matches
-        val listener = { matches: Set<Match>, _: Device ->
-            waiter.assertTrue(matches.size >= 0)
-            matchMoreSdk.matchMonitor.closeSocketForMatches()
-            waiter.resume()
-        }
-        matchMoreSdk.matchMonitor.addOnMatchListener(listener)
+        val matchTest = matchMoreSdk.matchMonitor.rxMatch().test()
 
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to "true")
-        matchMoreSdk.createPublication(publication, { _ ->
-            waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
-        }, waiter::fail)
+        matchMoreSdk.rxCreatePublication(publication).testAndWait()
+        assertEquals(1, matchMoreSdk.publications.findAll().size)
 
         // create subscription
         val subscription = Subscription("Test Topic", 2000.0, 100000.0)
         subscription.selector = "test = 'true'"
         subscription.pushers = mutableListOf("ws")
-        matchMoreSdk.createSubscription(subscription, { _ ->
-            waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
-        }, waiter::fail)
+        matchMoreSdk.rxCreateSubscription(subscription).testAndWait()
+        assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
 
         // update location
         mockLocation()
         matchMoreSdk.startUpdatingLocation()
 
-        waiter.await(SdkConfigTest.TIMEOUT)
-        matchMoreSdk.matchMonitor.removeOnMatchListener(listener)
+        matchTest.awaitDone(SdkConfigTest.TIMEOUT, TimeUnit.MILLISECONDS)
+                .assertValueAt(0)  { (matches, _) -> matches.isNotEmpty() }
         matchMoreSdk.stopUpdatingLocation()
     }
 }

@@ -33,13 +33,20 @@ class MainActivity : AppCompatActivity() {
                         matchMonitor.addOnMatchListener { matches, _ ->
                             Log.i(TAG, "Matches found: ${matches.size}")
                         }
-                        matchMonitor.startPollingMatches()
-
                         createPollingSubscription()
-
                         checkLocationPermission()
                     }, Throwable::printStackTrace)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MatchMore.instance.matchMonitor.startPollingMatches()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MatchMore.instance.matchMonitor.stopPollingMatches()
     }
 
     override fun onDestroy() {

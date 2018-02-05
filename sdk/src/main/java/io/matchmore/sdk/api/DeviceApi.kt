@@ -53,8 +53,8 @@ interface DeviceApi {
     @Headers("Content-Type:application/json")
     @POST("devices/{deviceId}/locations")
     fun createLocation(
-            @Path("deviceId") deviceId: String, @Body location: Location
-    ): Call<Location>
+            @Path("deviceId") deviceId: String, @Body location: MatchMoreLocation
+    ): Call<MatchMoreLocation>
 
     /**
      * Create a publication for a device

@@ -1,9 +1,11 @@
-package io.matchmore.sdk
+package io.matchmore.sdk.rx
 
+import io.matchmore.sdk.AlpsManager
+import io.matchmore.sdk.MatchMore
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.test.assertEquals
 
-class PushTest : BaseTest() {
+class RxPushTest : RxBaseTest() {
 
     @Test
     fun test() {

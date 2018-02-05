@@ -1,32 +1,35 @@
-package io.matchmore.sdk
+package io.matchmore.sdk.rx
 
 import android.Manifest
 import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import io.matchmore.config.SdkConfigTest
-import net.jodah.concurrentunit.Waiter
+import io.matchmore.sdk.BuildConfig
+import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.MatchMoreConfig
+import io.reactivex.Completable
+import io.reactivex.Single
+import io.reactivex.observers.TestObserver
+import junit.framework.Assert.assertEquals
 import org.junit.BeforeClass
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
-import org.robolectric.shadows.ShadowLocationManager
 import org.robolectric.shadows.ShadowLog
+import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, shadows =  [ShadowLocationManager::class])
-abstract class BaseTest {
+@Config(constants = BuildConfig::class)
+abstract class RxBaseTest {
 
     // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
     fun initAndStartUsingMainDevice() {
         init()
-        MatchMore.instance.startUsingMainDevice({ _ ->
-            waiter.assertEquals(1, MatchMore.instance.devices.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        MatchMore.instance.rxStartUsingMainDevice().testAndWait()
+        assertEquals(1, MatchMore.instance.devices.findAll().size)
     }
 
     fun init() {
@@ -43,27 +46,18 @@ abstract class BaseTest {
     }
 
     private fun removePublications() {
-        MatchMore.instance.publications.deleteAll({
-            waiter.assertEquals(0, MatchMore.instance.publications.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        MatchMore.instance.publications.rxDeleteAll().testAndWait()
+        assertEquals(0, MatchMore.instance.publications.findAll().size)
     }
 
     private fun removeSubscriptions() {
-        MatchMore.instance.subscriptions.deleteAll({
-            waiter.assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        MatchMore.instance.subscriptions.rxDeleteAll().testAndWait()
+        assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
     }
 
     private fun removeDevices() {
-        MatchMore.instance.devices.deleteAll({
-            waiter.assertEquals(0, MatchMore.instance.devices.findAll().size)
-            waiter.resume()
-        }, waiter::fail)
-        waiter.await(SdkConfigTest.TIMEOUT)
+        MatchMore.instance.devices.rxDeleteAll().testAndWait()
+        assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
     }
 
     protected fun mockLocation() {
@@ -79,7 +73,6 @@ abstract class BaseTest {
     }
 
     companion object {
-        val waiter = Waiter()
 
         @BeforeClass
         @JvmStatic
@@ -88,3 +81,7 @@ abstract class BaseTest {
         }
     }
 }
+
+fun <T> Single<T>.testAndWait(): TestObserver<T> = test().awaitDone(SdkConfigTest.TIMEOUT, TimeUnit.MILLISECONDS)
+
+fun Completable.testAndWait(): TestObserver<Void> = test().awaitDone(SdkConfigTest.TIMEOUT, TimeUnit.MILLISECONDS)

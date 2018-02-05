@@ -1,11 +1,14 @@
 package io.matchmore.sdk
 
 import io.matchmore.config.SdkConfigTest
-import io.matchmore.sdk.api.models.Location
+import io.matchmore.sdk.api.models.Device
+import io.matchmore.sdk.api.models.Match
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import org.junit.Test
+import org.robolectric.annotation.Config
 
+@Config(constants = BuildConfig::class, sdk = [24])
 class MatchesTest : BaseTest() {
 
     @Test
@@ -33,19 +36,20 @@ class MatchesTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // update location
-        val location = Location(latitude = 54.414662, longitude = 18.625498)
-        matchMoreSdk.locationManager.sendLocation(location) {
-            waiter.assertEquals(location, matchMoreSdk.locationManager.lastLocation)
-            waiter.resume()
-        }
-        waiter.await(SdkConfigTest.TIMEOUT)
+        mockLocation()
+        matchMoreSdk.startUpdatingLocation()
 
         // get a match
-        matchMoreSdk.matchMonitor.addOnMatchListener { matches, _ ->
+        val listener = { matches: Set<Match>, _: Device ->
             waiter.assertTrue(matches.size >= 0)
             waiter.resume()
         }
+        matchMoreSdk.matchMonitor.addOnMatchListener(listener)
         matchMoreSdk.matchMonitor.startPollingMatches()
         waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.matchMonitor.removeOnMatchListener(listener)
+        matchMoreSdk.matchMonitor.stopPollingMatches()
+        matchMoreSdk.stopUpdatingLocation()
+        Thread.sleep(SdkConfigTest.TIMEOUT) //wait to be sure that last get matches call is done
     }
 }
