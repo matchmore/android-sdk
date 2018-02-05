@@ -1,7 +1,8 @@
 {
-  "packageName": "io.matchmore.sdk",
-  "modelPackage": "io.matchmore.sdk.models",
-  "apiPackage": "io.matchmore.sdk",
+  "packageName": "io.matchmore.sdk.api",
+  "modelPackage": "io.matchmore.sdk.api.models",
+  "apiPackage": "io.matchmore.sdk.api",
+  "invokerPackage": "io.matchmore.sdk.api.utils",
   "library": "retrofit2",
   "artifactId": "alps",
   "hideGenerationTimestamp": true

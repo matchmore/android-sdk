@@ -11,5 +11,6 @@ wget $custom_url
 
 rm -fr ./Alps
 #swagger-codegen generate -l kotlin -Dmodels -Dapis -c swagger-config-kotlin.json -i ./alps-core.yaml -o api/
-swagger-codegen generate -l java -Dmodels -Dapis -DapiTests=false -DsupportingFiles=CollectionFormats.java -DsupportingFiles=StringUtil.java -DapiDocs=false -DmodelDocs=false -c swagger-config-java.json -i ./alps-core.yaml -o api/
+swagger-codegen generate -l java -c swagger-config-java.json -i ./alps-core.yaml -o gen/
+
 rm -f alps-core.yaml

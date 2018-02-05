@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "695963322818",
+    "firebase_url": "https://alps-android-sdk-example.firebaseio.com",
+    "project_id": "alps-android-sdk-example",
+    "storage_bucket": "alps-android-sdk-example.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695963322818:android:0435e761452d71de",
+        "android_client_info": {
+          "package_name": "io.matchmore.alps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695963322818-v2unmap1lkkib1ukseq355crh3pfru94.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.matchmore.alps",
+            "certificate_hash": "c37f8f845bdfc95a956822fee22920d4fa0a6a70"
+          }
+        },
+        {
+          "client_id": "695963322818-s1us9egoa824pn1plvbkvun4bnol28jv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHBNqOM-ez6UQnvhsiip9N150qTZKEGOw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695963322818-s1us9egoa824pn1plvbkvun4bnol28jv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

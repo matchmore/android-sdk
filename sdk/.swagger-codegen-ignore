@@ -1,0 +1,11 @@
+#Kotlin classes
+
+#Models
+/src/main/java/io/matchmore/sdk/api/models/Device.java
+/src/main/java/io/matchmore/sdk/api/models/Devices.java
+/src/main/java/io/matchmore/sdk/api/models/MobileDevice.java
+/src/main/java/io/matchmore/sdk/api/models/PinDevice.java
+/src/main/java/io/matchmore/sdk/api/models/IBeaconDevice.java
+
+#Interfaces
+/src/main/java/io/matchmore/sdk/api/DeviceApi.java

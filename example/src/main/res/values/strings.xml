@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Alps</string>
+    <string name="if_you_reject">If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]\</string>
 </resources>

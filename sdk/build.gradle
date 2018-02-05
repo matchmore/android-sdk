@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.matchmore'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "0.5.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+    testOptions.unitTests.all {
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat "full"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+ext {
+    firebase_version = "11.0.4"
+    retrofit_version = "2.3.0"
+    swagger_annotations_version = "1.5.15"
+    jodatime_version = "2.9.9"
+}
+
+dependencies {
+    api "com.google.firebase:firebase-core:$firebase_version"
+    api "com.google.firebase:firebase-messaging:$firebase_version"
+    api "joda-time:joda-time:$jodatime_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "io.swagger:swagger-annotations:$swagger_annotations_version"
+    implementation 'org.altbeacon:android-beacon-library:2.12.4'
+    testImplementation project(':config')
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.robolectric:robolectric:3.6.1"
+    testImplementation "net.jodah:concurrentunit:0.4.3"
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
