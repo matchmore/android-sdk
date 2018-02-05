@@ -69,6 +69,7 @@ class DeviceStore(private val manager: AlpsManager)
         manager.apiClient.deviceApi.deleteDevice(item.id!!).async({
             deleteData(item)
             if (item == main) main = null
+            manager.matchMonitor.stopMonitoringFor(item)
             listeners.forEach {
                 it.invoke(item.id!!)
             }

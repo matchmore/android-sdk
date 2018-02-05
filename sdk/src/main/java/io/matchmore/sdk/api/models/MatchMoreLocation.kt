@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiModelProperty
  * Location
  */
 
-data class Location(
+data class MatchMoreLocation(
         /**
          * The timestamp of the location creation in seconds since Jan 01 1970 (UTC).
          */
