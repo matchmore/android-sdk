@@ -40,6 +40,7 @@ public class DevicesTestJava {
 
     @Test
     public void creations() throws TimeoutException {
+        BaseTest.mockLocation();
         MatchMoreSdk matchMore = MatchMore.getInstance();
         matchMore.startUsingMainDevice(device -> {
             waiter.resume();

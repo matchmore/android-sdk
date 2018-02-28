@@ -36,7 +36,7 @@ class MatchesTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // update location
-        mockLocation()
+        BaseTest.mockLocation()
         matchMoreSdk.startUpdatingLocation()
 
         // get a match
