@@ -2,11 +2,10 @@ package io.matchmore.sdk.examplejava;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-
 
 import io.matchmore.config.SdkConfigTest;
 import io.matchmore.sdk.MatchMore;
@@ -25,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Request Location permission
-        ActivityCompat.requestPermissions(this,new String[]
-                { Manifest.permission.ACCESS_FINE_LOCATION }, 1);
+        ActivityCompat.requestPermissions(this, new String[]
+                {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         // Configuration of api key/world id
         if (!MatchMore.isConfigured()) {
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         matchMore.startUsingMainDevice(device -> {
             Publication publication = new Publication("Test Topic", 20d, 100000d);
             matchMore.createPublication(publication, createdPublication -> {
-                Log.d("JavaExample", publication.getId());
+                Log.d("JavaExample", createdPublication.getId());
                 return Unit.INSTANCE; // `return Unit.INSTANCE;` is important (b/c kotlin vs java lambdas differ in implementation)
             }, e -> {
                 Log.d("JavaExample", e.getMessage());
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
             Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
             matchMore.createSubscription(subscription, createdSubscription -> {
-                Log.d("JavaExample", subscription.getId());
+                Log.d("JavaExample", createdSubscription.getId());
                 return Unit.INSTANCE;
             }, e -> {
                 Log.d("JavaExample", e.getMessage());
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         // Start updating location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
         } else {
             matchMore.startUpdatingLocation();
         }
