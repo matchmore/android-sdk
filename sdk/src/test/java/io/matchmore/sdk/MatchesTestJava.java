@@ -61,17 +61,20 @@ public class MatchesTestJava {
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
 
+        // Start getting matches
+        matchMore.getMatchMonitor().addOnMatchListener((matches, device) -> {
+            waiter.resume();
+            return Unit.INSTANCE;
+        });
+
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
         matchMore.createSubscription(subscription,
                 device -> {
-                    waiter.resume();
                     return Unit.INSTANCE;
                 }, e -> {
                     waiter.fail(e);
                     return Unit.INSTANCE;
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
-
-
     }
 }
