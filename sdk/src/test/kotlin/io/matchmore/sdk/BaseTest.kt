@@ -66,18 +66,6 @@ abstract class BaseTest {
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 
-    protected fun mockLocation() {
-        Shadows.shadowOf(RuntimeEnvironment.application).grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
-        val locationManager = RuntimeEnvironment.application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val shadowLocationManager = Shadows.shadowOf(locationManager)
-        val location = Location(LocationManager.GPS_PROVIDER).apply {
-            latitude = 54.414663
-            longitude = 18.625499
-            time = System.currentTimeMillis()
-        }
-        shadowLocationManager.setLastKnownLocation(LocationManager.GPS_PROVIDER, location)
-    }
-
     companion object {
         val waiter = Waiter()
 
@@ -85,6 +73,19 @@ abstract class BaseTest {
         @JvmStatic
         fun setUp() {
             ShadowLog.stream = System.out
+        }
+
+        @JvmStatic
+        fun mockLocation() {
+            Shadows.shadowOf(RuntimeEnvironment.application).grantPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+            val locationManager = RuntimeEnvironment.application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val shadowLocationManager = Shadows.shadowOf(locationManager)
+            val location = Location(LocationManager.GPS_PROVIDER).apply {
+                latitude = 54.414663
+                longitude = 18.625499
+                time = System.currentTimeMillis()
+            }
+            shadowLocationManager.setLastKnownLocation(LocationManager.GPS_PROVIDER, location)
         }
     }
 }

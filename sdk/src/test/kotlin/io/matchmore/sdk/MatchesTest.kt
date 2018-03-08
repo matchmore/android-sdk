@@ -19,7 +19,7 @@ class MatchesTest : BaseTest() {
 
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
-        publication.properties = hashMapOf("test" to "true")
+        publication.properties = hashMapOf("test" to true)
         matchMoreSdk.createPublication(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
             waiter.resume()
@@ -28,7 +28,7 @@ class MatchesTest : BaseTest() {
 
         // create subscription
         val subscription = Subscription("Test Topic", 2000.0, 100000.0)
-        subscription.selector = "test = 'true'"
+        subscription.selector = "test = true"
         matchMoreSdk.createSubscription(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
@@ -36,7 +36,7 @@ class MatchesTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // update location
-        mockLocation()
+        BaseTest.mockLocation()
         matchMoreSdk.startUpdatingLocation()
 
         // get a match
