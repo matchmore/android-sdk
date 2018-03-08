@@ -46,7 +46,7 @@ class SocketTest : BaseTest() {
         }, waiter::fail)
 
         // update location
-        mockLocation()
+        BaseTest.mockLocation()
         matchMoreSdk.startUpdatingLocation()
 
         waiter.await(SdkConfigTest.TIMEOUT)

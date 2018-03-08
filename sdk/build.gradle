@@ -48,7 +48,7 @@ dependencies {
     api "com.google.firebase:firebase-messaging:$firebase_version"
     api "joda-time:joda-time:$jodatime_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"

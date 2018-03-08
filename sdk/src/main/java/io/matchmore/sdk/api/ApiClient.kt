@@ -40,8 +40,8 @@ class ApiClient(gson: Gson, private val matchMoreConfig: MatchMoreConfig) {
     val subscriptionApi by lazy { retrofit.create(SubscriptionApi::class.java) }
 
     companion object {
-        private const val DEFAULT_PROTOCOL = "http"
-        const val DEFAULT_URL = "35.201.116.232"
+        private const val DEFAULT_PROTOCOL = "https"
+        const val DEFAULT_URL = "api.matchmore.io"
         const val API_VERSION = "v5"
     }
 }
