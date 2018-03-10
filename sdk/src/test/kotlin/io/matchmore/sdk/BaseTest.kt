@@ -31,11 +31,13 @@ abstract class BaseTest {
 
     fun init() {
         if (!MatchMore.isConfigured()) {
-            MatchMore.config(MatchMoreConfig(
+            val config = MatchMoreConfig(
                     RuntimeEnvironment.application,
-                    SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
+                    SdkConfigTest.API_KEY,
                     callbackInUIThread = false,
-                    debugLog = true))
+                    debugLog = true)
+            waiter.assertEquals(SdkConfigTest.WORLD_ID, config.worldId)
+            MatchMore.config(config)
         }
         removeSubscriptions()
         removePublications()

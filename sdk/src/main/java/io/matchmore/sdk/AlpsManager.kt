@@ -30,7 +30,7 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     private val iBeaconTriplesStore by lazy { IBeaconTriplesStore(this) }
 
     val apiClient = ApiClient(gson, matchMoreConfig)
-    val persistenceManager = PersistenceManager(matchMoreConfig.context, gson)
+    val persistenceManager = PersistenceManager(matchMoreConfig, gson)
 
     override val matches: Set<Match>
         get() = matchMonitor.deliveredMatches.toSet()

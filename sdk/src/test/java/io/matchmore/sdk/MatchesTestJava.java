@@ -29,7 +29,6 @@ public class MatchesTestJava {
             MatchMore.config(new MatchMoreConfig(
                     RuntimeEnvironment.application,
                     SdkConfigTest.API_KEY,
-                    SdkConfigTest.WORLD_ID,
                     null,
                     null,
                     false,
