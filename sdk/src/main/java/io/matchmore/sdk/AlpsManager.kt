@@ -6,8 +6,10 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.adapters.ParserBuilder
 import io.matchmore.sdk.api.models.*
+import io.matchmore.sdk.managers.DefaultLocationProvider
 import io.matchmore.sdk.managers.MatchMoreBeaconManager
 import io.matchmore.sdk.managers.MatchMoreLocationManager
+import io.matchmore.sdk.managers.MatchMoreLocationProvider
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.DeviceStore
 import io.matchmore.sdk.store.IBeaconTriplesStore
@@ -15,7 +17,7 @@ import io.matchmore.sdk.store.PublicationStore
 import io.matchmore.sdk.store.SubscriptionStore
 import io.matchmore.sdk.utils.PersistenceManager
 
-class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
+class AlpsManager(private val config: MatchMoreConfig) : MatchMoreSdk {
 
     private val gson = ParserBuilder.gsonBuilder.create()
     private val deviceStore by lazy {
@@ -26,11 +28,11 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
     }
     private val publicationStore by lazy { PublicationStore(this) }
     private val subscriptionStore by lazy { SubscriptionStore(this) }
-    private val beaconManager by lazy { MatchMoreBeaconManager(matchMoreConfig.context, apiClient, deviceStore) }
+    private val beaconManager by lazy { MatchMoreBeaconManager(config.context, apiClient, deviceStore) }
     private val iBeaconTriplesStore by lazy { IBeaconTriplesStore(this) }
 
-    val apiClient = ApiClient(gson, matchMoreConfig)
-    val persistenceManager = PersistenceManager(matchMoreConfig, gson)
+    val apiClient = ApiClient(gson, config)
+    val persistenceManager = PersistenceManager(config, gson)
 
     override val matches: Set<Match>
         get() = matchMonitor.deliveredMatches.toSet()
@@ -59,11 +61,15 @@ class AlpsManager(matchMoreConfig: MatchMoreConfig) : MatchMoreSdk {
 
     override val devices = deviceStore
 
-    override val matchMonitor = MatchMonitor(this, matchMoreConfig)
+    override val matchMonitor = MatchMonitor(this, config)
 
-    override val locationManager = MatchMoreLocationManager(matchMoreConfig.context, this)
+    override val locationManager = MatchMoreLocationManager(this)
 
-    override fun startUpdatingLocation() = locationManager.startUpdatingLocation()
+    override fun startUpdatingLocation() =
+            locationManager.startUpdatingLocation(DefaultLocationProvider(config.context))
+
+    override fun startUpdatingLocation(locationProvider: MatchMoreLocationProvider) =
+            locationManager.startUpdatingLocation(locationProvider)
 
     override fun stopUpdatingLocation() = locationManager.stopUpdatingLocation()
 

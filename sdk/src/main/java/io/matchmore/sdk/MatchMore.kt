@@ -2,11 +2,13 @@ package io.matchmore.sdk
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.support.annotation.RequiresPermission
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.managers.MatchMoreLocationManager
+import io.matchmore.sdk.managers.MatchMoreLocationProvider
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.AsyncReadable
 import io.matchmore.sdk.store.CRD
@@ -23,9 +25,10 @@ object MatchMore {
     }
 
     @JvmStatic
-    fun config(matchMoreConfig: MatchMoreConfig) {
+    @JvmOverloads
+    fun config(context: Context, apiKey: String, debugLog: Boolean = false) {
         if (isConfigured()) throw IllegalStateException("You can not overwrite the configuration.")
-        this.matchMoreConfig = matchMoreConfig
+        this.matchMoreConfig = MatchMoreConfig(context, apiKey, debugLog)
     }
 
     @JvmStatic
@@ -51,6 +54,8 @@ interface MatchMoreSdk {
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startUpdatingLocation()
+
+    fun startUpdatingLocation(locationProvider: MatchMoreLocationProvider)
 
     fun stopUpdatingLocation()
 

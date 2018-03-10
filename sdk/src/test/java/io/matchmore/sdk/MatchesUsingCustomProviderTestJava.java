@@ -2,6 +2,7 @@ package io.matchmore.sdk;
 
 import net.jodah.concurrentunit.Waiter;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,14 +12,16 @@ import org.robolectric.annotation.Config;
 import java.util.concurrent.TimeoutException;
 
 import io.matchmore.config.SdkConfigTest;
+import io.matchmore.sdk.api.models.MatchMoreLocation;
 import io.matchmore.sdk.api.models.Publication;
 import io.matchmore.sdk.api.models.Subscription;
+import io.matchmore.sdk.managers.LocationSender;
+import io.matchmore.sdk.managers.MatchMoreLocationProvider;
 import kotlin.Unit;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class DevicesTestJava extends BaseTestJava {
-
+public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
     private Waiter waiter = new Waiter();
 
     @Before
@@ -27,9 +30,9 @@ public class DevicesTestJava extends BaseTestJava {
     }
 
     @Test
-    public void creations() throws TimeoutException {
-        BaseTest.mockLocation();
+    public void gettingMatches() throws TimeoutException {
         MatchMoreSdk matchMore = MatchMore.getInstance();
+
         matchMore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
@@ -60,34 +63,25 @@ public class DevicesTestJava extends BaseTestJava {
                     return Unit.INSTANCE;
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
+        MatchMoreLocationProvider locationProvider = new MatchMoreLocationProvider() {
+            @Override
+            public void startUpdatingLocation(@NotNull LocationSender sender) {
+                sender.sendLocation(new MatchMoreLocation(System.currentTimeMillis(), 80.0, 80.0));
+            }
 
-        matchMore.getSubscriptions().deleteAll(() -> {
+            @Override
+            public void stopUpdatingLocation() {
+
+            }
+        };
+        matchMore.startUpdatingLocation(locationProvider);
+        
+        // Start getting matches
+        matchMore.getMatchMonitor().addOnMatchListener((matches, device) -> {
+            waiter.assertTrue(matches.size() >= 0);
             waiter.resume();
             return Unit.INSTANCE;
-        }, e -> {
-            waiter.fail(e);
-            return Unit.INSTANCE;
         });
-        waiter.await(SdkConfigTest.TIMEOUT);
-
-        matchMore.startUpdatingLocation();
-
-        matchMore.getPublications().deleteAll(() -> {
-            waiter.resume();
-            return Unit.INSTANCE;
-        }, e -> {
-            waiter.fail(e);
-            return Unit.INSTANCE;
-        });
-        waiter.await(SdkConfigTest.TIMEOUT);
-
-        matchMore.getDevices().deleteAll(() -> {
-            waiter.resume();
-            return Unit.INSTANCE;
-        }, e -> {
-            waiter.fail(e);
-            return Unit.INSTANCE;
-        });
-        waiter.await(SdkConfigTest.TIMEOUT);
+        matchMore.stopUpdatingLocation();
     }
 }

@@ -6,9 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLog;
 
 import java.util.concurrent.TimeoutException;
 
@@ -19,21 +17,12 @@ import kotlin.Unit;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class MatchesTestJava {
+public class MatchesTestJava extends BaseTestJava {
     private Waiter waiter = new Waiter();
 
     @Before
     public void setUp() {
-        ShadowLog.stream = System.out;
-        if (!MatchMore.isConfigured()) {
-            MatchMore.config(new MatchMoreConfig(
-                    RuntimeEnvironment.application,
-                    SdkConfigTest.API_KEY,
-                    null,
-                    null,
-                    false,
-                    true));
-        }
+        configure();
     }
 
     @Test

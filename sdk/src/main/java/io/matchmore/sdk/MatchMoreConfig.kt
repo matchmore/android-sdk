@@ -5,13 +5,12 @@ import android.util.Base64
 import org.json.JSONObject
 import java.nio.charset.Charset
 
-data class MatchMoreConfig @JvmOverloads constructor(
+data class MatchMoreConfig(
         var context: Context,
         val apiKey: String,
-        val serverProtocol: String? = null,
-        val serverUrl: String? = null,
-        val callbackInUIThread: Boolean = true,
-        val debugLog: Boolean = false) {
+        var debugLog: Boolean
+) {
+
     init {
         context = context.applicationContext
     }
@@ -22,5 +21,4 @@ data class MatchMoreConfig @JvmOverloads constructor(
         val json = Base64.decode(segments[1], Base64.DEFAULT).toString(Charset.defaultCharset())
         return@lazy JSONObject(json).getString("sub")
     }
-
 }
