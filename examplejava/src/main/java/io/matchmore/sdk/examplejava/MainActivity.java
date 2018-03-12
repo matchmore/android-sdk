@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("JavaExample", device.getId());
             return Unit.INSTANCE;
         });
-
+        matchMore.getMatchMonitor().startPollingMatches();
 
         // Start updating location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
