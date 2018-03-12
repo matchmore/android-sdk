@@ -75,12 +75,12 @@ The `MatchMore` is a static wrapper that provides you all the functions you need
 
 ## Usage
 
-Setup application API key and world, get it for free from [http://matchmore.io/](http://matchmore.io/).
+Setup application API key, get it for free from [http://matchmore.io/](http://matchmore.io/).
 
 ```kotlin
 override fun onCreate() {
         super.onCreate()
-        MatchMore.config(MatchMoreConfig(this, SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID, debugLog = true))
+        MatchMore.config(context = this, apiKey = SdkConfigTest.API_KEY, debugLog = false)
     }
 }
 ```

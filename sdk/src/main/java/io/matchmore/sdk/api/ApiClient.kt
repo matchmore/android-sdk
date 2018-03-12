@@ -18,13 +18,11 @@ class ApiClient(gson: Gson, private val matchMoreConfig: MatchMoreConfig) {
                 .addInterceptor {
                     it.proceed(it.request().newBuilder().addHeader("api-key", matchMoreConfig.apiKey).build())
                 }
-        val url = matchMoreConfig.serverUrl ?: DEFAULT_URL
-        val protocol = matchMoreConfig.serverProtocol ?: DEFAULT_PROTOCOL
         val retrofitBuilder = Retrofit.Builder()
-                .baseUrl("$protocol://$url/$API_VERSION/")
+                .baseUrl("${config.serverProtocol}://${config.serverUrl}/${config.version}/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-        if (!matchMoreConfig.callbackInUIThread) {
+        if (!config.callbackInUIThread) {
             retrofitBuilder.callbackExecutor(Executors.newSingleThreadExecutor())
         }
         if (matchMoreConfig.debugLog) {
@@ -39,9 +37,13 @@ class ApiClient(gson: Gson, private val matchMoreConfig: MatchMoreConfig) {
     val publicationApi by lazy { retrofit.create(PublicationApi::class.java) }
     val subscriptionApi by lazy { retrofit.create(SubscriptionApi::class.java) }
 
+    class Config(var serverProtocol: String = "https",
+                      var serverUrl: String = "api.matchmore.io",
+                      var version: String = "v5",
+                      var callbackInUIThread: Boolean = true)
+
     companion object {
-        private const val DEFAULT_PROTOCOL = "https"
-        const val DEFAULT_URL = "api.matchmore.io"
-        const val API_VERSION = "v5"
+        @JvmStatic
+        val config = Config()
     }
 }

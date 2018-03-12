@@ -5,9 +5,8 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import io.matchmore.config.SdkConfigTest
-import io.matchmore.sdk.BuildConfig
 import io.matchmore.sdk.MatchMore
-import io.matchmore.sdk.MatchMoreConfig
+import io.matchmore.sdk.api.ApiClient
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.observers.TestObserver
@@ -34,11 +33,8 @@ abstract class RxBaseTest {
 
     fun init() {
         if (!MatchMore.isConfigured()) {
-            MatchMore.config(MatchMoreConfig(
-                    RuntimeEnvironment.application,
-                    SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
-                    callbackInUIThread = false,
-                    debugLog = true))
+            ApiClient.config.callbackInUIThread = false
+            MatchMore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true)
         }
         removeSubscriptions()
         removePublications()

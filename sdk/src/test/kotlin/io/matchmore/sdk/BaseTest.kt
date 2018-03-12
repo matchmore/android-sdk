@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import io.matchmore.config.SdkConfigTest
+import io.matchmore.sdk.api.ApiClient
 import net.jodah.concurrentunit.Waiter
 import org.junit.BeforeClass
 import org.junit.runner.RunWith
@@ -16,7 +17,7 @@ import org.robolectric.shadows.ShadowLocationManager
 import org.robolectric.shadows.ShadowLog
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, shadows =  [ShadowLocationManager::class])
+@Config(constants = BuildConfig::class, shadows = [ShadowLocationManager::class])
 abstract class BaseTest {
 
     // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
@@ -31,11 +32,8 @@ abstract class BaseTest {
 
     fun init() {
         if (!MatchMore.isConfigured()) {
-            MatchMore.config(MatchMoreConfig(
-                    RuntimeEnvironment.application,
-                    SdkConfigTest.API_KEY, SdkConfigTest.WORLD_ID,
-                    callbackInUIThread = false,
-                    debugLog = true))
+            ApiClient.config.callbackInUIThread = false
+            MatchMore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true)
         }
         removeSubscriptions()
         removePublications()

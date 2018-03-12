@@ -1,13 +1,17 @@
 package io.matchmore.sdk.utils
 
-import android.content.Context
 import com.google.gson.Gson
+import io.matchmore.sdk.MatchMoreConfig
 import okio.Okio
 import java.io.File
 
-class PersistenceManager(context: Context, val gson: Gson) {
+class PersistenceManager(config: MatchMoreConfig, val gson: Gson) {
 
-    val dataDir = context.applicationInfo.dataDir
+    private val dataDir = File(config.context.applicationInfo.dataDir, "mm/${config.worldId}")
+
+    init {
+        dataDir.mkdirs()
+    }
 
     fun writeData(data: Any?, fileName: String) {
         val sink = Okio.buffer(Okio.sink(File(dataDir, fileName)))
@@ -15,6 +19,7 @@ class PersistenceManager(context: Context, val gson: Gson) {
         sink.close()
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun getData(fileName: String): String? {
         val file = File(dataDir, fileName)
         if (!file.exists()) return null
