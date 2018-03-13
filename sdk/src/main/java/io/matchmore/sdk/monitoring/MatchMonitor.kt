@@ -15,10 +15,10 @@ import java.util.*
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
 class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
-    val monitoredDevices = mutableSetOf<Device>()
     val deliveredMatches = mutableSetOf<Match>()
-    val socketListener = MatchSocketListener()
 
+    private val monitoredDevices = mutableSetOf<Device>()
+    private val socketListener = MatchSocketListener()
 
     private var listeners = mutableSetOf<MatchMonitorListener>()
 
@@ -34,6 +34,7 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
         listeners.remove(listener)
     }
 
+    // TODO: start new socket after adding new device ?
     fun openSocketForMatches() {
         if (socket != null) {
             return
