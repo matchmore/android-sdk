@@ -6,12 +6,13 @@ import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Publication
+import io.matchmore.sdk.utils.unwrap
 import io.matchmore.sdk.utils.withoutExpired
 
 class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
         Store<Publication>(manager.persistenceManager, PUBLICATIONS_FILE) {
 
-    override var items: List<Publication> = listOf<Publication>()
+    override var items = listOf<Publication>()
         get() = field.withoutExpired()
         set(value) {
             Thread({ manager.persistenceManager.writeData(value, PUBLICATIONS_FILE) }).start()
@@ -29,19 +30,28 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
 
     override fun create(item: Publication, success: SuccessCallback<Publication>?, error: ErrorCallback?) {
         item.deviceId = item.deviceId ?: manager.main?.id
-        manager.apiClient.publicationApi.createPublication(item.deviceId!!, item)
-                .async({
-                    createData(it)
-                    success?.invoke(it)
-                }, error)
+        item.deviceId?.let { deviceId ->
+            manager.apiClient.publicationApi.createPublication(deviceId, item)
+                    .async({
+                        createData(it)
+                        success?.invoke(it)
+                    }, error)
+        } ?: run {
+            error(Throwable("Publication has to have device ID."))
+        }
     }
 
     override fun delete(item: Publication, complete: CompleteCallback?, error: ErrorCallback?) {
-        manager.apiClient.publicationApi.deletePublication(item.deviceId!!, item.id!!)
-                .async({
-                    deleteData(item)
-                    complete?.invoke()
-                }, error)
+        unwrap(item?.deviceId, item?.id, { deviceId, id ->
+            manager.apiClient.publicationApi.deletePublication(deviceId, id)
+                    .async({
+                        deleteData(item)
+                        complete?.invoke()
+                    }, error)
+        }, {
+            error(Throwable("Publication has to have ID and device ID."))
+        })
+
     }
 
     var onDeviceDelete: DeviceDeleteListener = { id ->

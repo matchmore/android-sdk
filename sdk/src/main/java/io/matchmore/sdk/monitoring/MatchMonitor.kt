@@ -15,10 +15,10 @@ import java.util.*
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
 class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
-    val monitoredDevices = mutableSetOf<Device>()
     val deliveredMatches = mutableSetOf<Match>()
-    val socketListener = MatchSocketListener()
 
+    private val monitoredDevices = mutableSetOf<Device>()
+    private val socketListener = MatchSocketListener()
 
     private var listeners = mutableSetOf<MatchMonitorListener>()
 
@@ -34,13 +34,14 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
         listeners.remove(listener)
     }
 
+    // TODO: start new socket after adding new device ?
     fun openSocketForMatches() {
         if (socket != null) {
             return
         }
         val deviceId = MatchMore.instance.devices.findAll().first().id
-        val url = config.serverUrl ?: ApiClient.DEFAULT_URL
-        val request = Request.Builder().url("ws://$url/pusher/${ApiClient.API_VERSION}/ws/$deviceId")
+        val url = ApiClient.config.serverUrl
+        val request = Request.Builder().url("ws://$url/pusher/${ApiClient.config.version}/ws/$deviceId")
                 .header("Sec-WebSocket-Protocol", "api-key,${config.worldId}").build()
         val client = OkHttpClient()
         socketListener.onMessage = { text ->
@@ -74,7 +75,8 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
         monitoredDevices.remove(device)
     }
 
-    fun startPollingMatches() {
+    @JvmOverloads
+    fun startPollingMatches(pollingIntervalMs: Long = DEFAULT_POLLING_INTERVAL_MS) {
         if (timer != null) {
             return
         }
@@ -83,7 +85,7 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
             override fun run() {
                 getMatches()
             }
-        }, delay, repeat)
+        }, 0, pollingIntervalMs)
     }
 
     fun stopPollingMatches() {
@@ -112,7 +114,6 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
     }
 
     companion object {
-        private const val delay: Long = 0
-        private const val repeat: Long = 5000
+        private const val DEFAULT_POLLING_INTERVAL_MS: Long = 5000
     }
 }

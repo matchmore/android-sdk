@@ -7,9 +7,9 @@ import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.AsyncClearable
-import io.matchmore.sdk.store.AsyncCreateable
-import io.matchmore.sdk.store.AsyncDeleteable
-import io.matchmore.sdk.store.AsyncUpdateable
+import io.matchmore.sdk.store.AsyncCreatable
+import io.matchmore.sdk.store.AsyncDeletable
+import io.matchmore.sdk.store.AsyncUpdatable
 import io.reactivex.*
 
 private fun completableEmitter(emitter: CompletableEmitter): () -> Unit = { if (!emitter.isDisposed) emitter.onComplete() }
@@ -49,13 +49,13 @@ fun MatchMoreSdk.rxCreateSubscription(subscription: Subscription, deviceWithId: 
 fun MatchMoreSdk.rxCreatePinDevice(pinDevice: PinDevice): Single<PinDevice> =
         singleRx { success, error -> createPinDevice(pinDevice, success, error) }
 
-fun <T> AsyncCreateable<T>.rxCreate(item: T): Single<T> =
+fun <T> AsyncCreatable<T>.rxCreate(item: T): Single<T> =
         singleRx { success, error -> create(item, success, error) }
 
-fun <T> AsyncUpdateable<T>.rxUpdate(item: T): Single<T> =
+fun <T> AsyncUpdatable<T>.rxUpdate(item: T): Single<T> =
         singleRx { success, error -> update(item, success, error) }
 
-fun <T> AsyncDeleteable<T>.rxDelete(item: T): Completable =
+fun <T> AsyncDeletable<T>.rxDelete(item: T): Completable =
         completableRx { complete, error -> delete(item, complete, error) }
 
 fun AsyncClearable.rxDeleteAll(): Completable = completableRx { complete, error -> deleteAll(complete, error) }

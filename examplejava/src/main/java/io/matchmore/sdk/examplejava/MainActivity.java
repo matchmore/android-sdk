@@ -9,7 +9,6 @@ import android.util.Log;
 
 import io.matchmore.config.SdkConfigTest;
 import io.matchmore.sdk.MatchMore;
-import io.matchmore.sdk.MatchMoreConfig;
 import io.matchmore.sdk.MatchMoreSdk;
 import io.matchmore.sdk.api.models.Publication;
 import io.matchmore.sdk.api.models.Subscription;
@@ -29,14 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Configuration of api key/world id
         if (!MatchMore.isConfigured()) {
-            MatchMore.config(new MatchMoreConfig(
-                    this,
-                    SdkConfigTest.API_KEY,
-                    SdkConfigTest.WORLD_ID,
-                    null,
-                    null,
-                    false,
-                    true));
+            MatchMore.config(this, SdkConfigTest.API_KEY, true);
         }
 
         // Getting instance. It's static variable. It's possible to have only one instance of matchmore.
@@ -72,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("JavaExample", device.getId());
             return Unit.INSTANCE;
         });
-
+        matchMore.getMatchMonitor().startPollingMatches();
 
         // Start updating location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

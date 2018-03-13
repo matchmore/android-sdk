@@ -2,10 +2,11 @@ package io.matchmore.sdk.utils
 
 import android.location.Location
 import android.os.Build
+import io.matchmore.sdk.api.models.MatchMoreLocation
 
-val Location.mmLocation: io.matchmore.sdk.api.models.MatchMoreLocation
+val Location.mmLocation: MatchMoreLocation
     get() {
-        var apiLocation = io.matchmore.sdk.api.models.MatchMoreLocation(
+        var apiLocation = MatchMoreLocation(
                 latitude = this.latitude,
                 longitude = this.longitude,
                 horizontalAccuracy = if (this.hasAccuracy()) this.accuracy.toDouble() else 1.0
