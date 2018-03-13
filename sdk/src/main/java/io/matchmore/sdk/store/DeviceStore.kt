@@ -8,6 +8,7 @@ import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Device
 import io.matchmore.sdk.api.models.MobileDevice
+import io.matchmore.sdk.utils.unwrap
 
 typealias DeviceDeleteListener = (String) -> Unit
 
@@ -66,26 +67,31 @@ class DeviceStore(private val manager: AlpsManager)
     }
 
     override fun delete(item: Device, complete: CompleteCallback?, error: ErrorCallback?) {
-        manager.apiClient.deviceApi.deleteDevice(item.id!!).async({
-            deleteData(item)
-            if (item == main) main = null
-            manager.matchMonitor.stopMonitoringFor(item)
-            listeners.forEach {
-                it.invoke(item.id!!)
-            }
-            complete?.invoke()
-        }, error)
+        item.id?.let { itemId ->
+            manager.apiClient.deviceApi.deleteDevice(itemId).async({
+                deleteData(item)
+                if (item == main) main = null
+                manager.matchMonitor.stopMonitoringFor(item)
+                listeners.forEach {
+                    it.invoke(itemId)
+                }
+                complete?.invoke()
+            }, error)
+        } ?: run {
+            error(Throwable("Item ID is required"))
+        }
+
     }
 
     fun registerDeviceToken(token: String) {
-        main?.let {
-            it.deviceToken = "fcm://$token"
-            manager.apiClient.deviceApi.updateDevice(it.id!!, it).async({ _ -> })
-        }
+        unwrap(main, main?.id, { main, mainId ->
+            main.deviceToken = "fcm://$token"
+            manager.apiClient.deviceApi.updateDevice(mainId, main).async({ _ -> })
+        })
     }
 
     companion object {
-        val MOBILE_DEVICES_FILE = "kMobileDevicesFile.Alps"
-        val MAIN_DEVICE_FILE = "kMainDeviceFile.Alps"
+        private const val MOBILE_DEVICES_FILE = "kMobileDevicesFile.Alps"
+        private const val MAIN_DEVICE_FILE = "kMainDeviceFile.Alps"
     }
 }

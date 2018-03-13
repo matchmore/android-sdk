@@ -39,12 +39,14 @@ class MatchMoreBeaconManager(
 
     override fun onBeaconServiceConnect() {
         beaconManager.addRangeNotifier { beacons, _ ->
-            beacons.forEach { beacon ->
-                Log.i("beacon", "${beacon.id1} ${beacon.distance}")
-                if (shouldTrigger(beacon)) {
-                    val proximityEvent = ProximityEvent(deviceId = beacon.id1.toString(), distance = beacon.distance)
-                    apiClient.deviceApi.triggerProximityEvents(deviceStore.main!!.id!!, proximityEvent)
-                            .async({ beaconsTriggered.put(beacon.id1, TriggerInfo(System.currentTimeMillis(), beacon.distance)) })
+            deviceStore.main?.id?.let { mainDeviceId ->
+                beacons.forEach { beacon ->
+                    Log.i("beacon", "${beacon.id1} ${beacon.distance}")
+                    if (shouldTrigger(beacon)) {
+                        val proximityEvent = ProximityEvent(deviceId = beacon.id1.toString(), distance = beacon.distance)
+                        apiClient.deviceApi.triggerProximityEvents(mainDeviceId, proximityEvent)
+                                .async({ beaconsTriggered[beacon.id1] = TriggerInfo(System.currentTimeMillis(), beacon.distance) })
+                    }
                 }
             }
         }
