@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
                         val publication = Publication("Test Topic", 1.0, 0.0)
                         publication.properties = hashMapOf("test" to "true")
-                        createPublication(publication, { result ->
+                        createPublicationForMainDevice(publication, { result ->
                             Log.i(TAG, "Publication created ${result.topic}")
                         }, Throwable::printStackTrace)
 
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private fun MatchMoreSdk.createPollingSubscription() {
         val subscription = Subscription("Test Topic", 1.0, 0.0)
         subscription.selector = "test = 'true'"
-        createSubscription(subscription, { result ->
+        createSubscriptionForMainDevice(subscription, { result ->
             Log.i(TAG, "Subscription created ${result.topic}")
         }, Throwable::printStackTrace)
     }

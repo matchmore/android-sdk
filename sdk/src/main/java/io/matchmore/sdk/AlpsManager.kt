@@ -1,5 +1,6 @@
 package io.matchmore.sdk
 
+import android.annotation.SuppressLint
 import com.google.firebase.iid.FirebaseInstanceId
 import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.ErrorCallback
@@ -65,6 +66,7 @@ class AlpsManager(private val config: MatchMoreConfig) : MatchMoreSdk {
 
     override val locationManager = MatchMoreLocationManager(this)
 
+    @SuppressLint("MissingPermission")
     override fun startUpdatingLocation() =
             locationManager.startUpdatingLocation(DefaultLocationProvider(config.context))
 

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         // Creating main device.
         matchMore.startUsingMainDevice(device -> {
             Publication publication = new Publication("Test Topic", 20d, 100000d);
-            matchMore.createPublication(publication, createdPublication -> {
+            matchMore.createPublicationForMainDevice(publication, createdPublication -> {
                 Log.d("JavaExample", createdPublication.getId());
                 return Unit.INSTANCE; // `return Unit.INSTANCE;` is important (b/c kotlin vs java lambdas differ in implementation)
             }, e -> {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-            matchMore.createSubscription(subscription, createdSubscription -> {
+            matchMore.createSubscriptionForMainDevice(subscription, createdSubscription -> {
                 Log.d("JavaExample", createdSubscription.getId());
                 return Unit.INSTANCE;
             }, e -> {

@@ -12,13 +12,13 @@ class SubscriptionsTest : BaseTest() {
 
         val matchMoreSdk = MatchMore.instance
         val subscription = Subscription("Test Topic", 20.0, 100000.0)
-        matchMoreSdk.createSubscription(subscription, { _ ->
+        matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        matchMoreSdk.createSubscription(subscription, { _ ->
+        matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(2, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)

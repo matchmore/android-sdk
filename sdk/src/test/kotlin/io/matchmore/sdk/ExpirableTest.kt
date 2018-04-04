@@ -14,14 +14,14 @@ class ExpirableTest : BaseTest() {
 
         // create publications
         val publication = Publication("Test Topic", 2000.0, 100.0)
-        matchMoreSdk.createPublication(publication, { _ ->
+        matchMoreSdk.createPublicationForMainDevice(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
         val expiringPublication = Publication("Expiring Topic", 2000.0, 1.0)
-        matchMoreSdk.createPublication(expiringPublication, { _ ->
+        matchMoreSdk.createPublicationForMainDevice(expiringPublication, { _ ->
             waiter.assertEquals(2, matchMoreSdk.publications.findAll().size)
             waiter.resume()
         }, waiter::fail)
@@ -29,14 +29,14 @@ class ExpirableTest : BaseTest() {
 
         // create subscriptions
         val subscription = Subscription("Test Topic", 2000.0, 100.0)
-        matchMoreSdk.createSubscription(subscription, { _ ->
+        matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
         val expiringSubscription = Subscription("Expiring Topic", 2000.0, 1.0)
-        matchMoreSdk.createSubscription(expiringSubscription, { _ ->
+        matchMoreSdk.createSubscriptionForMainDevice(expiringSubscription, { _ ->
             waiter.assertEquals(2, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)

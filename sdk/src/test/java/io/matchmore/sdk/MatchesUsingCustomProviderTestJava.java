@@ -43,7 +43,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
-        matchMore.createPublication(publication,
+        matchMore.createPublicationForMainDevice(publication,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -54,7 +54,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-        matchMore.createSubscription(subscription,
+        matchMore.createSubscriptionForMainDevice(subscription,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
