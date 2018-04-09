@@ -7,8 +7,8 @@ import android.support.annotation.RequiresPermission
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
 import io.matchmore.sdk.api.models.*
-import io.matchmore.sdk.managers.MatchMoreLocationManager
-import io.matchmore.sdk.managers.MatchMoreLocationProvider
+import io.matchmore.sdk.managers.MatchmoreLocationManager
+import io.matchmore.sdk.managers.MatchmoreLocationProvider
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.AsyncReadable
 import io.matchmore.sdk.store.CRD
@@ -37,7 +37,7 @@ object MatchMore {
 
 interface MatchMoreSdk {
     /**
-     * Main mobile device created by `startUsingMainDevice()`
+     * Main mobile device created by `startUsingMainDevice().`
      */
     val main: MobileDevice?
 
@@ -69,9 +69,9 @@ interface MatchMoreSdk {
 
     /**
      * Object responsible for getting location data that will be sent to Matchmore's cloud.
-     * It's possible to inject your own location manager by conforming to [MatchMoreLocationManager] interface.
+     * It's possible to inject your own location manager by conforming to [MatchmoreLocationManager] interface.
      */
-    val locationManager: MatchMoreLocationManager
+    val locationManager: MatchmoreLocationManager
 
     /**
      * Cached set of matches that have been downloaded so far.
@@ -88,9 +88,9 @@ interface MatchMoreSdk {
     /**
      * Starts updating and sending user's location to Matchmore's cloud.
      * Frequency of updates is strictly related to custom object's configuration.
-     * @property locationProvider object that provides location data, it has to conform to [MatchMoreLocationProvider] interface.
+     * @property locationProvider object that provides location data, it has to conform to [MatchmoreLocationProvider] interface.
      */
-    fun startUpdatingLocation(locationProvider: MatchMoreLocationProvider)
+    fun startUpdatingLocation(locationProvider: MatchmoreLocationProvider)
 
     /**
      * Stops updating and sending user's location to Matchmore's cloud.

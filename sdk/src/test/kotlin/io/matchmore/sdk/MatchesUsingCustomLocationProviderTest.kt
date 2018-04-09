@@ -3,7 +3,7 @@ package io.matchmore.sdk
 import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.managers.LocationSender
-import io.matchmore.sdk.managers.MatchMoreLocationProvider
+import io.matchmore.sdk.managers.MatchmoreLocationProvider
 import org.junit.Test
 import org.robolectric.annotation.Config
 
@@ -33,9 +33,9 @@ class MatchesUsingCustomLocationProviderTest : BaseTest() {
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
 
-        val locationProvider = object : MatchMoreLocationProvider {
+        val locationProvider = object : MatchmoreLocationProvider {
             override fun startUpdatingLocation(sender: LocationSender) {
-                sender.sendLocation(MatchMoreLocation(createdAt = System.currentTimeMillis(), latitude = 80.0, longitude = 80.0))
+                sender.sendLocation(MatchmoreLocation(createdAt = System.currentTimeMillis(), latitude = 80.0, longitude = 80.0))
             }
 
             override fun stopUpdatingLocation() {}

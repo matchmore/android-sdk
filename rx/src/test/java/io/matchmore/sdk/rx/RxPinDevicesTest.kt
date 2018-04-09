@@ -1,7 +1,7 @@
 package io.matchmore.sdk.rx
 
 import io.matchmore.sdk.MatchMore
-import io.matchmore.sdk.api.models.MatchMoreLocation
+import io.matchmore.sdk.api.models.MatchmoreLocation
 import io.matchmore.sdk.api.models.PinDevice
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
@@ -15,7 +15,7 @@ class RxPinDevicesTest : RxBaseTest() {
         init()
 
         val matchMoreSdk = MatchMore.instance
-        var pinDevice = PinDevice("Test Pin", location = MatchMoreLocation(latitude = 2.0, longitude = 2.0))
+        var pinDevice = PinDevice("Test Pin", location = MatchmoreLocation(latitude = 2.0, longitude = 2.0))
 
         matchMoreSdk.rxCreatePinDevice(pinDevice).testAndWait().assertValue {
             pinDevice = it

@@ -1,6 +1,6 @@
 package io.matchmore.sdk.api
 
-import io.matchmore.sdk.api.models.MatchMoreLocation
+import io.matchmore.sdk.api.models.MatchmoreLocation
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -19,7 +19,7 @@ interface LocationApi {
     @Headers("Content-Type:application/json")
     @POST("devices/{deviceId}/locations")
     fun createLocation(
-            @Path("deviceId") deviceId: String, @Body location: MatchMoreLocation
-    ): Call<MatchMoreLocation>
+            @Path("deviceId") deviceId: String, @Body location: MatchmoreLocation
+    ): Call<MatchmoreLocation>
 
 }

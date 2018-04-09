@@ -9,8 +9,8 @@ import io.matchmore.sdk.api.adapters.ParserBuilder
 import io.matchmore.sdk.api.models.*
 import io.matchmore.sdk.managers.DefaultLocationProvider
 import io.matchmore.sdk.managers.MatchMoreBeaconManager
-import io.matchmore.sdk.managers.MatchMoreLocationManager
-import io.matchmore.sdk.managers.MatchMoreLocationProvider
+import io.matchmore.sdk.managers.MatchmoreLocationManager
+import io.matchmore.sdk.managers.MatchmoreLocationProvider
 import io.matchmore.sdk.monitoring.MatchMonitor
 import io.matchmore.sdk.store.DeviceStore
 import io.matchmore.sdk.store.IBeaconTriplesStore
@@ -64,13 +64,13 @@ class AlpsManager(private val config: MatchMoreConfig) : MatchMoreSdk {
 
     override val matchMonitor = MatchMonitor(this, config)
 
-    override val locationManager = MatchMoreLocationManager(this)
+    override val locationManager = MatchmoreLocationManager(this)
 
     @SuppressLint("MissingPermission")
     override fun startUpdatingLocation() =
             locationManager.startUpdatingLocation(DefaultLocationProvider(config.context))
 
-    override fun startUpdatingLocation(locationProvider: MatchMoreLocationProvider) =
+    override fun startUpdatingLocation(locationProvider: MatchmoreLocationProvider) =
             locationManager.startUpdatingLocation(locationProvider)
 
     override fun stopUpdatingLocation() = locationManager.stopUpdatingLocation()

@@ -12,11 +12,11 @@ import org.robolectric.annotation.Config;
 import java.util.concurrent.TimeoutException;
 
 import io.matchmore.config.SdkConfigTest;
-import io.matchmore.sdk.api.models.MatchMoreLocation;
+import io.matchmore.sdk.api.models.MatchmoreLocation;
 import io.matchmore.sdk.api.models.Publication;
 import io.matchmore.sdk.api.models.Subscription;
 import io.matchmore.sdk.managers.LocationSender;
-import io.matchmore.sdk.managers.MatchMoreLocationProvider;
+import io.matchmore.sdk.managers.MatchmoreLocationProvider;
 import kotlin.Unit;
 
 @RunWith(RobolectricTestRunner.class)
@@ -63,10 +63,10 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
                     return Unit.INSTANCE;
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
-        MatchMoreLocationProvider locationProvider = new MatchMoreLocationProvider() {
+        MatchmoreLocationProvider locationProvider = new MatchmoreLocationProvider() {
             @Override
             public void startUpdatingLocation(@NotNull LocationSender sender) {
-                sender.sendLocation(new MatchMoreLocation(System.currentTimeMillis(), 80.0, 80.0));
+                sender.sendLocation(new MatchmoreLocation(System.currentTimeMillis(), 80.0, 80.0));
             }
 
             @Override
