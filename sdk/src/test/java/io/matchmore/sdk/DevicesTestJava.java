@@ -29,7 +29,7 @@ public class DevicesTestJava extends BaseTestJava {
     @Test
     public void creations() throws TimeoutException {
         BaseTest.mockLocation();
-        MatchMoreSdk matchMore = MatchMore.getInstance();
+        MatchMoreSDK matchMore = MatchMore.getInstance();
         matchMore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;

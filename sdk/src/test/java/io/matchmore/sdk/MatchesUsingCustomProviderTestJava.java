@@ -31,7 +31,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
 
     @Test
     public void gettingMatches() throws TimeoutException {
-        MatchMoreSdk matchMore = MatchMore.getInstance();
+        MatchMoreSDK matchMore = MatchMore.getInstance();
 
         matchMore.startUsingMainDevice(device -> {
             waiter.resume();

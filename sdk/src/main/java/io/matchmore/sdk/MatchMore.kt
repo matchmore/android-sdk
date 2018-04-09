@@ -18,7 +18,7 @@ object MatchMore {
     private var matchMoreConfig: MatchMoreConfig? = null
 
     @JvmStatic
-    val instance: MatchMoreSdk by lazy {
+    val instance: MatchMoreSDK by lazy {
         if (!isConfigured()) throw IllegalStateException("Please config first.")
         AlpsManager(matchMoreConfig!!)
 
@@ -35,9 +35,9 @@ object MatchMore {
     fun isConfigured() = this.matchMoreConfig != null
 }
 
-interface MatchMoreSdk {
+interface MatchMoreSDK {
     /**
-     * Main mobile device created by `startUsingMainDevice().`
+     * Main mobile device created by `startUsingMainDevice()`.
      */
     val main: MobileDevice?
 

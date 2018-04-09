@@ -9,7 +9,7 @@ import android.util.Log;
 
 import io.matchmore.config.SdkConfigTest;
 import io.matchmore.sdk.MatchMore;
-import io.matchmore.sdk.MatchMoreSdk;
+import io.matchmore.sdk.MatchMoreSDK;
 import io.matchmore.sdk.api.models.Publication;
 import io.matchmore.sdk.api.models.Subscription;
 import kotlin.Unit;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Getting instance. It's static variable. It's possible to have only one instance of matchmore.
-        MatchMoreSdk matchMore = MatchMore.getInstance();
+        MatchMoreSDK matchMore = MatchMore.getInstance();
 
         // Creating main device.
         matchMore.startUsingMainDevice(device -> {
