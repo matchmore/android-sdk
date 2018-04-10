@@ -12,11 +12,11 @@ import org.robolectric.annotation.Config;
 import java.util.concurrent.TimeoutException;
 
 import io.matchmore.config.SdkConfigTest;
-import io.matchmore.sdk.api.models.MatchMoreLocation;
+import io.matchmore.sdk.api.models.MatchmoreLocation;
 import io.matchmore.sdk.api.models.Publication;
 import io.matchmore.sdk.api.models.Subscription;
 import io.matchmore.sdk.managers.LocationSender;
-import io.matchmore.sdk.managers.MatchMoreLocationProvider;
+import io.matchmore.sdk.managers.MatchmoreLocationProvider;
 import kotlin.Unit;
 
 @RunWith(RobolectricTestRunner.class)
@@ -31,9 +31,9 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
 
     @Test
     public void gettingMatches() throws TimeoutException {
-        MatchMoreSdk matchMore = MatchMore.getInstance();
+        MatchmoreSDK matchmore = Matchmore.getInstance();
 
-        matchMore.startUsingMainDevice(device -> {
+        matchmore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -43,7 +43,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
-        matchMore.createPublication(publication,
+        matchmore.createPublicationForMainDevice(publication,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -54,7 +54,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-        matchMore.createSubscription(subscription,
+        matchmore.createSubscriptionForMainDevice(subscription,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -63,10 +63,10 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
                     return Unit.INSTANCE;
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
-        MatchMoreLocationProvider locationProvider = new MatchMoreLocationProvider() {
+        MatchmoreLocationProvider locationProvider = new MatchmoreLocationProvider() {
             @Override
             public void startUpdatingLocation(@NotNull LocationSender sender) {
-                sender.sendLocation(new MatchMoreLocation(System.currentTimeMillis(), 80.0, 80.0));
+                sender.sendLocation(new MatchmoreLocation(System.currentTimeMillis(), 80.0, 80.0));
             }
 
             @Override
@@ -74,14 +74,14 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
 
             }
         };
-        matchMore.startUpdatingLocation(locationProvider);
+        matchmore.startUpdatingLocation(locationProvider);
         
         // Start getting matches
-        matchMore.getMatchMonitor().addOnMatchListener((matches, device) -> {
+        matchmore.getMatchMonitor().addOnMatchListener((matches, device) -> {
             waiter.assertTrue(matches.size() >= 0);
             waiter.resume();
             return Unit.INSTANCE;
         });
-        matchMore.stopUpdatingLocation();
+        matchmore.stopUpdatingLocation();
     }
 }

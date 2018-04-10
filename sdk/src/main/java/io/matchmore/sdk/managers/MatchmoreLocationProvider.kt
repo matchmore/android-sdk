@@ -1,8 +1,8 @@
 package io.matchmore.sdk.managers
 
-import io.matchmore.sdk.api.models.MatchMoreLocation
+import io.matchmore.sdk.api.models.MatchmoreLocation
 
-interface MatchMoreLocationProvider {
+interface MatchmoreLocationProvider {
 
     fun startUpdatingLocation(sender: LocationSender)
 
@@ -10,5 +10,5 @@ interface MatchMoreLocationProvider {
 }
 
 interface LocationSender {
-    fun sendLocation(location: MatchMoreLocation)
+    fun sendLocation(location: MatchmoreLocation)
 }

@@ -5,7 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import io.matchmore.config.SdkConfigTest
-import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.Matchmore
 import io.matchmore.sdk.api.ApiClient
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -27,14 +27,14 @@ abstract class RxBaseTest {
     // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
     fun initAndStartUsingMainDevice() {
         init()
-        MatchMore.instance.rxStartUsingMainDevice().testAndWait()
-        assertEquals(1, MatchMore.instance.devices.findAll().size)
+        Matchmore.instance.rxStartUsingMainDevice().testAndWait()
+        assertEquals(1, Matchmore.instance.devices.findAll().size)
     }
 
     fun init() {
-        if (!MatchMore.isConfigured()) {
+        if (!Matchmore.isConfigured()) {
             ApiClient.config.callbackInUIThread = false
-            MatchMore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true)
+            Matchmore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true)
         }
         removeSubscriptions()
         removePublications()
@@ -42,18 +42,18 @@ abstract class RxBaseTest {
     }
 
     private fun removePublications() {
-        MatchMore.instance.publications.rxDeleteAll().testAndWait()
-        assertEquals(0, MatchMore.instance.publications.findAll().size)
+        Matchmore.instance.publications.rxDeleteAll().testAndWait()
+        assertEquals(0, Matchmore.instance.publications.findAll().size)
     }
 
     private fun removeSubscriptions() {
-        MatchMore.instance.subscriptions.rxDeleteAll().testAndWait()
-        assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
+        Matchmore.instance.subscriptions.rxDeleteAll().testAndWait()
+        assertEquals(0, Matchmore.instance.subscriptions.findAll().size)
     }
 
     private fun removeDevices() {
-        MatchMore.instance.devices.rxDeleteAll().testAndWait()
-        assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
+        Matchmore.instance.devices.rxDeleteAll().testAndWait()
+        assertEquals(0, Matchmore.instance.subscriptions.findAll().size)
     }
 
     protected fun mockLocation() {

@@ -12,7 +12,7 @@ import android.support.v4.content.ContextCompat
 import io.matchmore.sdk.utils.mmLocation
 
 
-class DefaultLocationProvider(private val context: Context): MatchMoreLocationProvider {
+class DefaultLocationProvider(private val context: Context): MatchmoreLocationProvider {
 
     private var sender: LocationSender? = null
 
