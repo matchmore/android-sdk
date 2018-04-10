@@ -23,17 +23,17 @@ abstract class BaseTest {
     // unfortunately we can't move that method to @BeforeClass because robolectric RuntimeEnvironment.application is still null there
     fun initAndStartUsingMainDevice() {
         init()
-        MatchMore.instance.startUsingMainDevice({ _ ->
-            waiter.assertEquals(1, MatchMore.instance.devices.findAll().size)
+        Matchmore.instance.startUsingMainDevice({ _ ->
+            waiter.assertEquals(1, Matchmore.instance.devices.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 
     fun init() {
-        if (!MatchMore.isConfigured()) {
+        if (!Matchmore.isConfigured()) {
             ApiClient.config.callbackInUIThread = false
-            MatchMore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true)
+            Matchmore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true)
         }
         removeSubscriptions()
         removePublications()
@@ -41,24 +41,24 @@ abstract class BaseTest {
     }
 
     private fun removePublications() {
-        MatchMore.instance.publications.deleteAll({
-            waiter.assertEquals(0, MatchMore.instance.publications.findAll().size)
+        Matchmore.instance.publications.deleteAll({
+            waiter.assertEquals(0, Matchmore.instance.publications.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 
     private fun removeSubscriptions() {
-        MatchMore.instance.subscriptions.deleteAll({
-            waiter.assertEquals(0, MatchMore.instance.subscriptions.findAll().size)
+        Matchmore.instance.subscriptions.deleteAll({
+            waiter.assertEquals(0, Matchmore.instance.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
     }
 
     private fun removeDevices() {
-        MatchMore.instance.devices.deleteAll({
-            waiter.assertEquals(0, MatchMore.instance.devices.findAll().size)
+        Matchmore.instance.devices.deleteAll({
+            waiter.assertEquals(0, Matchmore.instance.devices.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)

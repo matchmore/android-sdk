@@ -5,7 +5,7 @@ import android.util.Base64
 import org.json.JSONObject
 import java.nio.charset.Charset
 
-data class MatchMoreConfig(
+data class MatchmoreConfig(
         var context: Context,
         val apiKey: String,
         var debugLog: Boolean

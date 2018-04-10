@@ -27,9 +27,9 @@ public class MatchesTestJava extends BaseTestJava {
 
     @Test
     public void gettingMatches() throws TimeoutException {
-        MatchMoreSDK matchMore = MatchMore.getInstance();
+        MatchmoreSDK matchmore = Matchmore.getInstance();
 
-        matchMore.startUsingMainDevice(device -> {
+        matchmore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -39,7 +39,7 @@ public class MatchesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
-        matchMore.createPublicationForMainDevice(publication,
+        matchmore.createPublicationForMainDevice(publication,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -50,7 +50,7 @@ public class MatchesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-        matchMore.createSubscriptionForMainDevice(subscription,
+        matchmore.createSubscriptionForMainDevice(subscription,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -61,10 +61,10 @@ public class MatchesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         BaseTest.mockLocation();
-        matchMore.startUpdatingLocation();
+        matchmore.startUpdatingLocation();
         
         // Start getting matches
-        matchMore.getMatchMonitor().addOnMatchListener((matches, device) -> {
+        matchmore.getMatchMonitor().addOnMatchListener((matches, device) -> {
             waiter.assertTrue(matches.size() >= 0);
             waiter.resume();
             return Unit.INSTANCE;

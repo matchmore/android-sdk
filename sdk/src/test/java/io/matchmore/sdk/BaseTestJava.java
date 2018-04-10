@@ -9,9 +9,9 @@ import io.matchmore.sdk.api.ApiClient;
  class BaseTestJava {
     void configure() {
         ShadowLog.stream = System.out;
-        if (!MatchMore.isConfigured()) {
+        if (!Matchmore.isConfigured()) {
             ApiClient.getConfig().setCallbackInUIThread(false);
-            MatchMore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true);
+            Matchmore.config(RuntimeEnvironment.application, SdkConfigTest.API_KEY, true);
         }
     }
 }

@@ -10,7 +10,7 @@ class ExpirableTest : BaseTest() {
     fun testExpirablePubSub() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // create publications
         val publication = Publication("Test Topic", 2000.0, 100.0)

@@ -10,7 +10,7 @@ class PublicationsTest : BaseTest() {
     fun test() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
         val publication = Publication("Test Topic", 20.0, 100000.0)
         matchMoreSdk.createPublicationForMainDevice(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)

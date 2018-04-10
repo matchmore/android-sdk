@@ -17,7 +17,7 @@ class SocketTest : BaseTest() {
     fun getMatchesUsingSocket() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // open socket
         matchMoreSdk.matchMonitor.openSocketForMatches()

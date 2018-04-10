@@ -15,7 +15,7 @@ class MatchesTest : BaseTest() {
     fun getMatches() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)

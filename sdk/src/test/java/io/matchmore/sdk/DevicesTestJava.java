@@ -29,8 +29,8 @@ public class DevicesTestJava extends BaseTestJava {
     @Test
     public void creations() throws TimeoutException {
         BaseTest.mockLocation();
-        MatchMoreSDK matchMore = MatchMore.getInstance();
-        matchMore.startUsingMainDevice(device -> {
+        MatchmoreSDK matchmore = Matchmore.getInstance();
+        matchmore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -40,7 +40,7 @@ public class DevicesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
-        matchMore.createPublicationForMainDevice(publication,
+        matchmore.createPublicationForMainDevice(publication,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -51,7 +51,7 @@ public class DevicesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-        matchMore.createSubscriptionForMainDevice(subscription,
+        matchmore.createSubscriptionForMainDevice(subscription,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -61,7 +61,7 @@ public class DevicesTestJava extends BaseTestJava {
                 });
         waiter.await(SdkConfigTest.TIMEOUT);
 
-        matchMore.getSubscriptions().deleteAll(() -> {
+        matchmore.getSubscriptions().deleteAll(() -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -70,9 +70,9 @@ public class DevicesTestJava extends BaseTestJava {
         });
         waiter.await(SdkConfigTest.TIMEOUT);
 
-        matchMore.startUpdatingLocation();
+        matchmore.startUpdatingLocation();
 
-        matchMore.getPublications().deleteAll(() -> {
+        matchmore.getPublications().deleteAll(() -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -81,7 +81,7 @@ public class DevicesTestJava extends BaseTestJava {
         });
         waiter.await(SdkConfigTest.TIMEOUT);
 
-        matchMore.getDevices().deleteAll(() -> {
+        matchmore.getDevices().deleteAll(() -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {

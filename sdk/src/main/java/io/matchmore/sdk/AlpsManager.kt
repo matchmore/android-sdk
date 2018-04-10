@@ -18,7 +18,7 @@ import io.matchmore.sdk.store.PublicationStore
 import io.matchmore.sdk.store.SubscriptionStore
 import io.matchmore.sdk.utils.PersistenceManager
 
-class AlpsManager(private val config: MatchMoreConfig) : MatchMoreSDK {
+class AlpsManager(private val config: MatchmoreConfig) : MatchmoreSDK {
 
     private val gson = ParserBuilder.gsonBuilder.create()
     private val deviceStore by lazy {

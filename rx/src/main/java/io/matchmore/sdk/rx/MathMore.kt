@@ -1,6 +1,6 @@
 package io.matchmore.sdk.rx
 
-import io.matchmore.sdk.MatchMoreSDK
+import io.matchmore.sdk.MatchmoreSDK
 import io.matchmore.sdk.api.CompleteCallback
 import io.matchmore.sdk.api.ErrorCallback
 import io.matchmore.sdk.api.SuccessCallback
@@ -38,15 +38,15 @@ private fun completableRx(function: ((CompleteCallback, ErrorCallback) -> Unit))
             function(completableEmitter(emitter), errorEmitter(emitter))
         })
 
-fun MatchMoreSDK.rxStartUsingMainDevice(): Single<MobileDevice> = singleRx(this::startUsingMainDevice)
+fun MatchmoreSDK.rxStartUsingMainDevice(): Single<MobileDevice> = singleRx(this::startUsingMainDevice)
 
-fun MatchMoreSDK.rxCreatePublication(publication: Publication, deviceWithId: String? = null)
+fun MatchmoreSDK.rxCreatePublication(publication: Publication, deviceWithId: String? = null)
         : Single<Publication> = singleRx { success, error -> createPublication(publication, deviceWithId, success, error) }
 
-fun MatchMoreSDK.rxCreateSubscription(subscription: Subscription, deviceWithId: String? = null)
+fun MatchmoreSDK.rxCreateSubscription(subscription: Subscription, deviceWithId: String? = null)
         : Single<Subscription> = singleRx { success, error -> createSubscription(subscription, deviceWithId, success, error) }
 
-fun MatchMoreSDK.rxCreatePinDevice(pinDevice: PinDevice): Single<PinDevice> =
+fun MatchmoreSDK.rxCreatePinDevice(pinDevice: PinDevice): Single<PinDevice> =
         singleRx { success, error -> createPinDevice(pinDevice, success, error) }
 
 fun <T> AsyncCreatable<T>.rxCreate(item: T): Single<T> =

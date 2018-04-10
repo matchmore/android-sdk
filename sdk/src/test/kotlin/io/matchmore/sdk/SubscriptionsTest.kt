@@ -10,7 +10,7 @@ class SubscriptionsTest : BaseTest() {
     fun test() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
         val subscription = Subscription("Test Topic", 20.0, 100000.0)
         matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)

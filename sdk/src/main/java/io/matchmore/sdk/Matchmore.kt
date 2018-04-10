@@ -14,13 +14,13 @@ import io.matchmore.sdk.store.AsyncReadable
 import io.matchmore.sdk.store.CRD
 
 @SuppressLint("StaticFieldLeak")
-object MatchMore {
-    private var matchMoreConfig: MatchMoreConfig? = null
+object Matchmore {
+    private var matchmoreConfig: MatchmoreConfig? = null
 
     @JvmStatic
-    val instance: MatchMoreSDK by lazy {
+    val instance: MatchmoreSDK by lazy {
         if (!isConfigured()) throw IllegalStateException("Please config first.")
-        AlpsManager(matchMoreConfig!!)
+        AlpsManager(matchmoreConfig!!)
 
     }
 
@@ -28,14 +28,14 @@ object MatchMore {
     @JvmOverloads
     fun config(context: Context, apiKey: String, debugLog: Boolean = false) {
         if (isConfigured()) throw IllegalStateException("You can not overwrite the configuration.")
-        this.matchMoreConfig = MatchMoreConfig(context, apiKey, debugLog)
+        this.matchmoreConfig = MatchmoreConfig(context, apiKey, debugLog)
     }
 
     @JvmStatic
-    fun isConfigured() = this.matchMoreConfig != null
+    fun isConfigured() = this.matchmoreConfig != null
 }
 
-interface MatchMoreSDK {
+interface MatchmoreSDK {
     /**
      * Main mobile device created by `startUsingMainDevice()`.
      */

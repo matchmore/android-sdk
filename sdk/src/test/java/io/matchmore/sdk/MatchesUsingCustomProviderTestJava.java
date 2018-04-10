@@ -31,9 +31,9 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
 
     @Test
     public void gettingMatches() throws TimeoutException {
-        MatchMoreSDK matchMore = MatchMore.getInstance();
+        MatchmoreSDK matchmore = Matchmore.getInstance();
 
-        matchMore.startUsingMainDevice(device -> {
+        matchmore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -43,7 +43,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
-        matchMore.createPublicationForMainDevice(publication,
+        matchmore.createPublicationForMainDevice(publication,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -54,7 +54,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-        matchMore.createSubscriptionForMainDevice(subscription,
+        matchmore.createSubscriptionForMainDevice(subscription,
                 device -> {
                     waiter.resume();
                     return Unit.INSTANCE;
@@ -74,14 +74,14 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
 
             }
         };
-        matchMore.startUpdatingLocation(locationProvider);
+        matchmore.startUpdatingLocation(locationProvider);
         
         // Start getting matches
-        matchMore.getMatchMonitor().addOnMatchListener((matches, device) -> {
+        matchmore.getMatchMonitor().addOnMatchListener((matches, device) -> {
             waiter.assertTrue(matches.size() >= 0);
             waiter.resume();
             return Unit.INSTANCE;
         });
-        matchMore.stopUpdatingLocation();
+        matchmore.stopUpdatingLocation();
     }
 }

@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import io.matchmore.sdk.MatchMore
-import io.matchmore.sdk.MatchMoreSDK
+import io.matchmore.sdk.MatchmoreSDK
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun MatchMoreSDK.createPollingSubscription() {
+    private fun MatchmoreSDK.createPollingSubscription() {
         val subscription = Subscription("Test Topic", 1.0, 0.0)
         subscription.selector = "test = 'true'"
         createSubscriptionForMainDevice(subscription, { result ->
