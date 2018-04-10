@@ -19,10 +19,48 @@ import kotlin.Unit;
 @Config(constants = BuildConfig.class)
 public class MatchesTestJava extends BaseTestJava {
     private Waiter waiter = new Waiter();
+    private String removablePubId = null;
 
     @Before
     public void setUp() {
         configure();
+    }
+
+    @Test
+    public void removingPublication() throws TimeoutException {
+        MatchmoreSDK matchmore = Matchmore.getInstance();
+
+        matchmore.startUsingMainDevice(device -> {
+            waiter.resume();
+            return Unit.INSTANCE;
+        }, e -> {
+            waiter.fail(e);
+            return Unit.INSTANCE;
+        });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        Publication publication = new Publication("Test Topic", 20d, 100000d);
+        matchmore.createPublicationForMainDevice(publication,
+                pub -> {
+                    removablePubId = pub.getId();
+                    waiter.resume();
+                    return Unit.INSTANCE;
+                }, e -> {
+                    waiter.fail(e);
+                    return Unit.INSTANCE;
+                });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        Publication toBeRemovedPub = matchmore.getPublications().find(removablePubId);
+        matchmore.getPublications().delete(toBeRemovedPub,
+                () -> {
+                    waiter.resume();
+                    return Unit.INSTANCE;
+                }, e -> {
+                    waiter.fail(e);
+                    return Unit.INSTANCE;
+                });
+        waiter.await(SdkConfigTest.TIMEOUT);
     }
 
     @Test
@@ -40,7 +78,7 @@ public class MatchesTestJava extends BaseTestJava {
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
         matchmore.createPublicationForMainDevice(publication,
-                device -> {
+                pub -> {
                     waiter.resume();
                     return Unit.INSTANCE;
                 }, e -> {
@@ -51,7 +89,7 @@ public class MatchesTestJava extends BaseTestJava {
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
         matchmore.createSubscriptionForMainDevice(subscription,
-                device -> {
+                sub -> {
                     waiter.resume();
                     return Unit.INSTANCE;
                 }, e -> {
@@ -69,7 +107,5 @@ public class MatchesTestJava extends BaseTestJava {
             waiter.resume();
             return Unit.INSTANCE;
         });
-
-
     }
 }
