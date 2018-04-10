@@ -2,7 +2,7 @@ package io.matchmore.sdk.rx
 
 import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.BuildConfig
-import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.Matchmore
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import junit.framework.Assert.assertEquals
@@ -17,7 +17,7 @@ class RxMatchesTest : RxBaseTest() {
     fun getMatches() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
