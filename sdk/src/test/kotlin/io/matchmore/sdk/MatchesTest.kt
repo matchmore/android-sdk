@@ -15,12 +15,12 @@ class MatchesTest : BaseTest() {
     fun getMatches() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to true)
-        matchMoreSdk.createPublication(publication, { _ ->
+        matchMoreSdk.createPublicationForMainDevice(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
             waiter.resume()
         }, waiter::fail)
@@ -29,7 +29,7 @@ class MatchesTest : BaseTest() {
         // create subscription
         val subscription = Subscription("Test Topic", 2000.0, 100000.0)
         subscription.selector = "test = true"
-        matchMoreSdk.createSubscription(subscription, { _ ->
+        matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)

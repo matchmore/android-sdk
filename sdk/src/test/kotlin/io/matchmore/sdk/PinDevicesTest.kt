@@ -1,6 +1,6 @@
 package io.matchmore.sdk
 
-import io.matchmore.sdk.api.models.MatchMoreLocation
+import io.matchmore.sdk.api.models.MatchmoreLocation
 import io.matchmore.sdk.api.models.PinDevice
 import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.api.models.Publication
@@ -13,8 +13,8 @@ class PinDevicesTest : BaseTest() {
     fun testPinDeviceCreation() {
         init()
 
-        val matchMoreSdk = MatchMore.instance
-        var pinDevice = PinDevice("Test Pin", location = MatchMoreLocation(latitude = 2.0, longitude = 2.0))
+        val matchMoreSdk = Matchmore.instance
+        var pinDevice = PinDevice("Test Pin", location = MatchmoreLocation(latitude = 2.0, longitude = 2.0))
 
         matchMoreSdk.createPinDevice(pinDevice, {
             pinDevice = it

@@ -2,16 +2,16 @@ package io.matchmore.sdk.managers
 
 import io.matchmore.sdk.AlpsManager
 import io.matchmore.sdk.api.async
-import io.matchmore.sdk.api.models.MatchMoreLocation
+import io.matchmore.sdk.api.models.MatchmoreLocation
 import io.matchmore.sdk.api.models.MobileDevice
 
-class MatchMoreLocationManager(private val manager: AlpsManager) : LocationSender {
+class MatchmoreLocationManager(private val manager: AlpsManager) : LocationSender {
 
-    private var locationProvider: MatchMoreLocationProvider? = null
+    private var locationProvider: MatchmoreLocationProvider? = null
 
-    var lastLocation: MatchMoreLocation? = null
+    var lastLocation: MatchmoreLocation? = null
 
-    fun startUpdatingLocation(locationProvider: MatchMoreLocationProvider) {
+    fun startUpdatingLocation(locationProvider: MatchmoreLocationProvider) {
         this.locationProvider = locationProvider
         locationProvider.startUpdatingLocation(this)
     }
@@ -20,7 +20,7 @@ class MatchMoreLocationManager(private val manager: AlpsManager) : LocationSende
         locationProvider?.stopUpdatingLocation()
     }
 
-    override fun sendLocation(location: MatchMoreLocation) {
+    override fun sendLocation(location: MatchmoreLocation) {
         lastLocation = location
         manager.devices.findAll().filterIsInstance(MobileDevice::class.java).forEach {
             manager.apiClient.locationApi.createLocation(it.id!!, location).async()

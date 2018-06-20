@@ -2,7 +2,7 @@ package io.matchmore.sdk.rx
 
 import io.matchmore.config.SdkConfigTest
 import io.matchmore.sdk.BuildConfig
-import io.matchmore.sdk.MatchMore
+import io.matchmore.sdk.Matchmore
 import io.matchmore.sdk.api.models.Publication
 import io.matchmore.sdk.api.models.Subscription
 import junit.framework.Assert.assertEquals
@@ -19,7 +19,7 @@ class RxSocketTest : RxBaseTest() {
     fun getMatchesUsingSocket() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // open socket
         matchMoreSdk.matchMonitor.openSocketForMatches()

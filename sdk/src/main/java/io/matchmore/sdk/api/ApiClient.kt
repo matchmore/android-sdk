@@ -1,7 +1,7 @@
 package io.matchmore.sdk.api
 
 import com.google.gson.Gson
-import io.matchmore.sdk.MatchMoreConfig
+import io.matchmore.sdk.MatchmoreConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -9,14 +9,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.Executors
 
-class ApiClient(gson: Gson, private val matchMoreConfig: MatchMoreConfig) {
+class ApiClient(gson: Gson, private val matchmoreConfig: MatchmoreConfig) {
 
     private val retrofit: Retrofit
 
     init {
         val okHttpClientBuilder = OkHttpClient.Builder()
                 .addInterceptor {
-                    it.proceed(it.request().newBuilder().addHeader("api-key", matchMoreConfig.apiKey).build())
+                    it.proceed(it.request().newBuilder().addHeader("api-key", matchmoreConfig.apiKey).build())
                 }
         val retrofitBuilder = Retrofit.Builder()
                 .baseUrl("${config.serverProtocol}://${config.serverUrl}/${config.version}/")
@@ -25,7 +25,7 @@ class ApiClient(gson: Gson, private val matchMoreConfig: MatchMoreConfig) {
         if (!config.callbackInUIThread) {
             retrofitBuilder.callbackExecutor(Executors.newSingleThreadExecutor())
         }
-        if (matchMoreConfig.debugLog) {
+        if (matchmoreConfig.debugLog) {
             okHttpClientBuilder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         }
         retrofit = retrofitBuilder.client(okHttpClientBuilder.build()).build()

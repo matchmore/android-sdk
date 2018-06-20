@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty
 /**
  * Location
  */
-data class MatchMoreLocation @JvmOverloads constructor (
+data class MatchmoreLocation @JvmOverloads constructor (
         /**
          * The timestamp of the location creation in seconds since Jan 01 1970 (UTC).
          */

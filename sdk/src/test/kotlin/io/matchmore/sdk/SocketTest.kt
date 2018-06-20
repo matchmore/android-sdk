@@ -17,7 +17,7 @@ class SocketTest : BaseTest() {
     fun getMatchesUsingSocket() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
 
         // open socket
         matchMoreSdk.matchMonitor.openSocketForMatches()
@@ -33,7 +33,7 @@ class SocketTest : BaseTest() {
         // create publication
         val publication = Publication("Test Topic", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to "true")
-        matchMoreSdk.createPublication(publication, { _ ->
+        matchMoreSdk.createPublicationForMainDevice(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
         }, waiter::fail)
 
@@ -41,7 +41,7 @@ class SocketTest : BaseTest() {
         val subscription = Subscription("Test Topic", 2000.0, 100000.0)
         subscription.selector = "test = 'true'"
         subscription.pushers = mutableListOf("ws")
-        matchMoreSdk.createSubscription(subscription, { _ ->
+        matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
         }, waiter::fail)
 

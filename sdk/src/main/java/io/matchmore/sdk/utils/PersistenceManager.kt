@@ -1,11 +1,11 @@
 package io.matchmore.sdk.utils
 
 import com.google.gson.Gson
-import io.matchmore.sdk.MatchMoreConfig
+import io.matchmore.sdk.MatchmoreConfig
 import okio.Okio
 import java.io.File
 
-class PersistenceManager(config: MatchMoreConfig, val gson: Gson) {
+class PersistenceManager(config: MatchmoreConfig, val gson: Gson) {
 
     private val dataDir = File(config.context.applicationInfo.dataDir, "mm/${config.worldId}")
 

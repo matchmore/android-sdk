@@ -19,6 +19,7 @@ import kotlin.Unit;
 @Config(constants = BuildConfig.class)
 public class MatchesTestJava extends BaseTestJava {
     private Waiter waiter = new Waiter();
+    private String removablePubId = null;
 
     @Before
     public void setUp() {
@@ -26,10 +27,10 @@ public class MatchesTestJava extends BaseTestJava {
     }
 
     @Test
-    public void gettingMatches() throws TimeoutException {
-        MatchMoreSdk matchMore = MatchMore.getInstance();
+    public void removingPublication() throws TimeoutException {
+        MatchmoreSDK matchmore = Matchmore.getInstance();
 
-        matchMore.startUsingMainDevice(device -> {
+        matchmore.startUsingMainDevice(device -> {
             waiter.resume();
             return Unit.INSTANCE;
         }, e -> {
@@ -39,8 +40,45 @@ public class MatchesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Publication publication = new Publication("Test Topic", 20d, 100000d);
-        matchMore.createPublication(publication,
-                device -> {
+        matchmore.createPublicationForMainDevice(publication,
+                pub -> {
+                    removablePubId = pub.getId();
+                    waiter.resume();
+                    return Unit.INSTANCE;
+                }, e -> {
+                    waiter.fail(e);
+                    return Unit.INSTANCE;
+                });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        Publication toBeRemovedPub = matchmore.getPublications().find(removablePubId);
+        matchmore.getPublications().delete(toBeRemovedPub,
+                () -> {
+                    waiter.resume();
+                    return Unit.INSTANCE;
+                }, e -> {
+                    waiter.fail(e);
+                    return Unit.INSTANCE;
+                });
+        waiter.await(SdkConfigTest.TIMEOUT);
+    }
+
+    @Test
+    public void gettingMatches() throws TimeoutException {
+        MatchmoreSDK matchmore = Matchmore.getInstance();
+
+        matchmore.startUsingMainDevice(device -> {
+            waiter.resume();
+            return Unit.INSTANCE;
+        }, e -> {
+            waiter.fail(e);
+            return Unit.INSTANCE;
+        });
+        waiter.await(SdkConfigTest.TIMEOUT);
+
+        Publication publication = new Publication("Test Topic", 20d, 100000d);
+        matchmore.createPublicationForMainDevice(publication,
+                pub -> {
                     waiter.resume();
                     return Unit.INSTANCE;
                 }, e -> {
@@ -50,8 +88,8 @@ public class MatchesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         Subscription subscription = new Subscription("Test Topic", 20d, 100000d, "");
-        matchMore.createSubscription(subscription,
-                device -> {
+        matchmore.createSubscriptionForMainDevice(subscription,
+                sub -> {
                     waiter.resume();
                     return Unit.INSTANCE;
                 }, e -> {
@@ -61,15 +99,13 @@ public class MatchesTestJava extends BaseTestJava {
         waiter.await(SdkConfigTest.TIMEOUT);
 
         BaseTest.mockLocation();
-        matchMore.startUpdatingLocation();
+        matchmore.startUpdatingLocation();
         
         // Start getting matches
-        matchMore.getMatchMonitor().addOnMatchListener((matches, device) -> {
+        matchmore.getMatchMonitor().addOnMatchListener((matches, device) -> {
             waiter.assertTrue(matches.size() >= 0);
             waiter.resume();
             return Unit.INSTANCE;
         });
-
-
     }
 }

@@ -10,7 +10,7 @@ class DevicesTest : BaseTest() {
     fun test() {
         initAndStartUsingMainDevice()
 
-        val matchMoreSdk = MatchMore.instance
+        val matchMoreSdk = Matchmore.instance
         val device = MobileDevice("Test Device", platform = "Android")
 
         matchMoreSdk.devices.create(device, { _ ->

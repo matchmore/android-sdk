@@ -1,8 +1,8 @@
 package io.matchmore.sdk.monitoring
 
 import io.matchmore.sdk.AlpsManager
-import io.matchmore.sdk.MatchMore
-import io.matchmore.sdk.MatchMoreConfig
+import io.matchmore.sdk.Matchmore
+import io.matchmore.sdk.MatchmoreConfig
 import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.Device
@@ -14,7 +14,7 @@ import java.util.*
 
 typealias MatchMonitorListener = (Set<Match>, Device) -> Unit
 
-class MatchMonitor(private val manager: AlpsManager, private val config: MatchMoreConfig) {
+class MatchMonitor(private val manager: AlpsManager, private val config: MatchmoreConfig) {
     val deliveredMatches = mutableSetOf<Match>()
 
     private val monitoredDevices = mutableSetOf<Device>()
@@ -39,7 +39,7 @@ class MatchMonitor(private val manager: AlpsManager, private val config: MatchMo
         if (socket != null) {
             return
         }
-        val deviceId = MatchMore.instance.devices.findAll().first().id
+        val deviceId = Matchmore.instance.devices.findAll().first().id
         val url = ApiClient.config.serverUrl
         val request = Request.Builder().url("ws://$url/pusher/${ApiClient.config.version}/ws/$deviceId")
                 .header("Sec-WebSocket-Protocol", "api-key,${config.worldId}").build()
