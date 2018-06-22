@@ -24,11 +24,12 @@ class SubscriptionStore(private val manager: AlpsManager) : CRD<Subscription>,
     }
 
     fun createSubscription(subscription: Subscription, deviceWithId: String? = null, success: SuccessCallback<Subscription>?, error: ErrorCallback?) {
-        subscription.deviceId = deviceWithId ?: manager.main?.id
+        subscription.deviceId = deviceWithId ?: subscription.deviceId
         create(subscription, success, error)
     }
 
     override fun create(item: Subscription, success: SuccessCallback<Subscription>?, error: ErrorCallback?) {
+        item.deviceId = item.deviceId ?: manager.devices.main?.id
         item?.deviceId?.let { deviceId ->
             manager.apiClient.subscriptionApi.createSubscription(deviceId, item)
                     .async({

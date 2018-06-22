@@ -25,10 +25,16 @@ class DeviceStore(private val manager: AlpsManager)
         listeners.remove(listener)
     }
 
+
     var main: MobileDevice? = null
-        set(value) {
-            manager.persistenceManager.writeData(value, MAIN_DEVICE_FILE)
+        @Synchronized get() {
+            println("GET MAIN_DEVICE: ${field?.id}")
+            return field
+        }
+        @Synchronized set(value) {
             field = value
+            println("SET MAIN_DEVICE: ${field?.id}")
+            manager.persistenceManager.writeData(value, MAIN_DEVICE_FILE)
         }
 
     init {
