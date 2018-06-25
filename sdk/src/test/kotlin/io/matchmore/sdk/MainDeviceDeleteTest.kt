@@ -18,7 +18,7 @@ class MainDeviceDeleteTest : BaseTest() {
         val matchMoreSdk = Matchmore.instance
 
         // create publication
-        val publication = Publication("Test Topic X", 2000.0, 100000.0)
+        val publication = Publication("Test Topic XYZ", 2000.0, 100000.0)
         publication.properties = hashMapOf("test" to true)
         matchMoreSdk.createPublicationForMainDevice(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
@@ -27,13 +27,28 @@ class MainDeviceDeleteTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // create subscription
-        val subscription = Subscription("Test Topic X", 2000.0, 100000.0)
+        val subscription = Subscription("Test Topic XYZ", 2000.0, 100000.0)
         subscription.selector = "test = true"
         matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
             waiter.resume()
         }, waiter::fail)
         waiter.await(SdkConfigTest.TIMEOUT)
+
+        // update location
+        BaseTest.mockLocation()
+        matchMoreSdk.startUpdatingLocation()
+
+        // get a match
+        val listener1 = { matches: Set<Match>, _: Device ->
+            println("SIZE: ${matches.size}")
+            waiter.assertTrue(matches.size > 0)
+            waiter.resume()
+        }
+        matchMoreSdk.matchMonitor.addOnMatchListener(listener1)
+        matchMoreSdk.matchMonitor.startPollingMatches()
+        waiter.await(SdkConfigTest.TIMEOUT)
+        matchMoreSdk.matchMonitor.removeOnMatchListener(listener1)
 
         matchMoreSdk.publications.deleteAll({ ->
             waiter.assertEquals(0, Matchmore.instance.publications.findAll().size)
@@ -62,7 +77,7 @@ class MainDeviceDeleteTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // create publication
-        val publication2 = Publication("Test Topic X", 2000.0, 100000.0)
+        val publication2 = Publication("Test Topic XYZ", 2000.0, 100000.0)
         publication2.properties = hashMapOf("test" to true)
         matchMoreSdk.createPublicationForMainDevice(publication2, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
@@ -71,7 +86,7 @@ class MainDeviceDeleteTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // create subscription
-        val subscription2 = Subscription("Test Topic X", 2000.0, 100000.0)
+        val subscription2 = Subscription("Test Topic XYZ", 2000.0, 100000.0)
         subscription2.selector = "test = true"
         matchMoreSdk.createSubscriptionForMainDevice(subscription2, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
