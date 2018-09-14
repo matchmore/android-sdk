@@ -29,7 +29,7 @@ class AlpsManager(private val config: MatchmoreConfig) : MatchmoreSDK {
     }
     private val publicationStore by lazy { PublicationStore(this) }
     private val subscriptionStore by lazy { SubscriptionStore(this) }
-    private val beaconManager by lazy { MatchMoreBeaconManager(config.context, apiClient, deviceStore) }
+    private val beaconManager by lazy { MatchMoreBeaconManager(config.context, apiClient, deviceStore, iBeaconTriplesStore) }
     private val iBeaconTriplesStore by lazy { IBeaconTriplesStore(this) }
 
     val apiClient = ApiClient(gson, config)
