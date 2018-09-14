@@ -9,12 +9,14 @@ import io.matchmore.sdk.api.ApiClient
 import io.matchmore.sdk.api.async
 import io.matchmore.sdk.api.models.ProximityEvent
 import io.matchmore.sdk.store.DeviceStore
+import io.matchmore.sdk.store.IBeaconTriplesStore
 import org.altbeacon.beacon.*
 
 class MatchMoreBeaconManager(
         private val context: Context,
         private val apiClient: ApiClient,
-        private val deviceStore: DeviceStore
+        private val deviceStore: DeviceStore,
+        private val beaconStore: IBeaconTriplesStore
 ) : BeaconConsumer {
 
     private val beaconsTriggered = mutableMapOf<Identifier, TriggerInfo>()
@@ -42,11 +44,14 @@ class MatchMoreBeaconManager(
             deviceStore.main?.id?.let { mainDeviceId ->
                 beacons.forEach { beacon ->
                     Log.i("beacon", "${beacon.id1} ${beacon.distance}")
-                    if (shouldTrigger(beacon)) {
-                        val proximityEvent = ProximityEvent(deviceId = beacon.id1.toString(), distance = beacon.distance)
-                        apiClient.deviceApi.triggerProximityEvents(mainDeviceId, proximityEvent)
-                                .async({ beaconsTriggered[beacon.id1] = TriggerInfo(System.currentTimeMillis(), beacon.distance) })
-                    }
+                    beaconStore.items
+                            .find { it.proximityUUID == beacon.id1.toString() }?.let { knownBeacon ->
+                                if (shouldTrigger(beacon)) {
+                                    val proximityEvent = ProximityEvent(deviceId = knownBeacon.deviceId, distance = beacon.distance)
+                                    apiClient.deviceApi.triggerProximityEvents(mainDeviceId, proximityEvent)
+                                            .async { beaconsTriggered[beacon.id1] = TriggerInfo(System.currentTimeMillis(), beacon.distance) }
+                                }
+                            }
                 }
             }
         }

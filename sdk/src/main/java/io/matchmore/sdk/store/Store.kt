@@ -9,7 +9,7 @@ open class Store<T : HasId>(
 
     open var items = listOf<T>()
         set(value) {
-            Thread({ persistenceManager.writeData(value, file) }).start()
+            Thread { persistenceManager.writeData(value, file) }.start()
             field = value
         }
 
