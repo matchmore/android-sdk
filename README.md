@@ -1,5 +1,7 @@
 # Alps Android SDK
 
+[![Join the chat at https://gitter.im/matchmore/alps-android-sdk](https://badges.gitter.im/matchmore/alps-android-sdk.svg)](https://gitter.im/matchmore/alps-android-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 `AlpsSDK` is a contextualized publish/subscribe model which can be used to model any geolocated or proximity based mobile application. Save time and make development easier by using our SDK. We are built on Android Location services and we also provide iBeacons compatibility.
 
 ## Versioning
