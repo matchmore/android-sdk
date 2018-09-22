@@ -6,7 +6,7 @@ import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
 object ParserBuilder {
-    val gsonBuilder = GsonBuilder()
+    val gsonBuilder: GsonBuilder = GsonBuilder()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
             .registerTypeAdapter(DateTime::class.java, DateTimeTypeAdapter())
             .registerTypeAdapter(LocalDate::class.java, LocalDateTypeAdapter())

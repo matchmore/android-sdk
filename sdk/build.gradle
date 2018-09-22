@@ -37,28 +37,28 @@ android {
 }
 
 ext {
-    firebase_version = "11.0.4"
-    retrofit_version = "2.3.0"
+    retrofit_version = "2.4.0"
     swagger_annotations_version = "1.5.15"
-    jodatime_version = "2.9.9"
+    jodatime_version = "2.10"
 }
 
 dependencies {
-    api "com.google.firebase:firebase-core:$firebase_version"
-    api "com.google.firebase:firebase-messaging:$firebase_version"
+    api "com.google.firebase:firebase-core:16.0.3"
+    api "com.google.firebase:firebase-messaging:17.3.2"
     api "joda-time:joda-time:$jodatime_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.9.1"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation "io.swagger:swagger-annotations:$swagger_annotations_version"
     implementation 'org.altbeacon:android-beacon-library:2.12.4'
     testImplementation project(':config')
     testImplementation 'junit:junit:4.12'
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    testImplementation "org.robolectric:robolectric:3.6.1"
+    testImplementation "org.robolectric:robolectric:3.8"
     testImplementation "net.jodah:concurrentunit:0.4.3"
 }
 
