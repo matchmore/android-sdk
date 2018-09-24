@@ -73,7 +73,7 @@ Rx Wrapper
 
 ## Technical overview
 
-The `MatchMore` is a static wrapper that provides you all the functions you need to use our SDK.
+The `Matchmore` is a static wrapper that provides you all the functions you need to use our SDK.
 
 ## Usage
 
@@ -82,7 +82,7 @@ Setup application API key, get it for free from [http://matchmore.io/](http://ma
 ```kotlin
 override fun onCreate() {
         super.onCreate()
-        MatchMore.config(context = this, apiKey = SdkConfigTest.API_KEY, debugLog = false)
+        Matchmore.config(context = this, apiKey = SdkConfigTest.API_KEY, debugLog = false)
     }
 }
 ```
@@ -90,21 +90,21 @@ override fun onCreate() {
 Create first device, publication and subscription. Please note that we're not caring about errors right now.
 
 ```kotlin
-MatchMore.instance.apply {
+Matchmore.instance.apply {
     startUsingMainDevice({ device ->
         Log.i(TAG, "start using device ${device.name}")
 
         // Create publication
         val publication = Publication("Test Topic", 1.0, 0.0)
         publication.properties = hashMapOf("test" to "true")
-        createPublication(publication, { result ->
+        createPublicationForMainDevice(publication, { result ->
             Log.i(TAG, "Publication created ${result.topic}")
         }, Throwable::printStackTrace)
 
         // Create subscription
         val subscription = Subscription("Test Topic", 1.0, 0.0)
         subscription.selector = "test = 'true'"
-        createSubscription(subscription, { result ->
+        createSubscriptionForMainDevice(subscription, { result ->
             Log.i(TAG, "Subscription created ${result.topic}")
         }, Throwable::printStackTrace)
 

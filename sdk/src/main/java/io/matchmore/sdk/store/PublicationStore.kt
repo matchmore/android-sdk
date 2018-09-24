@@ -15,7 +15,7 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
     override var items = listOf<Publication>()
         get() = field.withoutExpired()
         set(value) {
-            Thread({ manager.persistenceManager.writeData(value, PUBLICATIONS_FILE) }).start()
+            Thread { manager.persistenceManager.writeData(value, PUBLICATIONS_FILE) }.start()
             field = value
         }
 
@@ -42,7 +42,7 @@ class PublicationStore(private val manager: AlpsManager) : CRD<Publication>,
     }
 
     override fun delete(item: Publication, complete: CompleteCallback?, error: ErrorCallback?) {
-        unwrap(item?.deviceId, item?.id, { deviceId, id ->
+        unwrap(item.deviceId, item.id, { deviceId, id ->
             manager.apiClient.publicationApi.deletePublication(deviceId, id)
                     .async({
                         deleteData(item)
