@@ -35,7 +35,7 @@ class MatchesUsingCustomLocationProviderTest : BaseTest() {
 
         val locationProvider = object : MatchmoreLocationProvider {
             override fun startUpdatingLocation(sender: LocationSender) {
-                sender.sendLocation(MatchmoreLocation(createdAt = System.currentTimeMillis(), latitude = 80.0, longitude = 80.0))
+                sender.sendLocation(MatchmoreLocation(latitude = 80.0, longitude = 80.0))
             }
 
             override fun stopUpdatingLocation() {}

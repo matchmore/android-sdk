@@ -41,13 +41,13 @@ data class Match(
          */
         @SerializedName("publication")
         @get:ApiModelProperty(required = true, value = "")
-        var publication: Publication? = null,
+        var publication: PublicationWithLocation? = null,
 
         /**
          * Get subscription
          */
         @SerializedName("subscription")
         @get:ApiModelProperty(required = true, value = "")
-        var subscription: Subscription? = null
+        var subscription: SubscriptionWithLocation? = null
 ): HasId
 

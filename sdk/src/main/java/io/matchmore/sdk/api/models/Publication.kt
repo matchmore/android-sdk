@@ -40,13 +40,17 @@ data class Publication @JvmOverloads constructor(
         var range: Double? = null,
 
         /**
-         * The duration of the publication in seconds. If set to &#39;-1&#39; the publication will live forever and if set to &#39;0&#39; it will be instant at the time of publication.
+         * The duration of the publication in seconds. If set to &#39;0&#39; it will be instant at the time of publication. Negative values are not allowed.
          */
         @SerializedName("duration")
-        @get:ApiModelProperty(required = true, value = "The duration of the publication in seconds. If set to '-1' the publication will live forever and if set to '0' it will be instant at the time of publication. ")
+        @get:ApiModelProperty(required = true, value = "The duration of the publication in seconds. If set to '0' it will be instant at the time of publication. Negative values are not allowed. ")
         override var duration: Double? = null,
 
+        /**
+         * The dictionary of key, value pairs. Allowed values are number, boolean, string and array of aforementioned types
+         */
         @SerializedName("properties")
+        @get:ApiModelProperty(example = "", required = true, value = "The dictionary of key, value pairs. Allowed values are number, boolean, string and array of aforementioned types")
         var properties: MutableMap<String, Any> = HashMap(),
 
         /**
@@ -67,16 +71,15 @@ data class Publication @JvmOverloads constructor(
          * The timestamp of the publication creation in seconds since Jan 01 1970 (UTC).
          */
         @SerializedName("createdAt")
-        @get:ApiModelProperty(required = true, value = "The timestamp of the publication creation in seconds since Jan 01 1970 (UTC). ")
+        @get:ApiModelProperty(value = "The timestamp of the publication creation in seconds since Jan 01 1970 (UTC). ")
         override val createdAt: Long? = null,
 
         /**
          * The id (UUID) of the publication.
          */
         @SerializedName("id")
-        @get:ApiModelProperty(required = true, value = "The id (UUID) of the publication.")
+        @get:ApiModelProperty(value = "The id (UUID) of the publication.")
         override val id: String? = null
-
 
 ) : HasId, Expirable
 

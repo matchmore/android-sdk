@@ -38,10 +38,10 @@ data class Subscription @JvmOverloads constructor(
         var range: Double? = null,
 
         /**
-         * The duration of the subscription in seconds. If set to &#39;-1&#39; the subscription will live forever and if set to &#39;0&#39; it will be instant at the time of subscription.
+         * The duration of the subscription in seconds. If set to &#39;0&#39; it will be instant at the time of subscription. Negative values are not allowed.
          */
         @SerializedName("duration")
-        @get:ApiModelProperty(required = true, value = "The duration of the subscription in seconds. If set to '-1' the subscription will live forever and if set to '0' it will be instant at the time of subscription. ")
+        @get:ApiModelProperty(required = true, value = "The duration of the subscription in seconds. If set to '0' it will be instant at the time of subscription. Negative values are not allowed. ")
         override var duration: Double? = null,
 
         /**
@@ -69,17 +69,21 @@ data class Subscription @JvmOverloads constructor(
          * The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC).
          */
         @SerializedName("createdAt")
-        @get:ApiModelProperty(required = true, value = "The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC). ")
+        @get:ApiModelProperty(value = "The timestamp of the subscription creation in seconds since Jan 01 1970 (UTC). ")
         override val createdAt: Long? = null,
 
+        /**
+         * When match will occurs, they will be notified on these provided URI(s) address(es) in the pushers array.
+         */
         @SerializedName("pushers")
-        var pushers: MutableList<String>? = null,
+        @get:ApiModelProperty(value = "When match will occurs, they will be notified on these provided URI(s) address(es) in the pushers array. ")
+        var pushers: List<String>? = null,
 
         /**
          * The id (UUID) of the subscription.
          */
         @SerializedName("id")
-        @get:ApiModelProperty(required = true, value = "The id (UUID) of the subscription.")
+        @get:ApiModelProperty(value = "The id (UUID) of the subscription.")
         override val id: String? = null
 ) : HasId, Expirable
 
