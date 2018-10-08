@@ -84,6 +84,22 @@ data class Subscription @JvmOverloads constructor(
          */
         @SerializedName("id")
         @get:ApiModelProperty(value = "The id (UUID) of the subscription.")
-        override val id: String? = null
+        override val id: String? = null,
+
+        /**
+         * Duration in seconds. Defaults to subscription duration (only one match will be delivered for pub/sub pair), this parameter tells when to deliver consecutive matches with the same publication. For example, there is a match between publication and subscription and after matchTTL time publication and subscription are still in the range of each other next match will be sent to subscription. This parameter is useful when you have long-lasting publications/subscriptions, and you want to be notified when a match occurs after some time.
+         * @return matchTTL
+         */
+        @SerializedName("matchTTL")
+        @get:ApiModelProperty(value = "Duration in seconds. Defaults to subscription duration (only one match will be delivered for pub/sub pair), this parameter tells when to deliver consecutive matches with the same publication. For example, there is a match between publication and subscription and after matchTTL time publication and subscription are still in the range of each other next match will be sent to subscription. This parameter is useful when you have long-lasting publications/subscriptions, and you want to be notified when a match occurs after some time. ")
+        var matchTTL: Double? = null,
+
+        /**
+         * Distance in meters. Defaults to two times the subscription range. This parameter says if the subscription will get a match again when the position of publication or subscription changes by matchDTL (publication and subscription still have to be in range after the change). This parameter is useful if you have large subscription/publication and subscription should get a match every time publication or subscription moves by matchDTL meters.
+         * @return matchDTL
+         */
+        @SerializedName("matchDTL")
+        @get:ApiModelProperty(value = "Distance in meters. Defaults to two times the subscription range. This parameter says if the subscription will get a match again when the position of publication or subscription changes by matchDTL (publication and subscription still have to be in range after the change). This parameter is useful if you have large subscription/publication and subscription should get a match every time publication or subscription moves by matchDTL meters. ")
+        var matchDTL: Double? = null
 ) : HasId, Expirable
 
