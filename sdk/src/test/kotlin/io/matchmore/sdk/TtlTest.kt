@@ -15,8 +15,8 @@ class TtlTest : BaseTest() {
         val matchMoreSdk = Matchmore.instance
 
         // create publication
-        val publication = Publication("Test TTL", 2000.0, SdkConfigTest.TIMEOUT.toDouble())
-        publication.properties = hashMapOf("testTTL" to true)
+        val publication = Publication("Test TTL", 2000.0, 20.0)
+        publication.properties = hashMapOf("testMatchTTL" to true)
         matchMoreSdk.createPublicationForMainDevice(publication, { _ ->
             waiter.assertEquals(1, matchMoreSdk.publications.findAll().size)
             waiter.resume()
@@ -24,8 +24,8 @@ class TtlTest : BaseTest() {
         waiter.await(SdkConfigTest.TIMEOUT)
 
         // create subscription
-        val subscription = Subscription("Test TTL", 2000.0, SdkConfigTest.TIMEOUT.toDouble())
-        subscription.selector = "testTTL = true"
+        val subscription = Subscription("Test TTL", 2000.0, 20.0)
+        subscription.selector = "testMatchTTL = true"
         subscription.matchTTL = 2.0
         matchMoreSdk.createSubscriptionForMainDevice(subscription, { _ ->
             waiter.assertEquals(1, matchMoreSdk.subscriptions.findAll().size)
@@ -37,8 +37,7 @@ class TtlTest : BaseTest() {
         // get a match
         var counter = 0
         val listener = { matches: Set<Match>, _: Device ->
-            counter++
-            waiter.assertTrue(matches.size >= 0)
+            counter += matches.size
             matchMoreSdk.locationManager.sendLocation(location)
             if (counter == 2) waiter.resume()
         }
