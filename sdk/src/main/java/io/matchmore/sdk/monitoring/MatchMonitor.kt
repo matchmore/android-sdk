@@ -100,8 +100,8 @@ class MatchMonitor(private val manager: AlpsManager, private val config: Matchmo
     private fun getMatches() = monitoredDevices.forEach { getMatchesForDevice(it) }
 
     private fun getMatchesForDevice(device: Device) {
-        device.id?.let {
-            manager.apiClient.matchesApi.getMatches(it).async({ matches ->
+        device.id?.let { id ->
+            manager.apiClient.matchesApi.getMatches(id).async({ matches ->
                 val newMatches = matches - deliveredMatches
                 if (newMatches.isNotEmpty()) {
                     deliveredMatches.addAll(newMatches)

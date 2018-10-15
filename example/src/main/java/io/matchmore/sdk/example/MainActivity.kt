@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
                     { device ->
                         Log.i(TAG, "start using device ${device.name}")
 
-                        val publication = Publication("Test Topic", 1.0, 0.0)
+                        val publication = Publication("Test Topic", 1.0, DURATION)
                         publication.properties = hashMapOf("test" to "true")
                         createPublicationForMainDevice(publication, { result ->
                             Log.i(TAG, "Publication created ${result.topic}")
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun MatchmoreSDK.createPollingSubscription() {
-        val subscription = Subscription("Test Topic", 1.0, 0.0)
+        val subscription = Subscription("Test Topic", 1.0, DURATION)
         subscription.selector = "test = 'true'"
         createSubscriptionForMainDevice(subscription, { result ->
             Log.i(TAG, "Subscription created ${result.topic}")
@@ -88,5 +88,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MatchMore"
+        private const val DURATION = 100.0
     }
 }

@@ -66,7 +66,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         MatchmoreLocationProvider locationProvider = new MatchmoreLocationProvider() {
             @Override
             public void startUpdatingLocation(@NotNull LocationSender sender) {
-                sender.sendLocation(new MatchmoreLocation(System.currentTimeMillis(), 80.0, 80.0));
+                sender.sendLocation(new MatchmoreLocation(80.0, 80.0));
             }
 
             @Override
@@ -78,7 +78,7 @@ public class MatchesUsingCustomProviderTestJava extends BaseTestJava {
         
         // Start getting matches
         matchmore.getMatchMonitor().addOnMatchListener((matches, device) -> {
-            waiter.assertTrue(matches.size() >= 0);
+            waiter.assertTrue(matches.size() > 0);
             waiter.resume();
             return Unit.INSTANCE;
         });

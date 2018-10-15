@@ -24,19 +24,19 @@ private fun errorEmitter(emitter: SingleEmitter<*>): (Throwable) -> Unit = { thr
 
 private fun errorEmitter(emitter: CompletableEmitter): (Throwable) -> Unit = { throwable -> if (!emitter.isDisposed) emitter.onError(throwable) }
 
-private fun <T> observableRx(function: ((SuccessCallback<T>, ErrorCallback) -> Unit)): Observable<T> = Observable.create<T>({ emitter ->
+private fun <T> observableRx(function: ((SuccessCallback<T>, ErrorCallback) -> Unit)): Observable<T> = Observable.create<T> { emitter ->
     function(observableEmitter(emitter), errorEmitter(emitter))
-})
+}
 
 private fun <T> singleRx(function: ((SuccessCallback<T>, ErrorCallback) -> Unit)): Single<T> =
-        Single.create<T>({ emitter ->
+        Single.create<T> { emitter ->
             function(successEmitter(emitter), errorEmitter(emitter))
-        })
+        }
 
 private fun completableRx(function: ((CompleteCallback, ErrorCallback) -> Unit)): Completable =
-        Completable.create({ emitter ->
+        Completable.create { emitter ->
             function(completableEmitter(emitter), errorEmitter(emitter))
-        })
+        }
 
 fun MatchmoreSDK.rxStartUsingMainDevice(): Single<MobileDevice> = singleRx(this::startUsingMainDevice)
 

@@ -21,13 +21,6 @@ import io.swagger.annotations.ApiModelProperty
  */
 data class MatchmoreLocation @JvmOverloads constructor (
         /**
-         * The timestamp of the location creation in seconds since Jan 01 1970 (UTC).
-         */
-        @SerializedName("createdAt")
-        @get:ApiModelProperty(required = true, value = "The timestamp of the location creation in seconds since Jan 01 1970 (UTC). ")
-        var createdAt: Long? = null,
-
-        /**
          * The latitude of the device in degrees, for instance &#39;46.5333&#39; (Lausanne, Switzerland).
          */
         @SerializedName("latitude")
@@ -46,20 +39,6 @@ data class MatchmoreLocation @JvmOverloads constructor (
          */
         @SerializedName("altitude")
         @get:ApiModelProperty(required = true, value = "The altitude of the device in meters, for instance '495.0' (Lausanne, Switzerland). ")
-        var altitude: Double? = 0.0,
-
-        /**
-         * The horizontal accuracy of the location, measured on a scale from &#39;0.0&#39; to &#39;1.0&#39;, &#39;1.0&#39; being the most accurate. If this value is not specified then the default value of &#39;1.0&#39; is used.
-         */
-        @SerializedName("horizontalAccuracy")
-        @get:ApiModelProperty(value = "The horizontal accuracy of the location, measured on a scale from '0.0' to '1.0', '1.0' being the most accurate. If this value is not specified then the default value of '1.0' is used. ")
-        var horizontalAccuracy: Double? = 1.0,
-
-        /**
-         * The vertical accuracy of the location, measured on a scale from &#39;0.0&#39; to &#39;1.0&#39;, &#39;1.0&#39; being the most accurate. If this value is not specified then the default value of &#39;1.0&#39; is used.
-         */
-        @SerializedName("verticalAccuracy")
-        @get:ApiModelProperty(value = "The vertical accuracy of the location, measured on a scale from '0.0' to '1.0', '1.0' being the most accurate. If this value is not specified then the default value of '1.0' is used. ")
-        var verticalAccuracy: Double? = 1.0
+        var altitude: Double? = 0.0
 )
 
